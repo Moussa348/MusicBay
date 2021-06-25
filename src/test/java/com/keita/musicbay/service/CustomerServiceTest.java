@@ -45,6 +45,22 @@ public class CustomerServiceTest {
     }
 
     @Test
+    void follow(){
+        //ARRANGE
+        String username = "bigBrr";
+        String usernameToFollow = "c4";
+        when(customerRepository.findByUserName(username)).thenReturn(Optional.of(Customer.builder().build()));
+        when(customerRepository.findByUserName(usernameToFollow)).thenReturn(Optional.of(Customer.builder().build()));
+
+        //ACT
+        Follower addedFollower = customerService.follow(username,usernameToFollow);
+
+        //ASSERT
+        assertNotNull(addedFollower);
+
+    }
+
+    @Test
     void getListFollower(){
         //ARRANGE
         Customer customer1 = Customer.builder().userName("ice").email("ice@gmail.com").build();
