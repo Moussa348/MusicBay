@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Text implements Serializable {
+public abstract class Text implements Serializable {
 
     @Id
     @GeneratedValue
