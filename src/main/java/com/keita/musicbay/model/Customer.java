@@ -1,5 +1,6 @@
 package com.keita.musicbay.model;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -30,6 +31,7 @@ public class Customer extends User implements Serializable {
 
     public Customer() { }
 
+    @Builder
     public Customer(String firstName, String lastName, String email, String userName, String password, String biography, List<Order> orders,
                     List<BelovedMusicArticle> belovedMusicArticles, List<SharedMusicArticle> sharedMusicArticles, List<PurchasedMusicArticle> purchasedMusicArticles) {
         super(firstName, lastName, email, userName, password, biography);
