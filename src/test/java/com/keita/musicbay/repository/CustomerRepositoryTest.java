@@ -59,5 +59,20 @@ public class CustomerRepositoryTest {
         assertTrue(customerExist);
     }
 
+    @Test
+    void findByUserName(){
+        //ARRANGE
+        Customer customer1 = Customer.builder().userName("sdaasdas").build();
+        Customer customer2 = Customer.builder().userName("bigWolf22").build();
+
+        //ACT
+        boolean customerDoNotExist = customerRepository.findByUserName(customer1.getUserName()).isPresent();
+        boolean customerExist = customerRepository.findByUserName(customer2.getUserName()).isPresent();
+
+        //ASSERT
+        assertFalse(customerDoNotExist);
+        assertTrue(customerExist);
+    }
+
 
 }

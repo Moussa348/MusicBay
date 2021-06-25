@@ -1,12 +1,17 @@
 package com.keita.musicbay.service;
 
 import com.keita.musicbay.model.Customer;
+import com.keita.musicbay.model.dto.Follower;
 import com.keita.musicbay.repository.CustomerRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -37,5 +42,24 @@ public class CustomerServiceTest {
         //ASSERT
         assertTrue(customer1HasBeenSaved);
         assertFalse(customer2HasNotBeenSaved);
+    }
+
+    @Test
+    void getListFollower(){
+        //ARRANGE
+        Customer customer1 = Customer.builder().userName("ice").email("ice@gmail.com").build();
+        customer1.setUsers(Arrays.asList(Customer.builder().build(),Customer.builder().build()));
+        when(customerRepository.findByUserName(customer1.getUserName())).thenReturn(Optional.of(customer1));
+
+        Customer customer2 = Customer.builder().userName("brrr").email("brrr@gmail.com").build();
+        when(customerRepository.findByUserName(customer2.getUserName())).thenReturn(Optional.of(customer2));
+
+        //ACT
+        List<Follower> followersOfCustomer1 = customerService.getListFollower(customer1.getUserName());
+        List<Follower> followersOfCustomer2 = customerService.getListFollower(customer2.getUserName());
+
+        //ASSERT
+        assertEquals(2,followersOfCustomer1.size());
+        assertEquals(0,followersOfCustomer2.size());
     }
 }
