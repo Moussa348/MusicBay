@@ -18,23 +18,23 @@ public class Customer extends User implements Serializable {
     private List<Order> orders;
 
     @OneToMany(mappedBy = "customer")
-    private List<LikedMusicArticle> likedMusicArticles;
+    private List<LikedMusic> likedMusics;
 
     @OneToMany(mappedBy = "customer")
-    private List<SharedMusicArticle> sharedMusicArticles;
+    private List<SharedMusic> sharedMusics;
 
     @OneToMany(mappedBy = "customer")
-    private List<PurchasedMusicArticle> purchasedMusicArticles;
+    private List<PurchasedMusic> purchasedMusics;
 
     public Customer() { }
 
     @Builder
     public Customer(String firstName, String lastName, String city, String email, String userName, String password, String biography, byte[] picutre, List<Order> orders,
-                    List<LikedMusicArticle> likedMusicArticles, List<SharedMusicArticle> sharedMusicArticles, List<PurchasedMusicArticle> purchasedMusicArticles) {
+                    List<LikedMusic> likedMusics, List<SharedMusic> sharedMusics, List<PurchasedMusic> purchasedMusics) {
         super(firstName, lastName,city, email, userName, password, biography,picutre);
         this.orders = orders;
-        this.likedMusicArticles = likedMusicArticles;
-        this.sharedMusicArticles = sharedMusicArticles;
-        this.purchasedMusicArticles = purchasedMusicArticles;
+        this.likedMusics = likedMusics;
+        this.sharedMusics = sharedMusics;
+        this.purchasedMusics = purchasedMusics;
     }
 }

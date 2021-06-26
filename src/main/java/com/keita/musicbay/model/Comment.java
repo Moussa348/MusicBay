@@ -15,13 +15,13 @@ public class Comment extends Text implements Serializable {
     private Integer nbrLike;
 
     @ManyToOne
-    private MusicArticle musicArticle;
+    private Music music;
 
     public Comment() { }
 
-    public Comment(Long id, String text, Integer nbrLike,MusicArticle musicArticle) {
+    public Comment(Long id, String text, Integer nbrLike, Music music) {
         super(id, text);
         this.nbrLike = nbrLike;
-        this.musicArticle = musicArticle;
+        this.music = music;
     }
 }

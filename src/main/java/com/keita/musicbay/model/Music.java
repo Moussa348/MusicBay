@@ -11,7 +11,7 @@ import java.util.UUID;
 @Entity
 @Data
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class MusicArticle implements Serializable {
+public abstract class Music implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,10 +24,10 @@ public abstract class MusicArticle implements Serializable {
     @OneToMany(mappedBy = "musicArticle")
     private List<Comment> comments;
 
-    public MusicArticle() {}
+    public Music() {}
 
-    public MusicArticle( String title, String description, String tags, Integer nbrOfLike,
-                         Integer nbrOfShare, Integer nbrOfPLay, Float price, List<Comment> comments) {
+    public Music(String title, String description, String tags, Integer nbrOfLike,
+                 Integer nbrOfShare, Integer nbrOfPLay, Float price, List<Comment> comments) {
         this.uuid = UUID.randomUUID();
         this.title = title;
         this.description = description;

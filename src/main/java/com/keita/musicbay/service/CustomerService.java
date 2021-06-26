@@ -1,15 +1,11 @@
 package com.keita.musicbay.service;
 
 import com.keita.musicbay.model.Customer;
-import com.keita.musicbay.model.LikedMusicArticle;
-import com.keita.musicbay.model.MusicArticle;
 import com.keita.musicbay.model.User;
 import com.keita.musicbay.model.dto.Follower;
+import com.keita.musicbay.model.dto.Profile;
 import com.keita.musicbay.repository.CustomerRepository;
-import com.keita.musicbay.repository.MusicArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +26,11 @@ public class CustomerService {
         return false;
     }
 
+    public Profile getProfile(String username){
+        Customer customer = customerRepository.findByUserName(username).get();
+        return new Profile(customer,customer.getLikedMusics(),customer.getSharedMusics(),customer.getPurchasedMusics());
+    }
+
     public Follower follow(String username, String usernameToFollow) {
         Customer customer = customerRepository.findByUserName(username).get();
         Customer customerToFollow = customerRepository.findByUserName(usernameToFollow).get();
@@ -42,7 +43,7 @@ public class CustomerService {
 
     public List<Follower> getListFollower(String username) {
         Optional<Customer> customerOptional = customerRepository.findByUserName(username);
-        return customerOptional.map(customer -> customer.getUsers().stream().map(Follower::new).collect(Collectors.toList())).orElse(null);
+        return customerOptional.map(customer -> customer.getUsers().stream().filter(User::isActive).map(Follower::new).collect(Collectors.toList())).orElse(null);
     }
 
 }

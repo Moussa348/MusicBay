@@ -2,6 +2,7 @@ package com.keita.musicbay.service;
 
 import com.keita.musicbay.model.Customer;
 import com.keita.musicbay.model.dto.Follower;
+import com.keita.musicbay.model.dto.Profile;
 import com.keita.musicbay.repository.CustomerRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +44,20 @@ public class CustomerServiceTest {
         //ASSERT
         assertTrue(customer1HasBeenSaved);
         assertFalse(customer2HasNotBeenSaved);
+    }
+
+    @Test
+    void getProfile(){
+        //ARRANGE
+        String username1 = "bigBrr";
+        when(customerRepository.findByUserName(username1))
+                .thenReturn(Optional.of(Customer.builder().likedMusics(Collections.emptyList()).sharedMusics(Collections.emptyList()).purchasedMusics(Collections.emptyList()).build()));
+
+        //ACT
+        Profile profileExist = customerService.getProfile(username1);
+
+        //ASSERT
+        assertNotNull(profileExist);
     }
 
     @Test

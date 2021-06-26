@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Track extends MusicArticle implements Serializable {
+public class Track extends Music implements Serializable {
 
     @OneToMany
     private List<MediaFile> mediaFiles;
