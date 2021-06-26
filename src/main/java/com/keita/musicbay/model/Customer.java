@@ -29,9 +29,9 @@ public class Customer extends User implements Serializable {
     public Customer() { }
 
     @Builder
-    public Customer(String firstName, String lastName, String city, String email, String userName, String password, String biography, byte[] picutre, List<Order> orders,
+    public Customer(String firstName, String lastName, String city, String email, String userName, String password, String biography, List<Order> orders,
                     List<LikedMusic> likedMusics, List<SharedMusic> sharedMusics, List<PurchasedMusic> purchasedMusics) {
-        super(firstName, lastName,city, email, userName, password, biography,picutre);
+        super(firstName, lastName,city, email, userName, password, biography);
         this.orders = orders;
         this.likedMusics = likedMusics;
         this.sharedMusics = sharedMusics;

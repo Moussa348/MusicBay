@@ -73,11 +73,7 @@ public class CustomerServiceTest {
         when(customerRepository.findByUserName(usernameToFollow)).thenReturn(Optional.of(Customer.builder().build()));
 
         //ACT
-        Follower addedFollower = customerService.follow(username,usernameToFollow);
-
-        //ASSERT
-        assertNotNull(addedFollower);
-
+        customerService.follow(username,usernameToFollow);
     }
 
     @Test

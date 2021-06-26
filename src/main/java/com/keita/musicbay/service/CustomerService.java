@@ -32,14 +32,13 @@ public class CustomerService {
         return new Profile(customer,customer.getLikedMusics(),customer.getSharedMusics(),customer.getPurchasedMusics());
     }
 
-    public Follower follow(String username, String usernameToFollow) {
+    public void follow(String username, String usernameToFollow) {
         Customer customer = customerRepository.findByUserName(username).get();
         Customer customerToFollow = customerRepository.findByUserName(usernameToFollow).get();
+
         customer.getUsers().add(customerToFollow);
 
         customerRepository.save(customer);
-
-        return new Follower(customerToFollow);
     }
 
     public List<MusicDTO> getListLikedMusic(String username){
