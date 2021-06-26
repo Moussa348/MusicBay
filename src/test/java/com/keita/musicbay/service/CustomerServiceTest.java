@@ -1,7 +1,11 @@
 package com.keita.musicbay.service;
 
 import com.keita.musicbay.model.Customer;
+import com.keita.musicbay.model.LikedMusic;
+import com.keita.musicbay.model.PurchasedMusic;
+import com.keita.musicbay.model.SharedMusic;
 import com.keita.musicbay.model.dto.Follower;
+import com.keita.musicbay.model.dto.MusicDTO;
 import com.keita.musicbay.model.dto.Profile;
 import com.keita.musicbay.repository.CustomerRepository;
 import org.junit.jupiter.api.Test;
@@ -74,6 +78,45 @@ public class CustomerServiceTest {
         //ASSERT
         assertNotNull(addedFollower);
 
+    }
+
+    @Test
+    void getListLikedMusic(){
+        //ARRANGE
+        Customer customer = Customer.builder().userName("ceo").likedMusics(Arrays.asList(LikedMusic.builder().build(),LikedMusic.builder().build())).build();
+        when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
+
+        //ACT
+        List<MusicDTO> musicDTOS = customerService.getListLikedMusic(customer.getUserName());
+
+        //ASSERT
+        assertEquals(2,musicDTOS.size());
+    }
+
+    @Test
+    void getListSharedMusic(){
+        //ARRANGE
+        Customer customer = Customer.builder().userName("ceo").sharedMusics(Arrays.asList(SharedMusic.builder().build(),SharedMusic.builder().build())).build();
+        when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
+
+        //ACT
+        List<MusicDTO> musicDTOS = customerService.getListSharedMusic(customer.getUserName());
+
+        //ASSERT
+        assertEquals(2,musicDTOS.size());
+    }
+
+    @Test
+    void getListPurchasedMusic(){
+        //ARRANGE
+        Customer customer = Customer.builder().userName("ceo").purchasedMusics(Arrays.asList(PurchasedMusic.builder().build(),PurchasedMusic.builder().build())).build();
+        when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
+
+        //ACT
+        List<MusicDTO> musicDTOS = customerService.getListPurchasedMusic(customer.getUserName());
+
+        //ASSERT
+        assertEquals(2,musicDTOS.size());
     }
 
     @Test

@@ -18,8 +18,8 @@ public class MixTape extends Music implements Serializable {
 
     public MixTape(){}
 
-    public MixTape(String title, String description, String tags, Integer nbrOfLike, Integer nbrOfShare,
-                   Integer nbrOfPLay, Float price, List<Comment> comments) {
-        super(title, description, tags, nbrOfLike, nbrOfShare, nbrOfPLay, price, comments);
+    public MixTape(String title, String description, String tags, Integer nbrOfLike,
+                   Integer nbrOfShare, Integer nbrOfPLay, Float price ) {
+        super(title, description, tags, nbrOfLike, nbrOfShare, nbrOfPLay, price);
     }
 }

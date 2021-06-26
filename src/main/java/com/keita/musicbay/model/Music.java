@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,7 +28,7 @@ public abstract class Music implements Serializable {
     public Music() {}
 
     public Music(String title, String description, String tags, Integer nbrOfLike,
-                 Integer nbrOfShare, Integer nbrOfPLay, Float price, List<Comment> comments) {
+                 Integer nbrOfShare, Integer nbrOfPLay, Float price) {
         this.uuid = UUID.randomUUID();
         this.title = title;
         this.description = description;
@@ -37,6 +38,6 @@ public abstract class Music implements Serializable {
         this.nbrOfShare = nbrOfShare;
         this.nbrOfPLay = nbrOfPLay;
         this.price = price;
-        this.comments = comments;
+        this.comments = new ArrayList<>();
     }
 }

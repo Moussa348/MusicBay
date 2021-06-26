@@ -3,6 +3,7 @@ package com.keita.musicbay.service;
 import com.keita.musicbay.model.Customer;
 import com.keita.musicbay.model.User;
 import com.keita.musicbay.model.dto.Follower;
+import com.keita.musicbay.model.dto.MusicDTO;
 import com.keita.musicbay.model.dto.Profile;
 import com.keita.musicbay.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,18 @@ public class CustomerService {
         customerRepository.save(customer);
 
         return new Follower(customerToFollow);
+    }
+
+    public List<MusicDTO> getListLikedMusic(String username){
+        return customerRepository.findByUserName(username).get().getLikedMusics().stream().map(MusicDTO::new).collect(Collectors.toList());
+    }
+
+    public List<MusicDTO> getListSharedMusic(String username){
+        return customerRepository.findByUserName(username).get().getSharedMusics().stream().map(MusicDTO::new).collect(Collectors.toList());
+    }
+
+    public List<MusicDTO> getListPurchasedMusic(String username){
+        return customerRepository.findByUserName(username).get().getPurchasedMusics().stream().map(MusicDTO::new).collect(Collectors.toList());
     }
 
     public List<Follower> getListFollower(String username) {
