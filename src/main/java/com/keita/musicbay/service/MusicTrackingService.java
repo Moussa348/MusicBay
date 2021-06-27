@@ -65,14 +65,4 @@ public class MusicTrackingService {
         music.setNbrOfPurchase(music.getNbrOfPurchase() +1);
         musicRepository.saveAndFlush(music);
     }
-/*
-    public void purchaseMusic(String username, String title){
-        Customer customer = customerRepository.findByUserName(username).get();
-        Purchasing purchasing = (Purchasing) musicRepository.findByTitle(title).get();
-
-        customer.getPurchasings().add(purchasing);
-
-        customerRepository.save(customer);
-    }
-     */
 }

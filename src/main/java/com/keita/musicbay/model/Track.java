@@ -15,7 +15,7 @@ import java.util.List;
 public class Track extends Music implements Serializable {
 
     @OneToMany
-    private List<MediaFile> mediaFiles;
+    private List<File> files;
     private Float bpm;
 
     public Track(){}

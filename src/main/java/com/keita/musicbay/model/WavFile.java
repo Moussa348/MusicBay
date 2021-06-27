@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import java.io.Serializable;
 
 @Entity
-public class WavFile extends MediaFile implements Serializable {
+public class WavFile extends File implements Serializable {
 
     public WavFile() { }
 

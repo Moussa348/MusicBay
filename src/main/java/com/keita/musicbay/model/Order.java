@@ -20,6 +20,9 @@ public class Order implements Serializable {
     @ManyToOne
     private Customer customer;
 
+    @OneToOne
+    private Agreement agreement;
+
     public Order(){}
 
     public Order(Float total, Customer customer) {

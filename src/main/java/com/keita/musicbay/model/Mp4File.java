@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import java.io.Serializable;
 
 @Entity
-public class Mp4File extends MediaFile implements Serializable {
+public class Mp4File extends File implements Serializable {
 
     public Mp4File() { }
 

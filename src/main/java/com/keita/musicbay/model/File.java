@@ -8,7 +8,7 @@ import java.io.Serializable;
 @Entity
 @Data
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class MediaFile implements Serializable {
+public abstract class File implements Serializable {
 
     @Id
     @GeneratedValue
@@ -22,9 +22,9 @@ public abstract class MediaFile implements Serializable {
     @ManyToOne
     private Track track;
 
-    public MediaFile(){}
+    public File(){}
 
-    public MediaFile(Long id, String fileName, byte[] data,Track track) {
+    public File(Long id, String fileName, byte[] data, Track track) {
         this.id = id;
         this.fileName = fileName;
         this.data = data;
