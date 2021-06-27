@@ -2,9 +2,7 @@ package com.keita.musicbay.service;
 
 import com.keita.musicbay.model.Customer;
 import com.keita.musicbay.model.User;
-import com.keita.musicbay.model.dto.Follower;
-import com.keita.musicbay.model.dto.MusicDTO;
-import com.keita.musicbay.model.dto.Profile;
+import com.keita.musicbay.model.dto.*;
 import com.keita.musicbay.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +27,7 @@ public class CustomerService {
 
     public Profile getProfile(String username){
         Customer customer = customerRepository.findByUserName(username).get();
-        return new Profile(customer,customer.getLikedMusics(),customer.getSharedMusics(),customer.getPurchasedMusics());
+        return new Profile(customer,customer.getLikings(),customer.getSharings(),customer.getPurchasings());
     }
 
     public void follow(String username, String usernameToFollow) {
@@ -41,16 +39,16 @@ public class CustomerService {
         customerRepository.save(customer);
     }
 
-    public List<MusicDTO> getListLikedMusic(String username){
-        return customerRepository.findByUserName(username).get().getLikedMusics().stream().map(MusicDTO::new).collect(Collectors.toList());
+    public List<LikedMusic> getListLikedMusic(String username){
+        return customerRepository.findByUserName(username).get().getLikings().stream().map(LikedMusic::new).collect(Collectors.toList());
     }
 
-    public List<MusicDTO> getListSharedMusic(String username){
-        return customerRepository.findByUserName(username).get().getSharedMusics().stream().map(MusicDTO::new).collect(Collectors.toList());
+    public List<SharedMusic> getListSharedMusic(String username){
+        return customerRepository.findByUserName(username).get().getSharings().stream().map(SharedMusic::new).collect(Collectors.toList());
     }
 
-    public List<MusicDTO> getListPurchasedMusic(String username){
-        return customerRepository.findByUserName(username).get().getPurchasedMusics().stream().map(MusicDTO::new).collect(Collectors.toList());
+    public List<PurchasedMusic> getListPurchasedMusic(String username){
+        return customerRepository.findByUserName(username).get().getPurchasings().stream().map(PurchasedMusic::new).collect(Collectors.toList());
     }
 
     public List<Follower> getListFollower(String username) {

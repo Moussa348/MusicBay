@@ -1,5 +1,6 @@
 package com.keita.musicbay.model;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -19,9 +20,10 @@ public class Track extends Music implements Serializable {
 
     public Track(){}
 
+    @Builder
     public Track(String title, String description, String tags, Integer nbrOfLike,
-                 Integer nbrOfShare, Integer nbrOfPLay, Float price, Float bpm) {
-        super(title, description, tags, nbrOfLike, nbrOfShare, nbrOfPLay, price);
+                 Integer nbrOfShare, Integer nbrOfPLay, Integer nbrOfPurchase, Float price, Float bpm) {
+        super(title, description, tags, nbrOfLike, nbrOfShare, nbrOfPLay, nbrOfPurchase,price);
         this.bpm = bpm;
     }
 }

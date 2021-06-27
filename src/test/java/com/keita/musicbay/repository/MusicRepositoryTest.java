@@ -1,8 +1,8 @@
 package com.keita.musicbay.repository;
 
-import com.keita.musicbay.model.Customer;
-import com.keita.musicbay.model.LikedMusic;
+import com.keita.musicbay.model.Liking;
 import com.keita.musicbay.model.Music;
+import com.keita.musicbay.model.Track;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -27,7 +27,7 @@ public class MusicRepositoryTest {
     @BeforeEach
     void insert(){
         List<Music> musics = Arrays.asList(
-                LikedMusic.builder().title("hope").build()
+                Track.builder().title("hope").build()
         );
         musicRepository.saveAll(musics);
     }
@@ -35,8 +35,8 @@ public class MusicRepositoryTest {
     @Test
     void existsByTitle(){
         //ARRANGE
-        Music music1 = LikedMusic.builder().title("hope").build();
-        Music music2 = LikedMusic.builder().title("h0p3").build();
+        Music music1 = Track.builder().title("hope").build();
+        Music music2 = Track.builder().title("h0p3").build();
 
         //ACT
         boolean musicExist = musicRepository.existsByTitle(music1.getTitle());
@@ -50,8 +50,8 @@ public class MusicRepositoryTest {
     @Test
     void findByTitle(){
         //ARRANGE
-        Music music1 = LikedMusic.builder().title("hope").build();
-        Music music2 = LikedMusic.builder().title("h0p3").build();
+        Music music1 = Track.builder().title("hope").build();
+        Music music2 = Track.builder().title("h0p3").build();
 
         //ACT
         boolean musicExist = musicRepository.findByTitle(music1.getTitle()).isPresent();

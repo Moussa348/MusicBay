@@ -1,7 +1,7 @@
 package com.keita.musicbay.service;
 
 import com.keita.musicbay.model.*;
-import com.keita.musicbay.repository.CustomerRepository;
+import com.keita.musicbay.model.dto.MusicDTO;
 import com.keita.musicbay.repository.MusicRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,11 +9,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class MusicServiceTest {
@@ -21,23 +22,23 @@ public class MusicServiceTest {
     @Mock
     MusicRepository musicRepository;
 
-    @Mock
-    CustomerRepository customerRepository;
-
     @InjectMocks
     MusicService musicService;
+
+    /*
+
 
     @Test
     void likeMusic(){
         //ARRANGE
         Customer customer = Customer.builder().likedMusics(new ArrayList<>()).build();
-        LikedMusic likedMusic = LikedMusic.builder().title("IT").build();
+        Liking liking = Liking.builder().title("IT").build();
 
         when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
-        when(musicRepository.findByTitle(likedMusic.getTitle())).thenReturn(Optional.of(likedMusic));
+        when(musicRepository.findByTitle(liking.getTitle())).thenReturn(Optional.of(liking));
         when(customerRepository.save(any(Customer.class))).thenReturn(new Customer());
         //ACT
-        musicService.likeMusic(customer.getUserName(),likedMusic.getTitle());
+        musicService.likeMusic(customer.getUserName(), liking.getTitle());
 
     }
 
@@ -45,25 +46,59 @@ public class MusicServiceTest {
     void shareMusic(){
         //ARRANGE
         Customer customer = Customer.builder().sharedMusics(new ArrayList<>()).build();
-        SharedMusic sharedMusic = SharedMusic.builder().title("IT").build();
+        Sharing sharing = Sharing.builder().title("IT").build();
 
         when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
-        when(musicRepository.findByTitle(sharedMusic.getTitle())).thenReturn(Optional.of(sharedMusic));
+        when(musicRepository.findByTitle(sharing.getTitle())).thenReturn(Optional.of(sharing));
         when(customerRepository.save(any(Customer.class))).thenReturn(new Customer());
         //ACT
-        musicService.shareMusic(customer.getUserName(),sharedMusic.getTitle());
+        musicService.shareMusic(customer.getUserName(), sharing.getTitle());
     }
 
     @Test
     void purchaseMusic(){
         //ARRANGE
         Customer customer = Customer.builder().purchasedMusics(new ArrayList<>()).build();
-        PurchasedMusic purchasedMusic = PurchasedMusic.builder().title("IT").build();
+        Purchasing purchasing = Purchasing.builder().title("IT").build();
 
         when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
-        when(musicRepository.findByTitle(purchasedMusic.getTitle())).thenReturn(Optional.of(purchasedMusic));
+        when(musicRepository.findByTitle(purchasing.getTitle())).thenReturn(Optional.of(purchasing));
         when(customerRepository.save(any(Customer.class))).thenReturn(new Customer());
         //ACT
-        musicService.purchaseMusic(customer.getUserName(),purchasedMusic.getTitle());
+        musicService.purchaseMusic(customer.getUserName(), purchasing.getTitle());
+    }
+     */
+
+    @Test
+    void getMusic(){
+        //ARRANGE
+        String title = "IceBurr";
+        when(musicRepository.findByTitle(title)).thenReturn(Optional.of(Track.builder().build()));
+
+        //ACT
+        MusicDTO musicDTO = musicService.getMusic(title);
+
+        //ASSERT
+        assertNotNull(musicDTO);
+
+    }
+
+    @Test
+    void getListMusic(){
+        //ARRANGE
+        List<Music> musics = Arrays.asList(
+                Track.builder().build(),
+                MixTape.builder().build(),
+                MixTape.builder().build(),
+                Track.builder().build()
+        );
+
+        when(musicRepository.findAll()).thenReturn(musics);
+        //ACT
+        List<MusicDTO> musicDTOS = musicService.getListMusic();
+
+        //ASSERT
+        assertEquals(4,musicDTOS.size());
+
     }
 }

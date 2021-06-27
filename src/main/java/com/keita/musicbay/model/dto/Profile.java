@@ -16,13 +16,13 @@ public class Profile implements Serializable {
     public Profile(){}
 
     @Builder
-    public Profile(User user, List<LikedMusic> likedMusics, List<SharedMusic> sharedMusics, List<PurchasedMusic> purchasedMusics){
+    public Profile(User user, List<Liking> likings, List<Sharing> sharings, List<Purchasing> purchasings){
         this.username = user.getUserName();
         this.email = user.getEmail();
         this.city = user.getCity();
         this.nbrOfFollower = user.getUsers().stream().filter(User::isActive).count();
-        this.nbrOfLikedMusic = likedMusics.size();
-        this.nbrOfSharedMusic = sharedMusics.size();
-        this.nbrOfPurchasedMusic = purchasedMusics.size();
+        this.nbrOfLikedMusic = likings.size();
+        this.nbrOfSharedMusic = sharings.size();
+        this.nbrOfPurchasedMusic = purchasings.size();
     }
 }

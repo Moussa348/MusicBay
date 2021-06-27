@@ -20,7 +20,7 @@ public abstract class Music implements Serializable {
     private UUID uuid;
     private String title,description,tags;
     private LocalDateTime date;
-    private Integer nbrOfLike,nbrOfShare,nbrOfPLay;
+    private Integer nbrOfLike,nbrOfShare,nbrOfPlay,nbrOfPurchase;
     private Float price;
 
     @OneToMany(mappedBy = "music")
@@ -29,7 +29,7 @@ public abstract class Music implements Serializable {
     public Music() {}
 
     public Music(String title, String description, String tags, Integer nbrOfLike,
-                 Integer nbrOfShare, Integer nbrOfPLay, Float price) {
+                 Integer nbrOfShare, Integer nbrOfPlay, Integer nbrOfPurchase,Float price) {
         this.uuid = UUID.randomUUID();
         this.title = title;
         this.description = description;
@@ -37,7 +37,8 @@ public abstract class Music implements Serializable {
         this.date = LocalDateTime.now();
         this.nbrOfLike = nbrOfLike;
         this.nbrOfShare = nbrOfShare;
-        this.nbrOfPLay = nbrOfPLay;
+        this.nbrOfPlay = nbrOfPlay;
+        this.nbrOfPurchase = nbrOfPurchase;
         this.price = price;
         this.comments = new ArrayList<>();
     }

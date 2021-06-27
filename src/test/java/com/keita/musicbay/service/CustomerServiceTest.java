@@ -1,12 +1,7 @@
 package com.keita.musicbay.service;
 
-import com.keita.musicbay.model.Customer;
-import com.keita.musicbay.model.LikedMusic;
-import com.keita.musicbay.model.PurchasedMusic;
-import com.keita.musicbay.model.SharedMusic;
-import com.keita.musicbay.model.dto.Follower;
-import com.keita.musicbay.model.dto.MusicDTO;
-import com.keita.musicbay.model.dto.Profile;
+import com.keita.musicbay.model.*;
+import com.keita.musicbay.model.dto.*;
 import com.keita.musicbay.repository.CustomerRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -55,7 +50,7 @@ public class CustomerServiceTest {
         //ARRANGE
         String username1 = "bigBrr";
         when(customerRepository.findByUserName(username1))
-                .thenReturn(Optional.of(Customer.builder().likedMusics(Collections.emptyList()).sharedMusics(Collections.emptyList()).purchasedMusics(Collections.emptyList()).build()));
+                .thenReturn(Optional.of(Customer.builder().likings(Collections.emptyList()).sharings(Collections.emptyList()).purchasings(Collections.emptyList()).build()));
 
         //ACT
         Profile profileExist = customerService.getProfile(username1);
@@ -79,40 +74,40 @@ public class CustomerServiceTest {
     @Test
     void getListLikedMusic(){
         //ARRANGE
-        Customer customer = Customer.builder().userName("ceo").likedMusics(Arrays.asList(LikedMusic.builder().build(),LikedMusic.builder().build())).build();
+        Customer customer = Customer.builder().userName("ceo").likings(Arrays.asList(Liking.builder().music(Track.builder().build()).build(), Liking.builder().music(Track.builder().build()).build())).build();
         when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
 
         //ACT
-        List<MusicDTO> musicDTOS = customerService.getListLikedMusic(customer.getUserName());
+        List<LikedMusic> likedMusics = customerService.getListLikedMusic(customer.getUserName());
 
         //ASSERT
-        assertEquals(2,musicDTOS.size());
+        assertEquals(2,likedMusics.size());
     }
 
     @Test
     void getListSharedMusic(){
         //ARRANGE
-        Customer customer = Customer.builder().userName("ceo").sharedMusics(Arrays.asList(SharedMusic.builder().build(),SharedMusic.builder().build())).build();
+        Customer customer = Customer.builder().userName("ceo").sharings(Arrays.asList(Sharing.builder().music(Track.builder().build()).build(), Sharing.builder().music(Track.builder().build()).build())).build();
         when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
 
         //ACT
-        List<MusicDTO> musicDTOS = customerService.getListSharedMusic(customer.getUserName());
+        List<SharedMusic> sharedMusics = customerService.getListSharedMusic(customer.getUserName());
 
         //ASSERT
-        assertEquals(2,musicDTOS.size());
+        assertEquals(2,sharedMusics.size());
     }
 
     @Test
     void getListPurchasedMusic(){
         //ARRANGE
-        Customer customer = Customer.builder().userName("ceo").purchasedMusics(Arrays.asList(PurchasedMusic.builder().build(),PurchasedMusic.builder().build())).build();
+        Customer customer = Customer.builder().userName("ceo").purchasings(Arrays.asList(Purchasing.builder().music(Track.builder().build()).build(), Purchasing.builder().music(Track.builder().build()).build())).build();
         when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
 
         //ACT
-        List<MusicDTO> musicDTOS = customerService.getListPurchasedMusic(customer.getUserName());
+        List<PurchasedMusic> purchasedMusics = customerService.getListPurchasedMusic(customer.getUserName());
 
         //ASSERT
-        assertEquals(2,musicDTOS.size());
+        assertEquals(2,purchasedMusics.size());
     }
 
     @Test

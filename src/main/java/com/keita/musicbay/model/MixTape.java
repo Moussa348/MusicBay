@@ -1,5 +1,6 @@
 package com.keita.musicbay.model;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,8 +19,9 @@ public class MixTape extends Music implements Serializable {
 
     public MixTape(){}
 
+    @Builder
     public MixTape(String title, String description, String tags, Integer nbrOfLike,
-                   Integer nbrOfShare, Integer nbrOfPLay, Float price ) {
-        super(title, description, tags, nbrOfLike, nbrOfShare, nbrOfPLay, price);
+                   Integer nbrOfShare, Integer nbrOfPLay,Integer nbrOfPurchase, Float price ) {
+        super(title, description, tags, nbrOfLike, nbrOfShare, nbrOfPLay, nbrOfPurchase,price);
     }
 }
