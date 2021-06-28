@@ -3,6 +3,7 @@ package com.keita.musicbay.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import java.io.Serializable;
 

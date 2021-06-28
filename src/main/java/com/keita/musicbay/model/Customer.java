@@ -4,9 +4,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -15,7 +17,7 @@ import java.util.List;
 public class Customer extends User implements Serializable {
 
     @OneToMany(mappedBy = "customer")
-    private List<Order> orders;
+    private List<Transaction> transactions;
 
     @OneToMany(mappedBy = "customer")
     private List<Liking> likings;
@@ -29,10 +31,10 @@ public class Customer extends User implements Serializable {
     public Customer() { }
 
     @Builder
-    public Customer(String firstName, String lastName, String city, String email, String userName, String password, String biography, List<Order> orders,
+    public Customer(String firstName, String lastName, LocalDate dateOfBirth, String cellNumber, String city, String email, String userName, String password, String biography, List<Transaction> transactions,
                     List<Liking> likings, List<Sharing> sharings, List<Purchasing> purchasings) {
-        super(firstName, lastName,city, email, userName, password, biography);
-        this.orders = orders;
+        super(firstName, lastName,dateOfBirth,cellNumber,city, email, userName, password, biography);
+        //this.transactions = transactions;
         this.likings = likings;
         this.sharings = sharings;
         this.purchasings = purchasings;

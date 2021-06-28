@@ -1,11 +1,13 @@
 package com.keita.musicbay.repository;
 
-import com.keita.musicbay.model.Order;
+import com.keita.musicbay.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface OrderRepository extends JpaRepository<Order, UUID> {
+public interface UserRepository extends JpaRepository<User, UUID> {
+   Optional<User> findByUserName(String username);
 }

@@ -15,7 +15,7 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @PostMapping
+    @PostMapping("/createCustomer")
     public boolean createCustomer(Customer customer){
         return customerService.createCustomer(customer);
     }

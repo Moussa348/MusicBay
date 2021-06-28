@@ -18,11 +18,12 @@ public abstract class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID uuid;
-    private String firstName,lastName,email,userName,city,password,biography;
+    private String firstName,lastName,email,userName,city,cellNumber,password,biography;
 
     @Lob
     @Column(name ="picture",columnDefinition = "BLOB")
     private byte[] picture;
+    private LocalDate dateOfBirth;
     private LocalDateTime registrationDate;
     private boolean active;
 
@@ -34,12 +35,14 @@ public abstract class User implements Serializable {
 
     public User(){}
 
-    public User(String firstName, String lastName,String city, String email, String userName, String password, String biography) {
+    public User(String firstName, String lastName,LocalDate dateOfBirth,String cellNumber,String city, String email, String userName, String password, String biography) {
         this.uuid = UUID.randomUUID();
         this.firstName = firstName;
         this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
         this.city = city;
         this.email = email;
+        this.cellNumber = cellNumber;
         this.userName = userName;
         this.password = password;
         this.biography = biography;

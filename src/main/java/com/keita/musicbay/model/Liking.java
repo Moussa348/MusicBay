@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class Liking implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne

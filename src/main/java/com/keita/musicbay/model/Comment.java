@@ -19,8 +19,8 @@ public class Comment extends Text implements Serializable {
 
     public Comment() { }
 
-    public Comment(Long id, String text, Integer nbrLike, Music music) {
-        super(id, text);
+    public Comment(Long id, String content, Integer nbrLike, Music music) {
+        super( id,content);
         this.nbrLike = nbrLike;
         this.music = music;
     }
