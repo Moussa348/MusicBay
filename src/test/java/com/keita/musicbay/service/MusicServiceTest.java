@@ -25,50 +25,6 @@ public class MusicServiceTest {
     @InjectMocks
     MusicService musicService;
 
-    /*
-
-
-    @Test
-    void likeMusic(){
-        //ARRANGE
-        Customer customer = Customer.builder().likedMusics(new ArrayList<>()).build();
-        Liking liking = Liking.builder().title("IT").build();
-
-        when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
-        when(musicRepository.findByTitle(liking.getTitle())).thenReturn(Optional.of(liking));
-        when(customerRepository.save(any(Customer.class))).thenReturn(new Customer());
-        //ACT
-        musicService.likeMusic(customer.getUserName(), liking.getTitle());
-
-    }
-
-    @Test
-    void shareMusic(){
-        //ARRANGE
-        Customer customer = Customer.builder().sharedMusics(new ArrayList<>()).build();
-        Sharing sharing = Sharing.builder().title("IT").build();
-
-        when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
-        when(musicRepository.findByTitle(sharing.getTitle())).thenReturn(Optional.of(sharing));
-        when(customerRepository.save(any(Customer.class))).thenReturn(new Customer());
-        //ACT
-        musicService.shareMusic(customer.getUserName(), sharing.getTitle());
-    }
-
-    @Test
-    void purchaseMusic(){
-        //ARRANGE
-        Customer customer = Customer.builder().purchasedMusics(new ArrayList<>()).build();
-        Purchasing purchasing = Purchasing.builder().title("IT").build();
-
-        when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
-        when(musicRepository.findByTitle(purchasing.getTitle())).thenReturn(Optional.of(purchasing));
-        when(customerRepository.save(any(Customer.class))).thenReturn(new Customer());
-        //ACT
-        musicService.purchaseMusic(customer.getUserName(), purchasing.getTitle());
-    }
-     */
-
     @Test
     void getMusic(){
         //ARRANGE

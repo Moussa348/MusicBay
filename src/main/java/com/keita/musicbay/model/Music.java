@@ -1,6 +1,5 @@
 package com.keita.musicbay.model;
 
-import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -22,6 +21,7 @@ public abstract class Music implements Serializable {
     private LocalDateTime date;
     private Integer nbrOfLike,nbrOfShare,nbrOfPlay,nbrOfPurchase;
     private Float price;
+    private boolean hasAgreement;
 
     @OneToMany(mappedBy = "music")
     private List<Comment> comments;

@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class MusicTrackingServiceTest {
+public class CustomerActivityServiceTest {
 
     @Mock
     CustomerRepository customerRepository;
@@ -29,7 +29,7 @@ public class MusicTrackingServiceTest {
     MusicRepository musicRepository;
 
     @InjectMocks
-    MusicTrackingService musicTrackingService;
+    CustomerActivityService customerActivityService;
 
     @BeforeEach
     void setup(){
@@ -46,7 +46,7 @@ public class MusicTrackingServiceTest {
         when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
         when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
         //ACT
-        musicTrackingService.likeMusic(customer.getUserName(), music.getTitle());
+        customerActivityService.likeMusic(customer.getUserName(), music.getTitle());
     }
 
     @Test
@@ -58,7 +58,7 @@ public class MusicTrackingServiceTest {
         when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
         when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
         //ACT
-        musicTrackingService.shareMusic(customer.getUserName(), music.getTitle(),"Nice one");
+        customerActivityService.shareMusic(customer.getUserName(), music.getTitle(),"Nice one");
     }
 
     @Test
@@ -70,6 +70,6 @@ public class MusicTrackingServiceTest {
         when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
         when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
         //ACT
-        musicTrackingService.purchaseMusic(customer.getUserName(), music.getTitle(), LocalDateTime.now());
+        customerActivityService.purchaseMusic(customer.getUserName(), music.getTitle(), LocalDateTime.now());
     }
 }

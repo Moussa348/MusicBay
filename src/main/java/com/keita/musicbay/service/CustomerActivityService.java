@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 @Service
-public class MusicTrackingService {
+public class CustomerActivityService {
 
     @Autowired
     private CustomerRepository customerRepository;

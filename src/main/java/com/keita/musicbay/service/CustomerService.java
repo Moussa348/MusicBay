@@ -17,7 +17,7 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public boolean saveCustomer(Customer customer) {
+    public boolean createCustomer(Customer customer) {
         if (!customerRepository.existsByEmail(customer.getEmail()) && !customerRepository.existsByUserName(customer.getUserName())) {
             customerRepository.save(customer);
             return true;

@@ -27,7 +27,7 @@ public class CustomerServiceTest {
     CustomerService customerService;
 
     @Test
-    void saveCustomer(){
+    void createCustomer(){
         //ARRANGE
         Customer customer1 = Customer.builder().userName("ice").email("ice@gmail.com").build();
         when(customerRepository.existsByEmail(customer1.getEmail()) && customerRepository.existsByUserName(customer1.getUserName())).thenReturn(false);
@@ -37,8 +37,8 @@ public class CustomerServiceTest {
 
         when(customerRepository.save(any(Customer.class))).thenReturn(new Customer());
         //ACT
-        boolean customer1HasBeenSaved = customerService.saveCustomer(customer1);
-        boolean customer2HasNotBeenSaved = customerService.saveCustomer(customer2);
+        boolean customer1HasBeenSaved = customerService.createCustomer(customer1);
+        boolean customer2HasNotBeenSaved = customerService.createCustomer(customer2);
 
         //ASSERT
         assertTrue(customer1HasBeenSaved);
