@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @Service
 public class MonitoringService {
@@ -63,7 +64,20 @@ public class MonitoringService {
     }
 
     public void unsubscribe(String username, String usernameToUnFollow){
+        Customer customer = customerRepository.findByUserName(username).get();
+        Customer customerToUnFollow = customerRepository.findByUserName(usernameToUnFollow).get();
 
+        customer.setSubscribeTos(customer.getSubscribeTos()
+                .stream()
+                .filter(subscribeTo -> !subscribeTo.getUsername().equals(usernameToUnFollow))
+        .collect(Collectors.toList()));
+
+        customerToUnFollow.setSubscribers(customer.getSubscribers()
+                .stream()
+                .filter(subscriber -> !subscriber.getUsername().equals(username))
+                .collect(Collectors.toList()));
+
+        customerRepository.saveAll(Arrays.asList(customer,customerToUnFollow));
     }
 
     private void increaseLike(Music music){
