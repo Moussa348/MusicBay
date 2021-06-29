@@ -34,11 +34,6 @@ public class CustomerController {
         return customerService.getProfile(username);
     }
 
-    @PostMapping("/follow")
-    public void follow(@RequestParam("username")String username, @RequestParam("usernameToFollow") String usernameToFollow){
-         customerService.follow(username,usernameToFollow);
-    }
-
     @GetMapping("/getListLikedMusic/{username}")
     public List<LikedMusic> getListLikedMusic(@PathVariable String username){
         return customerService.getListLikedMusic(username);

@@ -1,10 +1,9 @@
 package com.keita.musicbay.service;
 
-import com.keita.musicbay.model.Customer;
-import com.keita.musicbay.model.Music;
-import com.keita.musicbay.model.Track;
+import com.keita.musicbay.model.*;
 import com.keita.musicbay.repository.CustomerRepository;
 import com.keita.musicbay.repository.MusicRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,11 +30,6 @@ public class MonitoringServiceTest {
     @InjectMocks
     MonitoringService monitoringService;
 
-    @BeforeEach
-    void setup(){
-        when(customerRepository.save(any(Customer.class))).thenReturn(new Customer());
-        when(musicRepository.saveAndFlush(any(Music.class))).thenReturn(new Track());
-    }
 
     @Test
     void likeMusic(){
@@ -45,8 +39,13 @@ public class MonitoringServiceTest {
 
         when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
         when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
+
         //ACT
         monitoringService.likeMusic(customer.getUserName(), music.getTitle());
+
+        //ASSERT
+        assertEquals(5,music.getNbrOfLike());
+        assertNotNull(customer.getLikings().stream().filter(liking -> music.getTitle().equals(liking.getMusic().getTitle())));
     }
 
     @Test
@@ -57,8 +56,13 @@ public class MonitoringServiceTest {
 
         when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
         when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
+
         //ACT
         monitoringService.shareMusic(customer.getUserName(), music.getTitle(),"Nice one");
+
+        //ASSERT
+        assertEquals(5,music.getNbrOfShare());
+        assertNotNull(customer.getSharings().stream().filter(sharing -> music.getTitle().equals(sharing.getMusic().getTitle())));
     }
 
     @Test
@@ -69,7 +73,47 @@ public class MonitoringServiceTest {
 
         when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
         when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
+
         //ACT
         monitoringService.purchaseMusic(customer.getUserName(), music.getTitle(), LocalDateTime.now());
+
+        //ASSERT
+        assertEquals(5,music.getNbrOfPurchase());
+        assertNotNull(customer.getPurchasings().stream().filter(purchasing -> music.getTitle().equals(purchasing.getMusic().getTitle())));
+    }
+
+    @Test
+    void subscribe(){
+        //ARRANGE
+        Customer customer = Customer.builder().userName("bigBrr").build();
+        Customer customerToFollow = Customer.builder().userName("c4").build();
+        when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
+        when(customerRepository.findByUserName(customerToFollow.getUserName())).thenReturn(Optional.of(customerToFollow));
+
+        //ACT
+        monitoringService.subscribe(customer.getUserName(),customerToFollow.getUserName());
+
+        //ASSERT
+        assertEquals(1,customer.getSubscribeTos().size());
+        assertEquals(1,customerToFollow.getSubscribers().size());
+    }
+
+    @Test
+    void unsubscribe(){
+        //ARRANGE
+        Customer customer = Customer.builder().userName("bigBrr").build();
+        Customer customerToUnFollow = Customer.builder().userName("c4").build();
+
+        customer.getSubscribeTos().add(new SubscribeTo(customerToUnFollow.getUserName(),customer));
+
+        when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
+        when(customerRepository.findByUserName(customerToUnFollow.getUserName())).thenReturn(Optional.of(customerToUnFollow));
+
+        //ACT
+        monitoringService.unsubscribe(customer.getUserName(),customerToUnFollow.getUserName());
+
+        //ASSERT
+        assertEquals(0,customer.getSubscribeTos().size());
+
     }
 }

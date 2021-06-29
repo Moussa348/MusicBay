@@ -33,6 +33,12 @@ public abstract class User implements Serializable {
     @ManyToMany
     private List<User> users;
 
+    @OneToMany(mappedBy = "user")
+    private List<Subscriber> subscribers;
+
+    @OneToMany(mappedBy = "user")
+    private List<SubscribeTo> subscribeTos;
+
     public User(){}
 
     public User(String firstName, String lastName,LocalDate dateOfBirth,String cellNumber,String city, String email, String userName, String password, String biography) {
@@ -48,6 +54,8 @@ public abstract class User implements Serializable {
         this.biography = biography;
         this.users = new ArrayList<>();
         this.messages = new ArrayList<>();
+        this.subscribers = new ArrayList<>();
+        this.subscribeTos = new ArrayList<>();
         this.registrationDate = LocalDateTime.now();
         this.active = true;
     }

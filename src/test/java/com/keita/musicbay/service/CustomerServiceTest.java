@@ -60,22 +60,6 @@ public class CustomerServiceTest {
     }
 
     @Test
-    void follow(){
-        //ARRANGE
-        String username = "bigBrr";
-        String usernameToFollow = "c4";
-        Customer customer = Customer.builder().userName(username).build();
-        when(customerRepository.findByUserName(username)).thenReturn(Optional.of(customer));
-        when(customerRepository.findByUserName(usernameToFollow)).thenReturn(Optional.of(Customer.builder().build()));
-
-        //ACT
-        customerService.follow(username,usernameToFollow);
-
-        //ASSERT
-        assertEquals(1,customer.getUsers().size());
-    }
-
-    @Test
     void getListLikedMusic(){
         //ARRANGE
         Customer customer = Customer.builder().userName("ceo").likings(Arrays.asList(Liking.builder().music(Track.builder().build()).build(), Liking.builder().music(Track.builder().build()).build())).build();

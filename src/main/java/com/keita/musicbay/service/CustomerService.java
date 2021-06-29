@@ -30,15 +30,6 @@ public class CustomerService {
         return new Profile(customer,customer.getLikings(),customer.getSharings(),customer.getPurchasings());
     }
 
-    public void follow(String username, String usernameToFollow) {
-        Customer customer = customerRepository.findByUserName(username).get();
-        Customer customerToFollow = customerRepository.findByUserName(usernameToFollow).get();
-
-        customer.getUsers().add(customerToFollow);
-
-        customerRepository.save(customer);
-    }
-
     public List<LikedMusic> getListLikedMusic(String username){
         return customerRepository.findByUserName(username).get().getLikings().stream().map(LikedMusic::new).collect(Collectors.toList());
     }

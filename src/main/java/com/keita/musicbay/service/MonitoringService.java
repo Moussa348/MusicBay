@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 @Service
 public class MonitoringService {
@@ -49,6 +50,20 @@ public class MonitoringService {
         customer.getPurchasings().add(new Purchasing(customer,music,purchasingDate));
 
         customerRepository.save(customer);
+    }
+
+    public void subscribe(String username, String usernameToFollow) {
+        Customer customer = customerRepository.findByUserName(username).get();
+        Customer customerToFollow = customerRepository.findByUserName(usernameToFollow).get();
+
+        customer.getSubscribeTos().add(new SubscribeTo(customerToFollow.getUserName(),customer));
+        customerToFollow.getSubscribers().add(new Subscriber(customer.getUserName(),customerToFollow));
+
+        customerRepository.saveAll(Arrays.asList(customer,customerToFollow));
+    }
+
+    public void unsubscribe(String username, String usernameToUnFollow){
+
     }
 
     private void increaseLike(Music music){

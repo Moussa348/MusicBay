@@ -11,7 +11,7 @@ import java.util.List;
 public class Profile implements Serializable {
     private String username,email,city;
     private Long nbrOfFollower;
-    private Integer nbrOfLikedMusic,nbrOfSharedMusic,nbrOfPurchasedMusic;
+    private Integer nbrOfSubscriber,nbrOfSubscribeTo,nbrOfLikedMusic,nbrOfSharedMusic,nbrOfPurchasedMusic;
 
     public Profile(){}
 
@@ -20,6 +20,8 @@ public class Profile implements Serializable {
         this.username = user.getUserName();
         this.email = user.getEmail();
         this.city = user.getCity();
+        this.nbrOfSubscriber = user.getSubscribers().size();
+        this.nbrOfSubscribeTo = user.getSubscribeTos().size();
         this.nbrOfFollower = (user.getUsers() != null) ?user.getUsers().stream().filter(User::isActive).count():0;
         this.nbrOfLikedMusic = likings.size();
         this.nbrOfSharedMusic = sharings.size();
