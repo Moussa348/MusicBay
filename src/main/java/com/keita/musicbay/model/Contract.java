@@ -8,22 +8,22 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Agreement extends File implements Serializable {
+public class Contract extends File implements Serializable {
 
     @ManyToOne
-    private Transaction transaction;
-    private boolean agreementSigned;
+    private Music music;
+    private LocalDateTime date;
 
-    public Agreement(){}
+    public Contract(){}
 
     @Builder
-    public Agreement(Long id, String fileName, byte[] data, Track track, Transaction transaction, boolean agreementSigned) {
+    public Contract(Long id, String fileName, byte[] data, Track track) {
         super(id, fileName, data, track);
-        this.transaction = transaction;
-        this.agreementSigned = agreementSigned;
+        this.date = LocalDateTime.now();
     }
 }

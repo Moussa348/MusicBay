@@ -19,14 +19,21 @@ public abstract class Music implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID uuid;
-    private String title,description,tags;
+    private String title,description,tags,timeLength;
     private LocalDateTime date;
     private Integer nbrOfLike,nbrOfShare,nbrOfPlay,nbrOfPurchase;
     private Float price;
+
+    @Lob
+    @Column(name ="picture",columnDefinition = "BLOB")
+    private byte[] picture;
     private boolean hasAgreement;
 
     @OneToMany(mappedBy = "music")
     private List<Comment> comments;
+
+    @OneToMany(mappedBy = "transaction")
+    private List<Contract> contracts;
 
     public Music() {}
 

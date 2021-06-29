@@ -24,15 +24,19 @@ public class Transaction implements Serializable {
     private Customer customer;
 
     @OneToMany(mappedBy = "transaction")
-    private List<Agreement> agreements;
+    private List<Music> musics;
+
+    @OneToMany(mappedBy = "transaction")
+    private List<Contract> contracts;
 
     public Transaction(){}
 
     @Builder
-    public Transaction(Float total, Customer customer) {
+    public Transaction(Float total, Customer customer,List<Music> musics) {
         this.uuid = UUID.randomUUID();
         this.date = LocalDateTime.now();
         this.total = total;
+        this.musics = musics;
         this.customer = customer;
     }
 }

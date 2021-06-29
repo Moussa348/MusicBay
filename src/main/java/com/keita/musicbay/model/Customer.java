@@ -35,9 +35,10 @@ public class Customer extends User implements Serializable {
     public Customer(String firstName, String lastName, LocalDate dateOfBirth, String cellNumber, String city, String email, String userName, String password, String biography, List<Transaction> transactions,
                     List<Liking> likings, List<Sharing> sharings, List<Purchasing> purchasings) {
         super(firstName, lastName,dateOfBirth,cellNumber,city, email, userName, password, biography);
-        //this.transactions = transactions;
+        this.transactions = transactions;
         this.likings = likings;
         this.sharings = sharings;
         this.purchasings = purchasings;
     }
+
 }
