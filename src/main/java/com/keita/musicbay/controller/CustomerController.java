@@ -48,9 +48,4 @@ public class CustomerController {
     public List<PurchasedMusic> getListPurchasedMusic(@PathVariable String username){
         return customerService.getListPurchasedMusic(username);
     }
-
-    @GetMapping("/getListFollower/{username}")
-    public List<Follower> getListFollower(@PathVariable String username){
-        return customerService.getListFollower(username);
-    }
 }

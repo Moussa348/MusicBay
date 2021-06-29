@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
-public class CustomerActivityControllerTest {
+public class MonitoringControllerTest {
 
     @Autowired
     MockMvc mockMvc;

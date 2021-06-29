@@ -99,21 +99,39 @@ public class CustomerServiceTest {
     }
 
     @Test
-    void getListFollower(){
+    void getListSubscriber(){
         //ARRANGE
-        Customer customer1 = Customer.builder().userName("ice").email("ice@gmail.com").build();
-        customer1.setUsers(Arrays.asList(Customer.builder().build(),Customer.builder().build()));
-        when(customerRepository.findByUserName(customer1.getUserName())).thenReturn(Optional.of(customer1));
+        Customer customer = Customer.builder().userName("bombay").build();
+        Subscriber subscriber = Subscriber.builder().username("taa").build();
 
-        Customer customer2 = Customer.builder().userName("brrr").email("brrr@gmail.com").build();
-        when(customerRepository.findByUserName(customer2.getUserName())).thenReturn(Optional.of(customer2));
+        customer.setSubscribers(Arrays.asList(subscriber));
+
+        when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
+        customer.getSubscribers().forEach(s -> when(customerRepository.findByUserName(s.getUsername())).thenReturn(Optional.of(Customer.builder().likings(Collections.emptyList()).sharings(Collections.emptyList()).purchasings(Collections.emptyList()).build())));
 
         //ACT
-        List<Follower> followersOfCustomer1 = customerService.getListFollower(customer1.getUserName());
-        List<Follower> followersOfCustomer2 = customerService.getListFollower(customer2.getUserName());
+        List<Profile> subscribers = customerService.getListSubscriber(customer.getUserName());
 
         //ASSERT
-        assertEquals(2,followersOfCustomer1.size());
-        assertEquals(0,followersOfCustomer2.size());
+        assertEquals(1,subscribers.size());
+    }
+
+    @Test
+    void getListSubscribeTo(){
+        //ARRANGE
+        Customer customer = Customer.builder().userName("bombay").build();
+        SubscribeTo subscriberTo = SubscribeTo.builder().username("taa").build();
+
+        customer.setSubscribeTos(Arrays.asList(subscriberTo));
+
+        when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
+        customer.getSubscribeTos().forEach(s -> when(customerRepository.findByUserName(s.getUsername())).thenReturn(Optional.of(Customer.builder().likings(Collections.emptyList()).sharings(Collections.emptyList()).purchasings(Collections.emptyList()).build())));
+
+        //ACT
+        List<Profile> subscriberTos = customerService.getListSubscribeTo(customer.getUserName());
+
+        //ASSERT
+        assertEquals(1,subscriberTos.size());
+
     }
 }

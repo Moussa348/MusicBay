@@ -25,26 +25,35 @@ public class CustomerService {
         return false;
     }
 
-    public Profile getProfile(String username){
+    public Profile getProfile(String username) {
         Customer customer = customerRepository.findByUserName(username).get();
-        return new Profile(customer,customer.getLikings(),customer.getSharings(),customer.getPurchasings());
+        return new Profile(customer);
     }
 
-    public List<LikedMusic> getListLikedMusic(String username){
+    public List<LikedMusic> getListLikedMusic(String username) {
         return customerRepository.findByUserName(username).get().getLikings().stream().map(LikedMusic::new).collect(Collectors.toList());
     }
 
-    public List<SharedMusic> getListSharedMusic(String username){
+    public List<SharedMusic> getListSharedMusic(String username) {
         return customerRepository.findByUserName(username).get().getSharings().stream().map(SharedMusic::new).collect(Collectors.toList());
     }
 
-    public List<PurchasedMusic> getListPurchasedMusic(String username){
+    public List<PurchasedMusic> getListPurchasedMusic(String username) {
         return customerRepository.findByUserName(username).get().getPurchasings().stream().map(PurchasedMusic::new).collect(Collectors.toList());
     }
 
-    public List<Follower> getListFollower(String username) {
+    public List<Profile> getListSubscriber(String username) {
         Optional<Customer> customerOptional = customerRepository.findByUserName(username);
-        return customerOptional.map(customer -> customer.getUsers().stream().filter(User::isActive).map(Follower::new).collect(Collectors.toList())).orElse(null);
+        List<Customer> customers = customerOptional.get().getSubscribers().stream().map(subscriber -> customerRepository.findByUserName(subscriber.getUsername()).get()).collect(Collectors.toList());
+
+        return customers.stream().filter(Customer::isActive).map(Profile::new).collect(Collectors.toList());
+    }
+
+    public List<Profile> getListSubscribeTo(String username) {
+        Optional<Customer> customerOptional = customerRepository.findByUserName(username);
+        List<Customer> customers = customerOptional.get().getSubscribeTos().stream().map(subscribeTo -> customerRepository.findByUserName(subscribeTo.getUsername()).get()).collect(Collectors.toList());
+
+        return customers.stream().filter(Customer::isActive).map(Profile::new).collect(Collectors.toList());
     }
 
 }
