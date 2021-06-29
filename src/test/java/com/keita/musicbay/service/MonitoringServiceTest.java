@@ -3,8 +3,6 @@ package com.keita.musicbay.service;
 import com.keita.musicbay.model.*;
 import com.keita.musicbay.repository.CustomerRepository;
 import com.keita.musicbay.repository.MusicRepository;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -49,6 +47,23 @@ public class MonitoringServiceTest {
     }
 
     @Test
+    void unLikeMusic(){
+        //ARRANGE
+        Customer customer = Customer.builder().userName("bombay").likings(new ArrayList<>()).build();
+        Music music = Track.builder().title("IT").nbrOfLike(4).build();
+
+        when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
+        when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
+
+        //ACT
+        monitoringService.unLikeMusic(customer.getUserName(), music.getTitle());
+
+        //ASSERT
+        assertEquals(3,music.getNbrOfLike());
+        assertNotNull(customer.getLikings().stream().filter(liking -> music.getTitle().equals(liking.getMusic().getTitle())));
+    }
+
+    @Test
     void shareMusic(){
         //ARRANGE
         Customer customer = Customer.builder().userName("bombay").sharings(new ArrayList<>()).build();
@@ -62,6 +77,23 @@ public class MonitoringServiceTest {
 
         //ASSERT
         assertEquals(5,music.getNbrOfShare());
+        assertNotNull(customer.getSharings().stream().filter(sharing -> music.getTitle().equals(sharing.getMusic().getTitle())));
+    }
+
+    @Test
+    void unShareMusic(){
+        //ARRANGE
+        Customer customer = Customer.builder().userName("bombay").sharings(new ArrayList<>()).build();
+        Music music = Track.builder().title("IT").nbrOfShare(4).build();
+
+        when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
+        when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
+
+        //ACT
+        monitoringService.unShareMusic(customer.getUserName(), music.getTitle());
+
+        //ASSERT
+        assertEquals(3,music.getNbrOfShare());
         assertNotNull(customer.getSharings().stream().filter(sharing -> music.getTitle().equals(sharing.getMusic().getTitle())));
     }
 
@@ -99,7 +131,7 @@ public class MonitoringServiceTest {
     }
 
     @Test
-    void unsubscribe(){
+    void unSubscribe(){
         //ARRANGE
         Customer customer = Customer.builder().userName("bigBrr").build();
         Customer customerToUnFollow = Customer.builder().userName("c4").build();
@@ -110,7 +142,7 @@ public class MonitoringServiceTest {
         when(customerRepository.findByUserName(customerToUnFollow.getUserName())).thenReturn(Optional.of(customerToUnFollow));
 
         //ACT
-        monitoringService.unsubscribe(customer.getUserName(),customerToUnFollow.getUserName());
+        monitoringService.unSubscribe(customer.getUserName(),customerToUnFollow.getUserName());
 
         //ASSERT
         assertEquals(0,customer.getSubscribeTos().size());

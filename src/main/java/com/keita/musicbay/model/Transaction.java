@@ -18,6 +18,7 @@ public class Transaction implements Serializable {
     private UUID uuid;
     private LocalDateTime date;
     private Float total;
+    private boolean paymentApproved;
 
     @ManyToOne
     private Customer customer;

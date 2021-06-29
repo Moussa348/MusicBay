@@ -31,6 +31,17 @@ public class MonitoringService {
         customerRepository.save(customer);
     }
 
+    public void unLikeMusic(String username,String title){
+        Customer customer = customerRepository.findByUserName(username).get();
+        Music music = musicRepository.findByTitle(title).get();
+
+        customer.setLikings(customer.getLikings().stream().filter(liking -> !liking.getMusic().getTitle().equals(title)).collect(Collectors.toList()));
+
+        decreaseLike(music);
+
+        customerRepository.save(customer);
+    }
+
     public void shareMusic(String username, String title,String sharingMsg){
         Customer customer = customerRepository.findByUserName(username).get();
         Music music = musicRepository.findByTitle(title).get();
@@ -38,6 +49,17 @@ public class MonitoringService {
         increaseShare(music);
 
         customer.getSharings().add(new Sharing(customer,music,sharingMsg));
+
+        customerRepository.save(customer);
+    }
+
+    public void unShareMusic(String username,String title){
+        Customer customer = customerRepository.findByUserName(username).get();
+        Music music = musicRepository.findByTitle(title).get();
+
+        customer.setSharings(customer.getSharings().stream().filter(sharing -> !sharing.getMusic().getTitle().equals(title)).collect(Collectors.toList()));
+
+        decreaseShare(music);
 
         customerRepository.save(customer);
     }
@@ -63,7 +85,7 @@ public class MonitoringService {
         customerRepository.saveAll(Arrays.asList(customer,customerToFollow));
     }
 
-    public void unsubscribe(String username, String usernameToUnFollow){
+    public void unSubscribe(String username, String usernameToUnFollow){
         Customer customer = customerRepository.findByUserName(username).get();
         Customer customerToUnFollow = customerRepository.findByUserName(usernameToUnFollow).get();
 
@@ -85,8 +107,18 @@ public class MonitoringService {
         musicRepository.saveAndFlush(music);
     }
 
+    private void decreaseLike(Music music){
+        music.setNbrOfLike(music.getNbrOfLike()-1);
+        musicRepository.saveAndFlush(music);
+    }
+
     private void increaseShare(Music music){
         music.setNbrOfShare(music.getNbrOfShare() +1);
+        musicRepository.saveAndFlush(music);
+    }
+
+    private void decreaseShare(Music music){
+        music.setNbrOfShare(music.getNbrOfShare() -1);
         musicRepository.saveAndFlush(music);
     }
 
