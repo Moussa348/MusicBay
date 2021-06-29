@@ -64,11 +64,15 @@ public class CustomerServiceTest {
         //ARRANGE
         String username = "bigBrr";
         String usernameToFollow = "c4";
-        when(customerRepository.findByUserName(username)).thenReturn(Optional.of(Customer.builder().build()));
+        Customer customer = Customer.builder().userName(username).build();
+        when(customerRepository.findByUserName(username)).thenReturn(Optional.of(customer));
         when(customerRepository.findByUserName(usernameToFollow)).thenReturn(Optional.of(Customer.builder().build()));
 
         //ACT
         customerService.follow(username,usernameToFollow);
+
+        //ASSERT
+        assertEquals(1,customer.getUsers().size());
     }
 
     @Test

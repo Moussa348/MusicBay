@@ -21,13 +21,13 @@ public class Message extends Text implements Serializable {
     public Message(){}
 
     @Builder
-    public Message(Long id, String content,List<User> users) {
-        super(id,content);
+    public Message(Long id,String sendBy, String content,List<User> users) {
+        super(id,content,sendBy);
         this.users = users;
     }
 
     public Message(TextDTO textDTO,List<User> users){
-        super(textDTO.getId(),textDTO.getContent());
+        super(textDTO.getId(), textDTO.getContent(), textDTO.getSendBy());
         this.users = users;
     }
 }

@@ -17,11 +17,13 @@ public abstract class Text implements Serializable {
     @Lob
     @Column(name ="content",columnDefinition = "CLOB")
     private String content;
+    private String sendBy;
 
     public Text(){}
 
-    public Text(Long id,String content) {
+    public Text(Long id,String content, String sendBy) {
         this.id = id;
         this.content = content;
+        this.sendBy = sendBy;
     }
 }

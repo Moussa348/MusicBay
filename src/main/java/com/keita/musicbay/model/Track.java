@@ -3,6 +3,7 @@ package com.keita.musicbay.model;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Entity
 @Data
+@ToString
 @EqualsAndHashCode(callSuper = true)
 public class Track extends Music implements Serializable {
 

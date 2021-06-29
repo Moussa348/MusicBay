@@ -1,6 +1,7 @@
 package com.keita.musicbay.model;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,6 +12,7 @@ import java.util.UUID;
 
 @Entity
 @Data
+@ToString
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Music implements Serializable {
 

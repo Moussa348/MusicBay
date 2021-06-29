@@ -20,7 +20,7 @@ public class Profile implements Serializable {
         this.username = user.getUserName();
         this.email = user.getEmail();
         this.city = user.getCity();
-        this.nbrOfFollower = user.getUsers().stream().filter(User::isActive).count();
+        this.nbrOfFollower = (user.getUsers() != null) ?user.getUsers().stream().filter(User::isActive).count():0;
         this.nbrOfLikedMusic = likings.size();
         this.nbrOfSharedMusic = sharings.size();
         this.nbrOfPurchasedMusic = purchasings.size();
