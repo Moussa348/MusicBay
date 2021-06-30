@@ -1,9 +1,6 @@
 package com.keita.musicbay.service;
 
-import com.keita.musicbay.model.Customer;
-import com.keita.musicbay.model.MixTape;
-import com.keita.musicbay.model.Music;
-import com.keita.musicbay.model.Transaction;
+import com.keita.musicbay.model.*;
 import com.keita.musicbay.model.dto.TransactionDTO;
 import com.keita.musicbay.repository.CustomerRepository;
 import com.keita.musicbay.repository.MusicRepository;
@@ -30,9 +27,6 @@ public class TransactionServiceTest {
     @Mock
     MusicRepository musicRepository;
 
-    @Mock
-    TransactionRepository transactionRepository;
-
     @InjectMocks
     TransactionService transactionService;
 
@@ -49,10 +43,47 @@ public class TransactionServiceTest {
         when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
         when(customerRepository.save(customer)).thenReturn(customer);
         //ACT
-        TransactionDTO transactionDTO = transactionService.createTransaction(customer.getUserName(),music.getTitle());
+        TransactionDTO createdTransaction = transactionService.createTransaction(customer.getUserName(),music.getTitle());
 
         //ASSERT
-        assertNotNull(transactionDTO);
-        assertEquals(1,transactionDTO.getMusicArticles().size());
+        assertNotNull(createdTransaction);
+        assertEquals(1,createdTransaction.getMusicArticles().size());
+    }
+
+    @Test
+    void addMusicToTransaction(){
+        //ARRANGE
+        Customer customer = Customer.builder().userName("bigBrr").transactions(Arrays.asList(Transaction.builder().build())).build();
+        Music music = MixTape.builder().title("hoodSeason").build();
+
+        when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
+        when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
+        when(customerRepository.save(customer)).thenReturn(customer);
+
+        //ACT
+        TransactionDTO addedMusicTransaction = transactionService.addMusicToTransaction(customer.getUserName(),music.getTitle());
+
+        //ASSERT
+        assertEquals(2,addedMusicTransaction.getMusicArticles().size());
+    }
+
+    @Test
+    void removeMusicFromTransaction(){
+        //ARRANGE
+        Transaction transaction = Transaction.builder().build();
+        Music music = Track.builder().title("culture").build();
+        Customer customer = Customer.builder().userName("bigBrr").transactions(Arrays.asList(transaction)).build();
+
+        transaction.getMusics().add(music);
+
+        when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
+        when(customerRepository.save(customer)).thenReturn(customer);
+
+        //ACT
+        TransactionDTO removedMusicTransaction = transactionService.removeMusicFromTransaction(customer.getUserName(),music.getTitle());
+
+        //ASSERT
+        assertEquals(0,removedMusicTransaction.getMusicArticles().size());
+
     }
 }

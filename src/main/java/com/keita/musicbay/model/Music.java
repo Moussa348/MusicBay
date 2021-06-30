@@ -32,9 +32,6 @@ public abstract class Music implements Serializable {
     @OneToMany(mappedBy = "music")
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "transaction")
-    private List<Contract> contracts;
-
     public Music() {}
 
     public Music(String title, String description, String tags, Integer nbrOfLike,

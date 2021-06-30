@@ -32,6 +32,7 @@ public class CustomerRepositoryTest {
     @Test
     void existsByUserName(){
         //ARRANGE
+
         Customer customer1 = Customer.builder().userName("sdaasdas").build();
         Customer customer2 = Customer.builder().userName("bigWolf22").build();
 

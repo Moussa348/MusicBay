@@ -16,7 +16,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class Track extends Music implements Serializable {
 
-    @OneToMany
+    @OneToMany(mappedBy = "track")
     private List<File> files;
     private Float bpm;
 

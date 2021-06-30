@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,20 +24,17 @@ public class Transaction implements Serializable {
     @ManyToOne
     private Customer customer;
 
-    @OneToMany(mappedBy = "transaction")
+    @OneToMany
     private List<Music> musics;
-
-    @OneToMany(mappedBy = "transaction")
-    private List<Contract> contracts;
 
     public Transaction(){}
 
     @Builder
-    public Transaction(Float total, Customer customer,List<Music> musics) {
+    public Transaction(Float total, Customer customer) {
         this.uuid = UUID.randomUUID();
         this.date = LocalDateTime.now();
         this.total = total;
-        this.musics = musics;
+        this.musics = new ArrayList<>();
         this.customer = customer;
     }
 }
