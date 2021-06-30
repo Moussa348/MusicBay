@@ -9,10 +9,6 @@ import com.keita.musicbay.repository.MusicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,6 +50,12 @@ public class TransactionService {
         transaction.setMusics(transaction.getMusics().stream().filter(music -> !music.getTitle().equals(title)).collect(Collectors.toList()));
 
         return new TransactionDTO(customerRepository.save(customer).getTransactions().get(customer.getTransactions().size() - 1));
+    }
+
+    public void cancelTransaction(String username){
+        Customer customer = customerRepository.findByUserName(username).get();
+        customer.getTransactions().remove(customer.getTransactions().size()-1);
+        customerRepository.save(customer);
     }
 
 }

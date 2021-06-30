@@ -4,7 +4,6 @@ import com.keita.musicbay.model.*;
 import com.keita.musicbay.model.dto.TransactionDTO;
 import com.keita.musicbay.repository.CustomerRepository;
 import com.keita.musicbay.repository.MusicRepository;
-import com.keita.musicbay.repository.TransactionRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -64,7 +63,7 @@ public class TransactionServiceTest {
         TransactionDTO addedMusicTransaction = transactionService.addMusicToTransaction(customer.getUserName(),music.getTitle());
 
         //ASSERT
-        assertEquals(2,addedMusicTransaction.getMusicArticles().size());
+        assertEquals(1,addedMusicTransaction.getMusicArticles().size());
     }
 
     @Test
@@ -84,6 +83,22 @@ public class TransactionServiceTest {
 
         //ASSERT
         assertEquals(0,removedMusicTransaction.getMusicArticles().size());
+    }
 
+    @Test
+    void cancelTransaction(){
+        //ARRANGE
+        Customer customer = Customer.builder().userName("bigBrr").transactions(new ArrayList<>()).build();
+        customer.getTransactions().add(new Transaction());
+        customer.getTransactions().add(new Transaction());
+        customer.getTransactions().add(new Transaction());
+
+        when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
+
+        //ACT
+        transactionService.cancelTransaction(customer.getUserName());
+
+        //ASSERT
+        assertEquals(2,customer.getTransactions().size());
     }
 }
