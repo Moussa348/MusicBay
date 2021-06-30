@@ -14,9 +14,9 @@ spring:
   h2:
     console:
       path: /MusicBayTestingDB
-  #sql:
-   # init:
-    #  mode: always
-     # data-locations: classpath:data/test.sql
+      #sql:
+      # init:
+      #  mode: always
+      # data-locations: classpath:data/test.sql
 server:
   port: 4444

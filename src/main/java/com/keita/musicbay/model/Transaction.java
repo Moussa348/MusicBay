@@ -19,7 +19,7 @@ public class Transaction implements Serializable {
     private UUID uuid;
     private LocalDateTime date;
     private Float total;
-    private boolean paymentApproved;
+    private boolean paymentApproved,confirmed;
 
     @ManyToOne
     private Customer customer;
@@ -36,5 +36,7 @@ public class Transaction implements Serializable {
         this.total = total;
         this.musics = new ArrayList<>();
         this.customer = customer;
+        this.paymentApproved = false;
+        this.confirmed = false;
     }
 }
