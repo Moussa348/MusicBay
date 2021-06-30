@@ -9,6 +9,7 @@ import com.keita.musicbay.repository.MusicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,7 +22,7 @@ public class TransactionService {
     private MusicRepository musicRepository;
 
 
-    public TransactionDTO createTransaction(String username,String title){
+    public TransactionDTO createTransaction(String username, String title) {
         Customer customer = customerRepository.findByUserName(username).get();
 
         Transaction transaction = Transaction.builder().customer(customer).build();
@@ -29,7 +30,7 @@ public class TransactionService {
         transaction.getMusics().add(musicRepository.findByTitle(title).get());
         customer.getTransactions().add(transaction);
 
-        return new TransactionDTO(customerRepository.save(customer).getTransactions().get(customer.getTransactions().size()-1));
+        return new TransactionDTO(customerRepository.save(customer).getTransactions().get(customer.getTransactions().size() - 1));
     }
 
     public TransactionDTO addMusicToTransaction(String username, String title) {
@@ -43,7 +44,7 @@ public class TransactionService {
         return new TransactionDTO(customerRepository.save(customer).getTransactions().get(customer.getTransactions().size() - 1));
     }
 
-    public TransactionDTO removeMusicFromTransaction(String username,String title){
+    public TransactionDTO removeMusicFromTransaction(String username, String title) {
         Customer customer = customerRepository.findByUserName(username).get();
         Transaction transaction = customer.getTransactions().get(customer.getTransactions().size() - 1);
 
@@ -52,10 +53,22 @@ public class TransactionService {
         return new TransactionDTO(customerRepository.save(customer).getTransactions().get(customer.getTransactions().size() - 1));
     }
 
-    public void cancelTransaction(String username){
+    public void cancelTransaction(String username) {
         Customer customer = customerRepository.findByUserName(username).get();
-        customer.getTransactions().remove(customer.getTransactions().size()-1);
+        customer.getTransactions().remove(customer.getTransactions().size() - 1);
         customerRepository.save(customer);
     }
 
+    public TransactionDTO getCurrentTransaction(String username) {
+        Customer customer = customerRepository.findByUserName(username).get();
+        if (!customer.getTransactions().isEmpty()) {
+
+            Transaction transaction = customer.getTransactions().get(customer.getTransactions().size() - 1);
+
+            if (transaction.getDate().toLocalDate().equals(LocalDate.now()))
+                return new TransactionDTO(transaction);
+
+        }
+        return null;
+    }
 }
