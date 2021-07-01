@@ -4,6 +4,7 @@ import com.keita.musicbay.model.Comment;
 import com.keita.musicbay.model.Message;
 import com.keita.musicbay.model.Music;
 import com.keita.musicbay.model.User;
+import com.keita.musicbay.model.dto.PostedComment;
 import com.keita.musicbay.model.dto.TextDTO;
 import com.keita.musicbay.repository.CustomerRepository;
 import com.keita.musicbay.repository.MusicRepository;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class TextService {
+public class CommentService {
 
     @Autowired
     private TextRepository textRepository;
@@ -43,19 +44,32 @@ public class TextService {
         textRepository.save(message);
     }
 
-    public TextDTO createComment(TextDTO comment){
-        Music music = musicRepository.findByTitle(comment.getMusicTitle()).get();
-        return new TextDTO(textRepository.save(new Comment(comment,music)));
+    public PostedComment postComment(PostedComment postedComment,String musicTitle){
+        Music music = musicRepository.findByTitle(musicTitle).get();
+        return new PostedComment(textRepository.save(new Comment(postedComment,music)));
     }
 
-    public TextDTO increaseLike(Long id){
+    public PostedComment increaseLike(Long id){
         Comment comment = (Comment) textRepository.findById(id).get();
         comment.setNbrLike(comment.getNbrLike()+1);
-        return new TextDTO(textRepository.save(comment));
+        return new PostedComment(textRepository.save(comment));
     }
 
-    public List<TextDTO> getListCommentOfMusic(String title){
+    public List<PostedComment> getListCommentOfMusic(String title){
         Music music = musicRepository.findByTitle(title).get();
-        return music.getComments().stream().map(TextDTO::new).collect(Collectors.toList());
+        return music.getComments().stream().map(PostedComment::new).collect(Collectors.toList());
     }
+
+
+    /*
+
+    public List<TextDTO> getLastSentMessageWithEveryUser(String username){
+        User user = userRepository.findByUserName(username).get();
+        List<Message> lastSentMessageWithEveryUser = user.getMessages()
+                .stream().filter(message -> message)
+
+        return lastSentMessageWithEveryUser.stream().map(TextDTO::new).collect(Collectors.toList());
+    }
+     */
+
 }

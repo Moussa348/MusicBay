@@ -1,5 +1,6 @@
 package com.keita.musicbay.model;
 
+import com.keita.musicbay.model.dto.PostedComment;
 import com.keita.musicbay.model.dto.TextDTO;
 import lombok.Builder;
 import lombok.Data;
@@ -28,9 +29,9 @@ public class Comment extends Text implements Serializable {
         this.music = music;
     }
 
-    public Comment(TextDTO textDTO,Music music){
-        super(textDTO.getId(),textDTO.getContent(), textDTO.getSendBy());
-        this.nbrLike = textDTO.getNbrLike();
+    public Comment(PostedComment postedComment, Music music){
+        super(postedComment.getId(),postedComment.getContent(), postedComment.getSendBy());
+        this.nbrLike = postedComment.getNbrLike();
         this.music = music;
     }
 }

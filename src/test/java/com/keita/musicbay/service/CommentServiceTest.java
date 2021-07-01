@@ -1,6 +1,7 @@
 package com.keita.musicbay.service;
 
 import com.keita.musicbay.model.*;
+import com.keita.musicbay.model.dto.PostedComment;
 import com.keita.musicbay.model.dto.TextDTO;
 import com.keita.musicbay.repository.MusicRepository;
 import com.keita.musicbay.repository.TextRepository;
@@ -13,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,7 +23,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @Log
-public class TextServiceTest {
+public class CommentServiceTest {
 
     @Mock
     TextRepository textRepository;
@@ -33,7 +35,7 @@ public class TextServiceTest {
     MusicRepository musicRepository;
 
     @InjectMocks
-    TextService textService;
+    CommentService commentService;
 
     @Test
     void createMessage() {
@@ -44,7 +46,7 @@ public class TextServiceTest {
         when(textRepository.save(any(Text.class))).thenReturn(Message.builder().content(textDTO.getContent()).build());
 
         //ACT
-        String returnedContent = textService.createMessage(textDTO);
+        String returnedContent = commentService.createMessage(textDTO);
 
         //ASSERT
         assertEquals(textDTO.getContent(),returnedContent);
@@ -59,7 +61,7 @@ public class TextServiceTest {
         when(textRepository.findById(id)).thenReturn(Optional.of(message));
 
         //ACT
-        textService.deleteMessage(id,username);
+        commentService.deleteMessage(id,username);
 
         //ASSERT
         assertEquals(1,message.getUsers().size());
@@ -67,18 +69,18 @@ public class TextServiceTest {
     }
 
     @Test
-    void createComment() {
+    void postComment() {
         //ARRANGE
-        TextDTO textDTO = new TextDTO("this shit is fire no cap!!!","migos","culture3",0);
+        PostedComment postedComment = new PostedComment("this shit is fire no cap!!!","migos",0);
         Music music = Track.builder().title("culture3").build();
-        when(musicRepository.findByTitle(textDTO.getMusicTitle())).thenReturn(Optional.of(music));
-        when(textRepository.save(any(Text.class))).thenReturn(Comment.builder().content(textDTO.getContent()).music(music).build());
+        when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
+        when(textRepository.save(any(Text.class))).thenReturn(Comment.builder().content(postedComment.getContent()).music(music).build());
 
         //ACT
-        String returnedContent = textService.createComment(textDTO).getContent();
+        String returnedContent = commentService.postComment(postedComment,music.getTitle()).getContent();
 
         //ASSERT
-        assertEquals(textDTO.getContent(),returnedContent);
+        assertEquals(postedComment.getContent(),returnedContent);
     }
 
     @Test
@@ -90,9 +92,32 @@ public class TextServiceTest {
         when(textRepository.save(comment)).thenReturn(comment);
 
         //ACT
-        Integer nbrLike = textService.increaseLike(comment.getId()).getNbrLike();
+        Integer nbrLike = commentService.increaseLike(comment.getId()).getNbrLike();
 
         //ASSERT
         assertEquals(6,nbrLike);
+    }
+
+    @Test
+    void getListCommentOfMusic(){
+        //ARRANGE
+        Music music = Track.builder().title("culture3").build();
+        music.setComments(Arrays.asList(new Comment(),new Comment()));
+        when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
+
+        //ACT
+        List<PostedComment> postedComments = commentService.getListCommentOfMusic(music.getTitle());
+
+        //ASSERT
+        assertEquals(2,postedComments.size());
+    }
+
+    @Test
+    void getLastSentMessageWithEveryUser(){
+        //ARRANGE
+
+        //ACT
+
+        //ASSERT
     }
 }

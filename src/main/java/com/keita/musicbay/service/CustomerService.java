@@ -17,6 +17,7 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    //Todo:add MultipartFile as argument
     public boolean createCustomer(Customer customer) {
         if (!customerRepository.existsByEmail(customer.getEmail()) && !customerRepository.existsByUserName(customer.getUserName())) {
             customerRepository.save(customer);
@@ -24,6 +25,8 @@ public class CustomerService {
         }
         return false;
     }
+
+    //Todo: add a getPicture() method
 
     public Profile getProfile(String username) {
         Customer customer = customerRepository.findByUserName(username).get();

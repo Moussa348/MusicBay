@@ -36,13 +36,13 @@ public class EmailServiceTest {
     }
 
     @Test
-    void sendCancellation() throws Exception{
+    void sendCancellationEmail() throws Exception{
         //ARRANGE
         Customer customer = Customer.builder().email("araa@gmail.com").build();
         TransactionDTO transactionDTO = new TransactionDTO(Transaction.builder().build());
 
         when(javaMailSender.createMimeMessage()).thenReturn(new MimeMessage((Session) null));
         //ACT
-        emailService.sendCancellation(customer,transactionDTO);
+        emailService.sendCancellationEmail(customer,transactionDTO);
     }
 }

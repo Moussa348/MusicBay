@@ -28,7 +28,7 @@ public class EmailService {
     }
 
 
-    public void sendCancellation(Customer customer, TransactionDTO transactionDTO) throws Exception{
+    public void sendCancellationEmail(Customer customer, TransactionDTO transactionDTO) throws Exception{
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage,true);
 
