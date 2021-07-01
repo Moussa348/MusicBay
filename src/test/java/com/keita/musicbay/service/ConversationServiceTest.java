@@ -16,6 +16,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -142,6 +144,25 @@ public class ConversationServiceTest {
 
         //ASSERT
         assertNotNull(conversationDTO);
+    }
+
+    @Test
+    void getLastSentMessages(){
+        //ARRANGE
+        User user = Customer.builder().userName("bigBrr").build();
+        List<Conversation> conversations = Arrays.asList(
+                Conversation.builder().id(1L).build()
+        );
+        conversations.get(0).getMessages().add(new Message(1L,"allo","brr"));
+
+        when(userRepository.findByUserName(user.getUserName())).thenReturn(Optional.of(user));
+        when(conversationRepository.getByUser(user)).thenReturn(conversations);
+
+        //ACT
+        List<SentMessage> lastSentMessages = conversationService.getLastSentMessages(user.getUserName());
+
+        //ASSERT
+        assertEquals(1,lastSentMessages.size());
     }
 
 }

@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class SentMessage implements Serializable {
-    private Long id;
+    private Long id,conversationId;
     private LocalDateTime date;
     private String content,sendBy;
 
@@ -17,5 +17,6 @@ public class SentMessage implements Serializable {
         this.date = message.getDate();
         this.sendBy = message.getSendBy();
         this.content = message.getContent();
+        this.conversationId = message.getId();
     }
 }

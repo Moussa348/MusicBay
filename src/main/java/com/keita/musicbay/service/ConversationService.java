@@ -10,6 +10,7 @@ import com.keita.musicbay.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,6 +63,15 @@ public class ConversationService {
 
     public ConversationDTO getConversation(Long id){
         return new ConversationDTO(conversationRepository.getById(id));
+    }
+
+    public List<SentMessage> getLastSentMessages(String username){
+        List<Message> messages = new ArrayList<>();
+        List<Conversation> conversations = conversationRepository.getByUser(userRepository.findByUserName(username).get());
+
+        conversations.forEach(conversation -> messages.add(conversation.getMessages().get(conversation.getMessages().size()-1)));
+
+        return messages.stream().map(SentMessage::new).collect(Collectors.toList());
     }
 
 }

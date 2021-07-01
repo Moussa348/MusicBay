@@ -4,10 +4,7 @@ import com.keita.musicbay.model.enums.ConversationType;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,7 +24,7 @@ public class Conversation implements Serializable {
     @OneToMany
     private List<User> user = new ArrayList<>();
 
-    @OneToMany(mappedBy = "conversation")
+    @OneToMany(mappedBy = "conversation",cascade = CascadeType.ALL)
     private List<Message> messages = new ArrayList<>();
 
     public Conversation(){}
