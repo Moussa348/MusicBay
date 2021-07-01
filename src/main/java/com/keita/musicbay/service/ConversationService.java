@@ -34,5 +34,13 @@ public class ConversationService {
         return  new ConversationDTO(conversationRepository.save(conversation));
     }
 
+    public ConversationDTO addUserInConversationGroup(Long id, String username){
+        Conversation conversation = conversationRepository.getById(id);
+
+        conversation.getUser().add(userRepository.findByUserName(username).get());
+
+        return new ConversationDTO(conversationRepository.save(conversation));
+    }
+
 
 }
