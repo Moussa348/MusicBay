@@ -76,7 +76,30 @@ public class ConversationServiceTest {
         //ASSERT
         assertNotNull(conversationDTO);
         assertEquals(2,conversationDTO.getUsernames().size());
+    }
 
+    @Test
+    void removeUserFromConversationGroup(){
+        //ARRANGE
+        Conversation conversation = Conversation.builder()
+                .id(1L)
+                .creationDate(LocalDateTime.now())
+                .name("GLowGanggg")
+                .conversationType(ConversationType.GROUP).build();
+        User user = Customer.builder().userName("bigBrr").build();
+        User userToRemove = Customer.builder().userName("brr").build();
+
+        conversation.getUser().add(user);
+        conversation.getUser().add(userToRemove);
+
+        when(conversationRepository.getById(conversation.getId())).thenReturn(conversation);
+        when(conversationRepository.save(conversation)).thenReturn(conversation);
+        //ACT
+        ConversationDTO conversationDTO = conversationService.removeUserFromConversationGroup(conversation.getId(),userToRemove.getUserName());
+
+        //ASSERT
+        assertNotNull(conversationDTO);
+        assertEquals(1,conversationDTO.getUsernames().size());
     }
 
 }

@@ -22,7 +22,7 @@ public class Conversation implements Serializable {
     @GeneratedValue
     private Long id;
     private LocalDateTime creationDate;
-    private String name;
+    private String name,createdBy;
     private ConversationType conversationType;
 
     @OneToMany

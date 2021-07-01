@@ -42,5 +42,13 @@ public class ConversationService {
         return new ConversationDTO(conversationRepository.save(conversation));
     }
 
+    public ConversationDTO removeUserFromConversationGroup(Long id,String username){
+        Conversation conversation = conversationRepository.getById(id);
+
+        conversation.setUser(conversation.getUser().stream().filter(user -> !user.getUserName().equals(username)).collect(Collectors.toList()));
+
+        return new ConversationDTO(conversationRepository.save(conversation));
+    }
+
 
 }
