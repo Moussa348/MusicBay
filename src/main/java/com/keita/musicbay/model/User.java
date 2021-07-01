@@ -27,9 +27,6 @@ public abstract class User implements Serializable {
     private LocalDateTime registrationDate;
     private boolean active;
 
-    @ManyToMany(mappedBy = "users")
-    private List<Message> messages;
-
     @ManyToMany
     private List<User> users;
 
@@ -53,7 +50,6 @@ public abstract class User implements Serializable {
         this.password = password;
         this.biography = biography;
         this.users = new ArrayList<>();
-        this.messages = new ArrayList<>();
         this.subscribers = new ArrayList<>();
         this.subscribeTos = new ArrayList<>();
         this.registrationDate = LocalDateTime.now();

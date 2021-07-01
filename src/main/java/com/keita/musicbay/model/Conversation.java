@@ -1,6 +1,5 @@
 package com.keita.musicbay.model;
 
-import com.keita.musicbay.model.dto.ConversationDTO;
 import com.keita.musicbay.model.enums.ConversationType;
 import lombok.Builder;
 import lombok.Data;
@@ -28,7 +27,7 @@ public class Conversation implements Serializable {
     @OneToMany
     private List<User> user = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "conversation")
     private List<Message> messages = new ArrayList<>();
 
     public Conversation(){}

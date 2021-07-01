@@ -1,8 +1,10 @@
 package com.keita.musicbay.service;
 
 import com.keita.musicbay.model.Conversation;
+import com.keita.musicbay.model.Message;
 import com.keita.musicbay.model.User;
 import com.keita.musicbay.model.dto.ConversationDTO;
+import com.keita.musicbay.model.dto.SentMessage;
 import com.keita.musicbay.repository.ConversationRepository;
 import com.keita.musicbay.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,14 @@ public class ConversationService {
         conversation.setUser(conversation.getUser().stream().filter(user -> !user.getUserName().equals(username)).collect(Collectors.toList()));
 
         return new ConversationDTO(conversationRepository.save(conversation));
+    }
+
+    public SentMessage sendMessageInConversation(Long conversationId,SentMessage sentMessage){
+        Conversation conversation = conversationRepository.getById(conversationId);
+
+        conversation.getMessages().add(new Message(sentMessage,conversation));
+
+        return new SentMessage(conversationRepository.save(conversation).getMessages().get(conversation.getMessages().size()-1));
     }
 
 

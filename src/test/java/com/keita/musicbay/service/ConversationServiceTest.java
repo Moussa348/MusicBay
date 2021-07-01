@@ -2,8 +2,10 @@ package com.keita.musicbay.service;
 
 import com.keita.musicbay.model.Conversation;
 import com.keita.musicbay.model.Customer;
+import com.keita.musicbay.model.Message;
 import com.keita.musicbay.model.User;
 import com.keita.musicbay.model.dto.ConversationDTO;
+import com.keita.musicbay.model.dto.SentMessage;
 import com.keita.musicbay.model.enums.ConversationType;
 import com.keita.musicbay.repository.ConversationRepository;
 import com.keita.musicbay.repository.UserRepository;
@@ -100,6 +102,29 @@ public class ConversationServiceTest {
         //ASSERT
         assertNotNull(conversationDTO);
         assertEquals(1,conversationDTO.getUsernames().size());
+    }
+
+    @Test
+    void sendMessageInConversation(){
+        //ARRANGE
+        Conversation conversation = Conversation.builder()
+                .id(1L)
+                .creationDate(LocalDateTime.now())
+                .name("GLowGanggg")
+                .conversationType(ConversationType.GROUP).build();
+        SentMessage sentMessage = new SentMessage(new Message(1L,"sdaad","brr"));
+        Message message = new Message(sentMessage,conversation);
+
+
+        when(conversationRepository.getById(conversation.getId())).thenReturn(conversation);
+        when(conversationRepository.save(conversation)).thenReturn(conversation);
+
+        //ACT
+        SentMessage newSentMessage = conversationService.sendMessageInConversation(conversation.getId(),sentMessage);
+
+        //ASSERT
+        assertNotNull(newSentMessage);
+        assertEquals(1,conversation.getMessages().size());
     }
 
 }
