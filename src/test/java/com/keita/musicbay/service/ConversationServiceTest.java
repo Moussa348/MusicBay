@@ -127,4 +127,21 @@ public class ConversationServiceTest {
         assertEquals(1,conversation.getMessages().size());
     }
 
+    @Test
+    void getConversation(){
+        //ARRANGE
+        Long id = 1L;
+        when(conversationRepository.getById(id)).thenReturn(Conversation.builder()
+                .id(1L)
+                .creationDate(LocalDateTime.now())
+                .name("GLowGanggg")
+                .conversationType(ConversationType.GROUP).build());
+
+        //ACT
+        ConversationDTO conversationDTO = conversationService.getConversation(id);
+
+        //ASSERT
+        assertNotNull(conversationDTO);
+    }
+
 }

@@ -60,5 +60,8 @@ public class ConversationService {
         return new SentMessage(conversationRepository.save(conversation).getMessages().get(conversation.getMessages().size()-1));
     }
 
+    public ConversationDTO getConversation(Long id){
+        return new ConversationDTO(conversationRepository.getById(id));
+    }
 
 }
