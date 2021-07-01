@@ -5,8 +5,6 @@ import com.keita.musicbay.model.Message;
 import com.keita.musicbay.model.Music;
 import com.keita.musicbay.model.User;
 import com.keita.musicbay.model.dto.PostedComment;
-import com.keita.musicbay.model.dto.TextDTO;
-import com.keita.musicbay.repository.CustomerRepository;
 import com.keita.musicbay.repository.MusicRepository;
 import com.keita.musicbay.repository.TextRepository;
 import com.keita.musicbay.repository.UserRepository;
@@ -28,6 +26,7 @@ public class CommentService {
     @Autowired
     private MusicRepository musicRepository;
 
+    /*
     public String createMessage(TextDTO message){
         List<User> users = message
                 .getUsernames()
@@ -43,6 +42,7 @@ public class CommentService {
         message.setUsers(users);
         textRepository.save(message);
     }
+     */
 
     public PostedComment postComment(PostedComment postedComment,String musicTitle){
         Music music = musicRepository.findByTitle(musicTitle).get();

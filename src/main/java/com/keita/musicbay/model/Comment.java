@@ -1,7 +1,6 @@
 package com.keita.musicbay.model;
 
 import com.keita.musicbay.model.dto.PostedComment;
-import com.keita.musicbay.model.dto.TextDTO;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

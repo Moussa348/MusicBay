@@ -1,6 +1,5 @@
 package com.keita.musicbay.model;
 
-import com.keita.musicbay.model.dto.TextDTO;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,8 +25,11 @@ public class Message extends Text implements Serializable {
         this.users = users;
     }
 
+    /*
+
     public Message(TextDTO textDTO,List<User> users){
         super(textDTO.getId(), textDTO.getContent(), textDTO.getSendBy());
         this.users = users;
     }
+     */
 }

@@ -2,7 +2,6 @@ package com.keita.musicbay.service;
 
 import com.keita.musicbay.model.*;
 import com.keita.musicbay.model.dto.PostedComment;
-import com.keita.musicbay.model.dto.TextDTO;
 import com.keita.musicbay.repository.MusicRepository;
 import com.keita.musicbay.repository.TextRepository;
 import com.keita.musicbay.repository.UserRepository;
@@ -29,13 +28,13 @@ public class CommentServiceTest {
     TextRepository textRepository;
 
     @Mock
-    UserRepository userRepository;
-
-    @Mock
     MusicRepository musicRepository;
 
     @InjectMocks
     CommentService commentService;
+
+    /*
+
 
     @Test
     void createMessage() {
@@ -67,6 +66,7 @@ public class CommentServiceTest {
         assertEquals(1,message.getUsers().size());
 
     }
+     */
 
     @Test
     void postComment() {
@@ -110,14 +110,5 @@ public class CommentServiceTest {
 
         //ASSERT
         assertEquals(2,postedComments.size());
-    }
-
-    @Test
-    void getLastSentMessageWithEveryUser(){
-        //ARRANGE
-
-        //ACT
-
-        //ASSERT
     }
 }

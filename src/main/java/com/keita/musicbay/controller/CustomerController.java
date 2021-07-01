@@ -3,7 +3,6 @@ package com.keita.musicbay.controller;
 import com.keita.musicbay.model.Customer;
 import com.keita.musicbay.model.dto.*;
 import com.keita.musicbay.service.CustomerService;
-import com.keita.musicbay.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,18 +15,6 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @Autowired
-    private CommentService commentService;
-
-    @PostMapping("/createCustomer")
-    public boolean createCustomer(@RequestBody Customer customer){
-        return customerService.createCustomer(customer);
-    }
-
-    @PostMapping("/createMessage")
-    public String createMessage(@RequestBody TextDTO message){
-        return commentService.createMessage(message);
-    }
 
     @GetMapping("/getProfile/{username}")
     public Profile getProfile(@PathVariable String username){

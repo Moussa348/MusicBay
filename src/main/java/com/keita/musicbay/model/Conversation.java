@@ -1,6 +1,8 @@
 package com.keita.musicbay.model;
 
+import com.keita.musicbay.model.dto.ConversationDTO;
 import com.keita.musicbay.model.enums.ConversationType;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -9,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,10 +26,18 @@ public class Conversation implements Serializable {
     private ConversationType conversationType;
 
     @OneToMany
-    private List<User> user;
+    private List<User> user = new ArrayList<>();
 
     @OneToMany
-    private List<Message> messages;
+    private List<Message> messages = new ArrayList<>();
 
+    public Conversation(){}
 
+    @Builder
+    public Conversation(Long id, LocalDateTime creationDate, String name, ConversationType conversationType) {
+        this.id = id;
+        this.creationDate = creationDate;
+        this.name = name;
+        this.conversationType = conversationType;
+    }
 }
