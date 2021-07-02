@@ -43,16 +43,4 @@ public class CommentService {
         return music.getComments().stream().map(PostedComment::new).collect(Collectors.toList());
     }
 
-
-    /*
-
-    public List<TextDTO> getLastSentMessageWithEveryUser(String username){
-        User user = userRepository.findByUserName(username).get();
-        List<Message> lastSentMessageWithEveryUser = user.getMessages()
-                .stream().filter(message -> message)
-
-        return lastSentMessageWithEveryUser.stream().map(TextDTO::new).collect(Collectors.toList());
-    }
-     */
-
 }

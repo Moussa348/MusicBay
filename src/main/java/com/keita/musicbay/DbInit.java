@@ -30,7 +30,10 @@ public class DbInit implements CommandLineRunner {
         List<Customer> customers = Arrays.asList(
                 Customer.builder().firstName("bay").lastName("drip").picture("".getBytes()).dateOfBirth(LocalDate.of(1999, 12, 22))
                         .city("ATL").email("bayDrip@gmail.com").cellNumber("442-332-3421").userName("bayDrip").password("bayDrip123")
-                        .biography("best rapper alive").build()
+                        .biography("best rapper alive").build(),
+                Customer.builder().firstName("brr").lastName("Big").picture("".getBytes()).dateOfBirth(LocalDate.of(1967, 12, 22))
+                        .city("ATL").email("bigBrr@gmail.com").cellNumber("442-332-3421").userName("bigBrr").password("bigBrr123")
+                        .biography("brr..bigBrr...").build()
         );
 
 
@@ -45,8 +48,9 @@ public class DbInit implements CommandLineRunner {
 
     public void insertMusic(){
         List<Music> musics = Arrays.asList(
-                MixTape.builder().title("culture1").build(),
-                Track.builder().title("redRoom").build()
+                MixTape.builder().title("culture1").nbrOfLike(0).nbrOfPLay(0).nbrOfShare(0).nbrOfPurchase(0).build(),
+                MixTape.builder().title("culture2").nbrOfLike(1).nbrOfPLay(1).nbrOfShare(1).nbrOfPurchase(0).build(),
+                Track.builder().title("redRoom").nbrOfLike(0).nbrOfPLay(0).nbrOfShare(0).nbrOfPurchase(0).build()
         );
 
         musics.get(0).getComments().add(Comment.builder().id(1L).content("nice!!").sendBy("bayDrip").nbrLike(0).build());
