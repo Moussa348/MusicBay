@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -89,9 +90,12 @@ public class TransactionServiceTest {
     void cancelTransaction(){
         //ARRANGE
         Customer customer = Customer.builder().userName("bigBrr").transactions(new ArrayList<>()).build();
+
         customer.getTransactions().add(new Transaction());
         customer.getTransactions().add(new Transaction());
         customer.getTransactions().add(new Transaction());
+        customer.getTransactions().get(0).setConfirmed(true);
+        customer.getTransactions().get(1).setConfirmed(true);
 
         when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
 

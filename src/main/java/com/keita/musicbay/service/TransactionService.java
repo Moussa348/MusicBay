@@ -55,7 +55,9 @@ public class TransactionService {
 
     public void cancelTransaction(String username) {
         Customer customer = customerRepository.findByUserName(username).get();
-        customer.getTransactions().remove(customer.getTransactions().size() - 1);
+
+        customer.getTransactions().removeIf(transaction -> !transaction.isConfirmed());
+
         customerRepository.save(customer);
     }
 

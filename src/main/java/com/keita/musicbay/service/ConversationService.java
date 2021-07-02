@@ -23,7 +23,6 @@ public class ConversationService {
     @Autowired
     private UserRepository userRepository;
 
-
     public ConversationDTO createConversation(ConversationDTO conversationDTO){
         List<User> users = conversationDTO.getUsernames().stream().map(username -> userRepository.findByUserName(username).get()).collect(Collectors.toList());
 
@@ -73,5 +72,4 @@ public class ConversationService {
 
         return messages.stream().map(SentMessage::new).collect(Collectors.toList());
     }
-
 }
