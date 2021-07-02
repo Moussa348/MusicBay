@@ -8,11 +8,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
@@ -54,8 +52,8 @@ public class CustomerServiceTest {
     void getProfile(){
         //ARRANGE
         String username1 = "bigBrr";
-        when(customerRepository.findByUserName(username1))
-                .thenReturn(Optional.of(Customer.builder().likings(Collections.emptyList()).sharings(Collections.emptyList()).purchasings(Collections.emptyList()).build()));
+
+        when(customerRepository.findByUserName(username1)).thenReturn(Optional.of(Customer.builder().likings(Collections.emptyList()).sharings(Collections.emptyList()).purchasings(Collections.emptyList()).build()));
 
         //ACT
         Profile profileExist = customerService.getProfile(username1);
@@ -98,6 +96,7 @@ public class CustomerServiceTest {
     void getListSharedMusic(){
         //ARRANGE
         Customer customer = Customer.builder().userName("ceo").sharings(Arrays.asList(Sharing.builder().music(Track.builder().build()).build(), Sharing.builder().music(Track.builder().build()).build())).build();
+
         when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
 
         //ACT
@@ -111,6 +110,7 @@ public class CustomerServiceTest {
     void getListPurchasedMusic(){
         //ARRANGE
         Customer customer = Customer.builder().userName("ceo").purchasings(Arrays.asList(Purchasing.builder().music(Track.builder().build()).build(), Purchasing.builder().music(Track.builder().build()).build())).build();
+
         when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
 
         //ACT
@@ -154,6 +154,5 @@ public class CustomerServiceTest {
 
         //ASSERT
         assertEquals(1,subscriberTos.size());
-
     }
 }

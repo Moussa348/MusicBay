@@ -26,8 +26,12 @@ public class CustomerService {
     //Todo:add MultipartFile as argument
     public boolean createCustomer(Customer customer, MultipartFile multipartFile) throws Exception {
         if (!customerRepository.existsByEmail(customer.getEmail()) && !customerRepository.existsByUserName(customer.getUserName())) {
-            customer.setPicture(multipartFile.getBytes());
+
+            if(multipartFile != null)
+                customer.setPicture(multipartFile.getBytes());
+
             customerRepository.save(customer);
+
             return true;
         }
         return false;

@@ -38,7 +38,7 @@ public abstract class User implements Serializable {
 
     public User(){}
 
-    public User(String firstName, String lastName,LocalDate dateOfBirth,String cellNumber,String city, String email, String userName, String password, String biography) {
+    public User(String firstName, String lastName, byte[] picture,LocalDate dateOfBirth,String cellNumber,String city, String email, String userName, String password, String biography) {
         this.uuid = UUID.randomUUID();
         this.firstName = firstName;
         this.lastName = lastName;
@@ -53,6 +53,7 @@ public abstract class User implements Serializable {
         this.subscribers = new ArrayList<>();
         this.subscribeTos = new ArrayList<>();
         this.registrationDate = LocalDateTime.now();
+        this.picture = picture;
         this.active = true;
     }
 
