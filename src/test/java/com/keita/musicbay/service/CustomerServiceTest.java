@@ -8,7 +8,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockMultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +32,7 @@ public class CustomerServiceTest {
     CustomerService customerService;
 
     @Test
-    void createCustomer(){
+    void createCustomer() throws Exception {
         //ARRANGE
         Customer customer1 = Customer.builder().userName("ice").email("ice@gmail.com").build();
         when(customerRepository.existsByEmail(customer1.getEmail()) && customerRepository.existsByUserName(customer1.getUserName())).thenReturn(false);
@@ -37,8 +42,8 @@ public class CustomerServiceTest {
 
         when(customerRepository.save(any(Customer.class))).thenReturn(new Customer());
         //ACT
-        boolean customer1HasBeenSaved = customerService.createCustomer(customer1);
-        boolean customer2HasNotBeenSaved = customerService.createCustomer(customer2);
+        boolean customer1HasBeenSaved = customerService.createCustomer(customer1,new MockMultipartFile("taa.zip","content".getBytes()));
+        boolean customer2HasNotBeenSaved = customerService.createCustomer(customer2,new MockMultipartFile("taa.zip","content".getBytes()));
 
         //ASSERT
         assertTrue(customer1HasBeenSaved);
@@ -57,6 +62,23 @@ public class CustomerServiceTest {
 
         //ASSERT
         assertNotNull(profileExist);
+    }
+
+    @Test
+    void getPicture() throws IOException {
+        //ARRANGE
+        Customer customer = Customer.builder().userName("bigBrr").build();
+        customer.setPicture("sadasd".getBytes());
+
+        MockHttpServletResponse mockHttpServletResponse = new MockHttpServletResponse();
+
+        mockHttpServletResponse.setContentType("image/jpeg");
+
+        when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
+
+        //ACT
+        customerService.getPicture(customer.getUserName(),mockHttpServletResponse);
+
     }
 
     @Test

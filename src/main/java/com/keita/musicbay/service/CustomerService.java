@@ -4,9 +4,15 @@ import com.keita.musicbay.model.Customer;
 import com.keita.musicbay.model.User;
 import com.keita.musicbay.model.dto.*;
 import com.keita.musicbay.repository.CustomerRepository;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,19 +24,26 @@ public class CustomerService {
     private CustomerRepository customerRepository;
 
     //Todo:add MultipartFile as argument
-    public boolean createCustomer(Customer customer) {
+    public boolean createCustomer(Customer customer, MultipartFile multipartFile) throws Exception {
         if (!customerRepository.existsByEmail(customer.getEmail()) && !customerRepository.existsByUserName(customer.getUserName())) {
+            customer.setPicture(multipartFile.getBytes());
             customerRepository.save(customer);
             return true;
         }
         return false;
     }
 
-    //Todo: add a getPicture() method
-
     public Profile getProfile(String username) {
         Customer customer = customerRepository.findByUserName(username).get();
         return new Profile(customer);
+    }
+
+    public void getPicture(String username, HttpServletResponse httpServletResponse) throws IOException {
+        httpServletResponse.setContentType("image/jpeg");
+
+        InputStream inputStream = new ByteArrayInputStream(customerRepository.findByUserName(username).get().getPicture());
+
+        IOUtils.copy(inputStream,httpServletResponse.getOutputStream());
     }
 
     public List<LikedMusic> getListLikedMusic(String username) {
