@@ -1,6 +1,10 @@
 package com.keita.musicbay;
 
+import com.keita.musicbay.controller.MusicController;
 import com.keita.musicbay.model.Customer;
+import com.keita.musicbay.model.MixTape;
+import com.keita.musicbay.model.Music;
+import com.keita.musicbay.model.Track;
 import com.keita.musicbay.repository.MusicRepository;
 import com.keita.musicbay.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +47,12 @@ public class DbInit implements CommandLineRunner {
     }
 
     public void insertMusic(){
+        List<Music> musics = Arrays.asList(
+                MixTape.builder().title("culture1").build(),
+                Track.builder().title("redRoom").build()
+        );
 
+        musicRepository.saveAll(musics);
     }
 
     @Override

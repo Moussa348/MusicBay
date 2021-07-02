@@ -73,7 +73,7 @@ public class CustomerControllerTest {
         String username1 = "bayDrip";
 
         //ACT
-        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.get("/customer/getProfile/" + username1)
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.get("/customer/getPicture/" + username1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
