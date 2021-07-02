@@ -29,7 +29,7 @@ public abstract class Music implements Serializable {
     private byte[] picture;
     private boolean hasAgreement;
 
-    @OneToMany(mappedBy = "music")
+    @OneToMany(mappedBy = "music",cascade = CascadeType.ALL)
     private List<Comment> comments;
 
     public Music() {}

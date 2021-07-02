@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class Purchasing implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne

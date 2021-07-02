@@ -26,23 +26,6 @@ public class CommentService {
     @Autowired
     private MusicRepository musicRepository;
 
-    /*
-    public String createMessage(TextDTO message){
-        List<User> users = message
-                .getUsernames()
-                .stream()
-                .map(username -> userRepository.findByUserName(username).get())
-                .collect(Collectors.toList());
-        return textRepository.save(new Message(message,users)).getContent();
-    }
-
-    public void deleteMessage(Long id,String username){
-        Message message = (Message) textRepository.findById(id).get();
-        List<User> users = message.getUsers().stream().filter(user -> !user.getUserName().equals(username)).collect(Collectors.toList());
-        message.setUsers(users);
-        textRepository.save(message);
-    }
-     */
 
     public PostedComment postComment(PostedComment postedComment,String musicTitle){
         Music music = musicRepository.findByTitle(musicTitle).get();
