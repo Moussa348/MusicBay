@@ -50,7 +50,7 @@ public class MonitoringControllerTest {
         String title = "culture2";
 
         //ACT
-        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.post("/monitoring/unLikeMusic/")
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.delete("/monitoring/unLikeMusic/")
                 .param("username",username)
                 .param("title",title)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -88,7 +88,7 @@ public class MonitoringControllerTest {
         String title = "culture2";
 
         //ACT
-        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.post("/monitoring/unShareMusic/")
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.delete("/monitoring/unShareMusic/")
                 .param("username",username)
                 .param("title",title)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -124,7 +124,7 @@ public class MonitoringControllerTest {
         String usernameToUnFollow = "bigBrr";
 
         //ACT
-        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.post("/monitoring/unSubscribe/")
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.delete("/monitoring/unSubscribe/")
                 .param("username",username)
                 .param("usernameToUnFollow",usernameToUnFollow)
                 .contentType(MediaType.APPLICATION_JSON)

@@ -4,6 +4,7 @@ import com.keita.musicbay.controller.MusicController;
 import com.keita.musicbay.model.*;
 import com.keita.musicbay.repository.MusicRepository;
 import com.keita.musicbay.service.CustomerService;
+import com.keita.musicbay.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
@@ -22,6 +23,9 @@ public class DbInit implements CommandLineRunner {
 
     @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    private TransactionService transactionService;
 
     @Autowired
     private MusicRepository musicRepository;
@@ -58,10 +62,14 @@ public class DbInit implements CommandLineRunner {
         musicRepository.saveAll(musics);
     }
 
+    public void insertTransaction(){
+        transactionService.createTransaction("bayDrip","culture1");
+    }
+
     @Override
     public void run(String... args) throws Exception {
         insertCustomers();
-
         insertMusic();
+        insertTransaction();
     }
 }

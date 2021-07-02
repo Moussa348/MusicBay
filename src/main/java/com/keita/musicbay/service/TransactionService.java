@@ -9,8 +9,8 @@ import com.keita.musicbay.repository.MusicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.stream.Collectors;
+import javax.transaction.Transactional;
+import java.util.UUID;
 
 @Service
 public class TransactionService {
@@ -21,10 +21,9 @@ public class TransactionService {
     @Autowired
     private MusicRepository musicRepository;
 
-
+    @Transactional
     public TransactionDTO createTransaction(String username, String title) {
         Customer customer = customerRepository.findByUserName(username).get();
-
         Transaction transaction = Transaction.builder().customer(customer).build();
 
         transaction.getMusics().add(musicRepository.findByTitle(title).get());
@@ -36,41 +35,34 @@ public class TransactionService {
     public TransactionDTO addMusicToTransaction(String username, String title) {
         Customer customer = customerRepository.findByUserName(username).get();
         Music music = musicRepository.findByTitle(title).get();
+        int positionOfLastTransaction = customer.getTransactions().size()-1;
 
-        Transaction transaction = customer.getTransactions().get(customer.getTransactions().size() - 1);
+        customer.getTransactions().get(positionOfLastTransaction).getMusics().add(music);
 
-        transaction.getMusics().add(music);
-
-        return new TransactionDTO(customerRepository.save(customer).getTransactions().get(customer.getTransactions().size() - 1));
+        return new TransactionDTO(customerRepository.save(customer).getTransactions().get(positionOfLastTransaction));
     }
 
     public TransactionDTO removeMusicFromTransaction(String username, String title) {
         Customer customer = customerRepository.findByUserName(username).get();
         Transaction transaction = customer.getTransactions().get(customer.getTransactions().size() - 1);
 
-        transaction.setMusics(transaction.getMusics().stream().filter(music -> !music.getTitle().equals(title)).collect(Collectors.toList()));
+        transaction.getMusics().removeIf(music -> music.getTitle().equals(title));
 
         return new TransactionDTO(customerRepository.save(customer).getTransactions().get(customer.getTransactions().size() - 1));
     }
 
-    public void cancelTransaction(String username) {
+    public void cancelTransaction(String username, UUID uuid) {
         Customer customer = customerRepository.findByUserName(username).get();
 
-        customer.getTransactions().removeIf(transaction -> !transaction.isConfirmed());
+        customer.getTransactions().removeIf(transaction -> transaction.getUuid().equals(uuid));
 
         customerRepository.save(customer);
     }
 
     public TransactionDTO getCurrentTransaction(String username) {
         Customer customer = customerRepository.findByUserName(username).get();
-        if (!customer.getTransactions().isEmpty()) {
+        int positionOfLastTransaction = customer.getTransactions().size()-1;
 
-            Transaction transaction = customer.getTransactions().get(customer.getTransactions().size() - 1);
-
-            if (transaction.getDate().toLocalDate().equals(LocalDate.now()))
-                return new TransactionDTO(transaction);
-
-        }
-        return null;
+        return customer.getTransactions().isEmpty() || customer.getTransactions().get(positionOfLastTransaction).isConfirmed() ? null:new TransactionDTO(customer.getTransactions().get(positionOfLastTransaction));
     }
 }

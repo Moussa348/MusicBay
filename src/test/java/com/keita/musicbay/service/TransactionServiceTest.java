@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -90,16 +91,18 @@ public class TransactionServiceTest {
         //ARRANGE
         Customer customer = Customer.builder().userName("bigBrr").transactions(new ArrayList<>()).build();
 
-        customer.getTransactions().add(new Transaction());
-        customer.getTransactions().add(new Transaction());
-        customer.getTransactions().add(new Transaction());
+        customer.getTransactions().add(Transaction.builder().build());
+        customer.getTransactions().add(Transaction.builder().build());
+        customer.getTransactions().add(Transaction.builder().build());
         customer.getTransactions().get(0).setConfirmed(true);
         customer.getTransactions().get(1).setConfirmed(true);
+
+
 
         when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
 
         //ACT
-        transactionService.cancelTransaction(customer.getUserName());
+        transactionService.cancelTransaction(customer.getUserName(),customer.getTransactions().get(1).getUuid());
 
         //ASSERT
         assertEquals(2,customer.getTransactions().size());

@@ -2,10 +2,7 @@ package com.keita.musicbay.controller;
 
 import com.keita.musicbay.service.MonitoringService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/monitoring")
@@ -19,7 +16,7 @@ public class MonitoringController {
         monitoringService.likeMusic(username,title);
     }
 
-    @PostMapping("/unLikeMusic")
+    @DeleteMapping("/unLikeMusic")
     public void unLikeMusic(@RequestParam("username") String username,@RequestParam("title") String title){
         monitoringService.unLikeMusic(username,title);
     }
@@ -29,7 +26,7 @@ public class MonitoringController {
         monitoringService.shareMusic(username,title,sharingMsg);
     }
 
-    @PostMapping("/unShareMusic")
+    @DeleteMapping("/unShareMusic")
     public void unShareMusic(@RequestParam("username") String username,@RequestParam("title") String title){
         monitoringService.unShareMusic(username,title);
     }
@@ -39,7 +36,7 @@ public class MonitoringController {
         monitoringService.subscribe(username,usernameToFollow);
     }
 
-    @PostMapping("/unSubscribe")
+    @DeleteMapping("/unSubscribe")
     public void unSubscribe(@RequestParam("username") String username,@RequestParam("usernameToUnFollow") String usernameToUnFollow){
         monitoringService.unSubscribe(username,usernameToUnFollow);
     }
