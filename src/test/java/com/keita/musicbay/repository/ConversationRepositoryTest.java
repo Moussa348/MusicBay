@@ -35,7 +35,7 @@ public class ConversationRepositoryTest {
                 Conversation.builder().id(1L).build()
         );
         conversations.get(0).getMessages().add(new Message(1L,"allo","brr"));
-        conversations.get(0).getUser().add(customerRepository.findByUserName("brr").get());
+        conversations.get(0).getUsers().add(customerRepository.findByUserName("brr").get());
 
         conversationRepository.saveAll(conversations);
     }

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 public class MusicDTO implements Serializable {
     private String title,description,tags,sharingMsg;
-    private LocalDateTime date,likingDate,sharingDate,purchasingDate;
+    private LocalDateTime date;
     private Integer nbrOfLike,nbrOfShare,nbrOfPlay,nbrOfPurchase,nbrOfComment;
     private Float price;
 

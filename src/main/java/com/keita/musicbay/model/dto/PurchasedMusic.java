@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class PurchasedMusic implements Serializable {
     private String title,description,tags;
     private Integer nbrOfLike,nbrOfShare,nbrOfPlay,nbrOfComment;
-    private LocalDateTime date,likingDate;
+    private LocalDateTime date,purchasingDate;
     private Float price;
 
     public PurchasedMusic(){}
@@ -25,6 +25,6 @@ public class PurchasedMusic implements Serializable {
         this.nbrOfPlay = purchasing.getMusic().getNbrOfPlay();
         this.price = purchasing.getMusic().getPrice();
         this.nbrOfComment = purchasing.getMusic().getComments().size();
-        this.likingDate = purchasing.getPurchasingDate();
+        this.purchasingDate = purchasing.getPurchasingDate();
     }
 }

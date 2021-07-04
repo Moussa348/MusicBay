@@ -31,7 +31,7 @@ public class TransactionControllerTest {
     void createTransaction() throws Exception{
         //ARRANGE
         String username = "bayDrip";
-        String title = "culture1";
+        String title = "redRoom";
 
         //ACT
         MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.post("/transaction/createTransaction/")
@@ -52,7 +52,7 @@ public class TransactionControllerTest {
         String title = "culture2";
 
         //ACT
-        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.post("/transaction/addMusicToTransaction/")
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/transaction/addMusicToTransaction/")
                 .param("username",username)
                 .param("title",title)
                 .contentType(MediaType.APPLICATION_JSON)

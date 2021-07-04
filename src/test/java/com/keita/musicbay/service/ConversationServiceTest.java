@@ -44,11 +44,11 @@ public class ConversationServiceTest {
                 .conversationType(ConversationType.GROUP).build();
         User user = Customer.builder().userName("brr").build();
 
-        conversation.getUser().add(user);
+        conversation.getUsers().add(user);
 
         ConversationDTO conversationDTO = new ConversationDTO(conversation);
 
-        conversation.getUser().forEach(userToAdd -> when(userRepository.findByUserName(user.getUserName())).thenReturn(Optional.of(user)));
+        conversation.getUsers().forEach(userToAdd -> when(userRepository.findByUserName(user.getUserName())).thenReturn(Optional.of(user)));
         when(conversationRepository.save(conversation)).thenReturn(conversation);
         //ACT
         ConversationDTO createdConversation = conversationService.createConversation(conversationDTO);
@@ -69,7 +69,7 @@ public class ConversationServiceTest {
         User user = Customer.builder().userName("bigBrr").build();
         User userToAdd = Customer.builder().userName("brr").build();
 
-        conversation.getUser().add(user);
+        conversation.getUsers().add(user);
 
         when(userRepository.findByUserName(userToAdd.getUserName())).thenReturn(Optional.of(userToAdd));
         when(conversationRepository.getById(conversation.getId())).thenReturn(conversation);
@@ -93,8 +93,8 @@ public class ConversationServiceTest {
         User user = Customer.builder().userName("bigBrr").build();
         User userToRemove = Customer.builder().userName("brr").build();
 
-        conversation.getUser().add(user);
-        conversation.getUser().add(userToRemove);
+        conversation.getUsers().add(user);
+        conversation.getUsers().add(userToRemove);
 
         when(conversationRepository.getById(conversation.getId())).thenReturn(conversation);
         when(conversationRepository.save(conversation)).thenReturn(conversation);
@@ -164,5 +164,4 @@ public class ConversationServiceTest {
         //ASSERT
         assertEquals(1,lastSentMessages.size());
     }
-
 }

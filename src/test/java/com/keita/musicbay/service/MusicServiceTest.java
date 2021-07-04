@@ -1,7 +1,9 @@
 package com.keita.musicbay.service;
 
 import com.keita.musicbay.model.*;
+import com.keita.musicbay.model.dto.Catalog;
 import com.keita.musicbay.model.dto.MusicDTO;
+import com.keita.musicbay.repository.CustomerRepository;
 import com.keita.musicbay.repository.MusicRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,6 +24,9 @@ public class MusicServiceTest {
     @Mock
     MusicRepository musicRepository;
 
+    @Mock
+    CustomerRepository customerRepository;
+
     @InjectMocks
     MusicService musicService;
 
@@ -37,6 +42,30 @@ public class MusicServiceTest {
         //ASSERT
         assertNotNull(musicDTO);
 
+    }
+
+    @Test
+    void getCatalog(){
+        //ARRANGE
+        Customer customer = Customer.builder()
+                .sharings(Arrays.asList(Sharing.builder().music(Track.builder().title("").build()).build()))
+                .likings(Arrays.asList(Liking.builder().music(Track.builder().title("").build()).build())).build();
+        List<Music> musics = Arrays.asList(
+                Track.builder().title("").build(),
+                MixTape.builder().title("").build(),
+                MixTape.builder().title("").build(),
+                Track.builder().title("").build()
+        );
+
+        when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
+        when(musicRepository.findAll()).thenReturn(musics);
+        //ACT
+        Catalog catalog = musicService.getCatalog(customer.getUserName());
+
+        //ASSERT
+        assertEquals(4,catalog.getMusics().size());
+        assertEquals(1,catalog.getLikedMusicTitles().size());
+        assertEquals(1,catalog.getSharedMusicTitles().size());
     }
 
     @Test

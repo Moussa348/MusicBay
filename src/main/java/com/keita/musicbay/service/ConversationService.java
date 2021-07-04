@@ -7,6 +7,7 @@ import com.keita.musicbay.model.dto.ConversationDTO;
 import com.keita.musicbay.model.dto.SentMessage;
 import com.keita.musicbay.repository.ConversationRepository;
 import com.keita.musicbay.repository.UserRepository;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Log
 public class ConversationService {
 
     @Autowired
@@ -31,15 +33,16 @@ public class ConversationService {
                 .name(conversationDTO.getName())
                 .conversationType(conversationDTO.getConversationType()).build();
 
-        conversation.getUser().addAll(users);
+        conversation.getUsers().addAll(users);
 
+        log.info(conversationDTO.toString());
         return  new ConversationDTO(conversationRepository.save(conversation));
     }
 
     public ConversationDTO addUserInConversationGroup(Long id, String username){
         Conversation conversation = conversationRepository.getById(id);
 
-        conversation.getUser().add(userRepository.findByUserName(username).get());
+        conversation.getUsers().add(userRepository.findByUserName(username).get());
 
         return new ConversationDTO(conversationRepository.save(conversation));
     }
@@ -47,7 +50,7 @@ public class ConversationService {
     public ConversationDTO removeUserFromConversationGroup(Long id,String username){
         Conversation conversation = conversationRepository.getById(id);
 
-        conversation.setUser(conversation.getUser().stream().filter(user -> !user.getUserName().equals(username)).collect(Collectors.toList()));
+        conversation.getUsers().removeIf(user -> user.getUserName().equals(username));
 
         return new ConversationDTO(conversationRepository.save(conversation));
     }
@@ -65,11 +68,11 @@ public class ConversationService {
     }
 
     public List<SentMessage> getLastSentMessages(String username){
-        List<Message> messages = new ArrayList<>();
+        List<Message> lastSentMessages = new ArrayList<>();
         List<Conversation> conversations = conversationRepository.getByUser(userRepository.findByUserName(username).get());
 
-        conversations.forEach(conversation -> messages.add(conversation.getMessages().get(conversation.getMessages().size()-1)));
+        conversations.forEach(conversation -> lastSentMessages.add(conversation.getMessages().get(conversation.getMessages().size()-1)));
 
-        return messages.stream().map(SentMessage::new).collect(Collectors.toList());
+        return lastSentMessages.stream().map(SentMessage::new).collect(Collectors.toList());
     }
 }

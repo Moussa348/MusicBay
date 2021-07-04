@@ -42,6 +42,21 @@ public class MusicControllerTest {
     }
 
     @Test
+    void getCatalog() throws Exception{
+        //ARRANGE
+        String username = "bigBrr";
+
+        //ACT
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.get("/music/getCatalog/" + username)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+
+        //ASSERT
+        assertNotNull(mvcResult1.getResponse().getContentAsString());
+    }
+
+    @Test
     void getListMusic() throws Exception{
         //ARRANGE
         String title = "culture3";

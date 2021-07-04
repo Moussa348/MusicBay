@@ -22,7 +22,7 @@ public class Conversation implements Serializable {
     private ConversationType conversationType;
 
     @OneToMany
-    private List<User> user = new ArrayList<>();
+    private List<User> users = new ArrayList<>();
 
     @OneToMany(mappedBy = "conversation",cascade = CascadeType.ALL)
     private List<Message> messages = new ArrayList<>();

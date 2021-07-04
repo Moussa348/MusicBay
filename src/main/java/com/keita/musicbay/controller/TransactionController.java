@@ -9,6 +9,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/transaction")
+@CrossOrigin(origins = "http://localhost:5001")
 public class TransactionController {
 
     @Autowired
@@ -19,7 +20,7 @@ public class TransactionController {
         return transactionService.createTransaction(username,title);
     }
 
-    @PostMapping("/addMusicToTransaction")
+    @PatchMapping("/addMusicToTransaction")
     public TransactionDTO addMusicToTransaction(@RequestParam("username") String username,@RequestParam("title") String title){
         return transactionService.addMusicToTransaction(username,title);
     }

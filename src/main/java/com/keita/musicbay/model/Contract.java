@@ -18,6 +18,7 @@ public class Contract extends File implements Serializable {
     @ManyToOne
     private Music music;
     private LocalDateTime date;
+    private String type,description;
 
     public Contract(){}
 
