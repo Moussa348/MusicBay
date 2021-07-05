@@ -34,6 +34,16 @@ public class CommentService {
 
         comment.setNbrLike(comment.getNbrLike()+1);
         comment.getLikedByList().add(new LikedBy(username,comment));
+
+        return new PostedComment(textRepository.save(comment));
+    }
+
+    public PostedComment decreaseLike(Long id,String username){
+        Comment comment = (Comment) textRepository.findById(id).get();
+
+        comment.setNbrLike(comment.getNbrLike()-1);
+        comment.getLikedByList().removeIf(likedBy -> likedBy.getUsername().equals(username));
+
         return new PostedComment(textRepository.save(comment));
     }
 

@@ -65,6 +65,22 @@ public class CommentServiceTest {
     }
 
     @Test
+    void decreaseLike(){
+        //ARRANGE
+        Comment comment = Comment.builder().id(1L).nbrLike(5).music(Track.builder().title("halloween").build()).build();
+        String username = "bombay";
+
+        when(textRepository.findById(comment.getId())).thenReturn(Optional.of(comment));
+        when(textRepository.save(comment)).thenReturn(comment);
+
+        //ACT
+        Integer nbrLike = commentService.decreaseLike(comment.getId(),username).getNbrLike();
+
+        //ASSERT
+        assertEquals(4,nbrLike);
+    }
+
+    @Test
     void getListCommentOfMusic(){
         //ARRANGE
         Music music = Track.builder().title("culture3").build();

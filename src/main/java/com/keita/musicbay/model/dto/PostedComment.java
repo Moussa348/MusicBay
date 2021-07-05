@@ -1,10 +1,13 @@
 package com.keita.musicbay.model.dto;
 
 import com.keita.musicbay.model.Comment;
+import com.keita.musicbay.model.LikedBy;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class PostedComment implements Serializable {
@@ -12,6 +15,7 @@ public class PostedComment implements Serializable {
     private LocalDateTime date;
     private String content,sendBy;
     private Integer nbrLike;
+    private List<String> likedBys;
 
     public PostedComment(String content,String sendBy,Integer nbrLike){
         this.content = content;
@@ -25,5 +29,6 @@ public class PostedComment implements Serializable {
         this.sendBy = comment.getSendBy();
         this.content = comment.getContent();
         this.nbrLike = comment.getNbrLike();
+        this.likedBys = comment.getLikedByList().stream().map(LikedBy::getUsername).collect(Collectors.toList());
     }
 }
