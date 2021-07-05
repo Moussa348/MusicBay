@@ -41,11 +41,9 @@ public class ConversationController {
         return conversationService.getConversation(id);
     }
 
-    /*
 
     @GetMapping("/getLastSentMessages/{username}")
     public List<SentMessage> getConversation(@PathVariable String username){
         return conversationService.getLastSentMessages(username);
     }
-     */
 }

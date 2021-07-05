@@ -5,9 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -18,6 +23,9 @@ public class Comment extends Text implements Serializable {
 
     @ManyToOne
     private Music music;
+
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<LikedBy> likedByList = new ArrayList<>();
 
     public Comment() { }
 
@@ -30,6 +38,7 @@ public class Comment extends Text implements Serializable {
 
     public Comment(PostedComment postedComment, Music music){
         super(postedComment.getId(),postedComment.getContent(), postedComment.getSendBy());
+        super.setDate(LocalDateTime.now());
         this.nbrLike = postedComment.getNbrLike();
         this.music = music;
     }

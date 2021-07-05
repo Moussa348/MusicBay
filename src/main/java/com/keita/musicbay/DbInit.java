@@ -3,8 +3,10 @@ package com.keita.musicbay;
 import com.keita.musicbay.controller.MusicController;
 import com.keita.musicbay.model.*;
 import com.keita.musicbay.model.dto.ConversationDTO;
+import com.keita.musicbay.model.dto.PostedComment;
 import com.keita.musicbay.model.enums.ConversationType;
 import com.keita.musicbay.repository.MusicRepository;
+import com.keita.musicbay.service.CommentService;
 import com.keita.musicbay.service.ConversationService;
 import com.keita.musicbay.service.CustomerService;
 import com.keita.musicbay.service.TransactionService;
@@ -37,6 +39,9 @@ public class DbInit implements CommandLineRunner {
     @Autowired
     private ConversationService conversationService;
 
+    @Autowired
+    private CommentService commentService;
+
     private void insertCustomers() {
         List<Customer> customers = Arrays.asList(
                 Customer.builder().firstName("bay").lastName("drip").picture("".getBytes()).dateOfBirth(LocalDate.of(1999, 12, 22))
@@ -60,7 +65,7 @@ public class DbInit implements CommandLineRunner {
         });
     }
 
-    public void insertMusic(){
+    private void insertMusic(){
         List<Music> musics = Arrays.asList(
                 MixTape.builder().title("culture1").description("").tags("Dark Hip-Hop rap").nbrOfLike(0).nbrOfPLay(0).nbrOfShare(0).nbrOfPurchase(0).price(24.0f).build(),
                 MixTape.builder().title("culture2").description("").tags("Hip-Hop Rap").nbrOfLike(1).nbrOfPLay(1).nbrOfShare(1).nbrOfPurchase(0).price(50.0f).build(),
@@ -75,11 +80,11 @@ public class DbInit implements CommandLineRunner {
         musicRepository.saveAll(musics);
     }
 
-    public void insertTransaction(){
+    private void insertTransaction(){
         transactionService.createTransaction("bayDrip","culture1");
     }
 
-    public void insertConversation(){
+    private void insertConversation(){
         List<ConversationDTO> conversationDTOS = Arrays.asList(
                 new ConversationDTO("migos", ConversationType.GROUP)
         );
@@ -89,11 +94,22 @@ public class DbInit implements CommandLineRunner {
         conversationDTOS.forEach(conversationDTO -> conversationService.createConversation(conversationDTO));
     }
 
+    private void insertComment(){
+        List<PostedComment> postedComments = Arrays.asList(
+            new PostedComment("nice instru you should get more views","bayDrip",0),
+            new PostedComment("this shit firee cant liee","bigBrr",0),
+            new PostedComment("broo you should drop some more","bayDrip",0)
+        );
+
+        postedComments.forEach(postedComment -> commentService.postComment(postedComment,"culture1"));
+    }
+
     @Override
     public void run(String... args) throws Exception {
         insertCustomers();
         insertMusic();
         insertTransaction();
         insertConversation();
+        insertComment();
     }
 }

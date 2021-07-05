@@ -56,18 +56,4 @@ public class MusicControllerTest {
         assertNotNull(mvcResult1.getResponse().getContentAsString());
     }
 
-    @Test
-    void getListMusic() throws Exception{
-        //ARRANGE
-        String title = "culture3";
-
-        //ACT
-        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.get("/music/getListMusic/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk()).andReturn();
-
-        //ASSERT
-        assertNotNull(mvcResult1.getResponse().getContentAsString());
-    }
 }

@@ -25,8 +25,4 @@ public class MusicController {
     public Catalog getCatalog(@PathVariable String username){
         return musicService.getCatalog(username);
     }
-    @GetMapping("/getListMusic")
-    public List<MusicDTO> getListMusic(){
-        return musicService.getListMusic();
-    }
 }

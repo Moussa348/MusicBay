@@ -6,6 +6,7 @@ import com.keita.musicbay.repository.MusicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
@@ -36,7 +37,7 @@ public class MonitoringService {
         customer.getLikings().removeIf(liking -> liking.getMusic().getTitle().equals(title));
         decreaseLike(music);
 
-        customerRepository.save(customer);
+        customerRepository.saveAndFlush(customer);
     }
 
     public void shareMusic(String username, String title, String sharingMsg) {

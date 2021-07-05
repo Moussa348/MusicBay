@@ -1,9 +1,6 @@
 package com.keita.musicbay.service;
 
-import com.keita.musicbay.model.Comment;
-import com.keita.musicbay.model.Message;
-import com.keita.musicbay.model.Music;
-import com.keita.musicbay.model.User;
+import com.keita.musicbay.model.*;
 import com.keita.musicbay.model.dto.PostedComment;
 import com.keita.musicbay.repository.MusicRepository;
 import com.keita.musicbay.repository.TextRepository;
@@ -32,9 +29,11 @@ public class CommentService {
         return new PostedComment(textRepository.save(new Comment(postedComment,music)));
     }
 
-    public PostedComment increaseLike(Long id){
+    public PostedComment increaseLike(Long id,String username){
         Comment comment = (Comment) textRepository.findById(id).get();
+
         comment.setNbrLike(comment.getNbrLike()+1);
+        comment.getLikedByList().add(new LikedBy(username,comment));
         return new PostedComment(textRepository.save(comment));
     }
 

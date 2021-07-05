@@ -49,9 +49,12 @@ public class CommentControllerTest {
     void increaseLike() throws Exception{
         //ARRANGE
         long id = 1L;
+        String username = "bombay";
 
         //ACT
-        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/comment/increaseLike/" + id)
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/comment/increaseLike/")
+                .param("id",String.valueOf(id))
+                .param("username",username)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();

@@ -33,41 +33,6 @@ public class CommentServiceTest {
     @InjectMocks
     CommentService commentService;
 
-    /*
-
-
-    @Test
-    void createMessage() {
-        //ARRANGE
-        TextDTO textDTO = new TextDTO("hey my friend","bigbrr", Arrays.asList("brr", "c4", "moneyman"));
-        textDTO.getUsernames().forEach(username -> when(userRepository.findByUserName(username)).thenReturn(Optional.of(new Customer())));
-
-        when(textRepository.save(any(Text.class))).thenReturn(Message.builder().content(textDTO.getContent()).build());
-
-        //ACT
-        String returnedContent = commentService.createMessage(textDTO);
-
-        //ASSERT
-        assertEquals(textDTO.getContent(),returnedContent);
-    }
-
-    @Test
-    public void deleteMessage(){
-        //ARRANGE
-        Long id = 1L;
-        String username = "bombay";
-        Message message = Message.builder().users(Arrays.asList(Customer.builder().userName("taa").build(),Customer.builder().userName("bombay").build())).build();
-        when(textRepository.findById(id)).thenReturn(Optional.of(message));
-
-        //ACT
-        commentService.deleteMessage(id,username);
-
-        //ASSERT
-        assertEquals(1,message.getUsers().size());
-
-    }
-     */
-
     @Test
     void postComment() {
         //ARRANGE
@@ -87,12 +52,13 @@ public class CommentServiceTest {
     void increaseLike() {
         //ARRANGE
         Comment comment = Comment.builder().id(1L).nbrLike(5).music(Track.builder().title("halloween").build()).build();
-        when(textRepository.findById(comment.getId())).thenReturn(Optional.of(comment));
+        String username = "bombay";
 
+        when(textRepository.findById(comment.getId())).thenReturn(Optional.of(comment));
         when(textRepository.save(comment)).thenReturn(comment);
 
         //ACT
-        Integer nbrLike = commentService.increaseLike(comment.getId()).getNbrLike();
+        Integer nbrLike = commentService.increaseLike(comment.getId(),username).getNbrLike();
 
         //ASSERT
         assertEquals(6,nbrLike);

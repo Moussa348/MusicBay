@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/comment")
+@CrossOrigin(origins = "http://localhost:5001")
 public class CommentController {
 
     @Autowired
@@ -19,9 +20,9 @@ public class CommentController {
         return commentService.postComment(postedComment,title);
     }
 
-    @PatchMapping("/increaseLike/{id}")
-    public PostedComment increaseLike(@PathVariable Long id){
-        return commentService.increaseLike(id);
+    @PatchMapping("/increaseLike")
+    public PostedComment increaseLike(@RequestParam("id") Long id,@RequestParam("username") String username){
+        return commentService.increaseLike(id,username);
     }
 
     @GetMapping("/getListCommentOfMusic/{title}")
