@@ -29,15 +29,19 @@ public abstract class Music implements Serializable {
     private byte[] picture;
     private boolean hasAgreement;
 
+    @ManyToOne
+    private Producer producer;
+
     @OneToMany(mappedBy = "music",cascade = CascadeType.ALL)
     private List<Comment> comments;
 
     public Music() {}
 
-    public Music(String title, String description, String tags, Integer nbrOfLike,
+    public Music(String title,String timeLength, String description, String tags, Integer nbrOfLike,
                  Integer nbrOfShare, Integer nbrOfPlay, Integer nbrOfPurchase,Float price) {
         this.uuid = UUID.randomUUID();
         this.title = title;
+        this.timeLength = timeLength;
         this.description = description;
         this.tags = tags;
         this.date = LocalDateTime.now();

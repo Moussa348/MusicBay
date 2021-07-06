@@ -1,6 +1,7 @@
 package com.keita.musicbay.model.dto;
 
 import com.keita.musicbay.model.Music;
+import com.keita.musicbay.model.Track;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -8,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class MusicDTO implements Serializable {
-    private String title,description,tags,sharingMsg;
+    private String title,description,tags,sharingMsg,creator,timeLength,type;
     private LocalDateTime date;
     private Integer nbrOfLike,nbrOfShare,nbrOfPlay,nbrOfPurchase,nbrOfComment;
     private Float price;
@@ -19,11 +20,14 @@ public class MusicDTO implements Serializable {
         this.title = music.getTitle();
         this.description = music.getDescription();
         this.tags = music.getTags();
+        this.timeLength = music.getTimeLength();
         this.date = music.getDate();
         this.nbrOfLike = music.getNbrOfLike();
         this.nbrOfShare = music.getNbrOfShare();
         this.nbrOfPlay = music.getNbrOfPlay();
         this.price = music.getPrice();
         this.nbrOfComment = music.getComments().size();
+        this.creator = "bombay";
+        this.type = music instanceof Track ? "TRACK":"MIXTAPE";
     }
 }

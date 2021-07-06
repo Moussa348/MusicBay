@@ -25,6 +25,13 @@ public class CommentController {
         return commentService.increaseLike(id,username);
     }
 
+    @PatchMapping("/decreaseLike")
+    public PostedComment decreaseLike(@RequestParam("id") Long id,@RequestParam("username") String username){
+        return commentService.decreaseLike(id,username);
+    }
+
+
+
     @GetMapping("/getListCommentOfMusic/{title}")
     public List<PostedComment> getListCommentOfMusic(@PathVariable String title){
         return commentService.getListCommentOfMusic(title);

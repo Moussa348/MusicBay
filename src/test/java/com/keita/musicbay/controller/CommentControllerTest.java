@@ -65,6 +65,25 @@ public class CommentControllerTest {
     }
 
     @Test
+    void decreaseLike() throws Exception{
+        //ARRANGE
+        long id = 1L;
+        String username = "bombay";
+
+        //ACT
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/comment/decreaseLike/")
+                .param("id",String.valueOf(id))
+                .param("username",username)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+
+
+        //ASSERT
+        assertNotNull(mvcResult1.getResponse().getContentAsString());
+    }
+
+    @Test
     void getListCommentOfMusic() throws Exception{
         //ARRANGE
         String title = "redRoom";

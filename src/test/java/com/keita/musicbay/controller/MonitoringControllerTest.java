@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -133,5 +134,23 @@ public class MonitoringControllerTest {
 
         //ASSERT
         assertNotNull(mvcResult1.getResponse().getContentAsString());
+    }
+
+    @Test
+    void checkIfSubscribeTo() throws Exception{
+        //ARRANGE
+        String username = "bayDrip";
+        String usernameSubscribeTo = "bombay";
+
+        //ACT
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.get("/monitoring/checkIfSubscribeTo/")
+                .param("username",username)
+                .param("usernameSubscribeTo",usernameSubscribeTo)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+
+        //ASSERT
+        assertEquals("true",mvcResult1.getResponse().getContentAsString());
     }
 }

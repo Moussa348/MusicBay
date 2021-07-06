@@ -24,7 +24,7 @@ public class Comment extends Text implements Serializable {
     @ManyToOne
     private Music music;
 
-    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "comment",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<LikedBy> likedByList = new ArrayList<>();
 
     public Comment() { }

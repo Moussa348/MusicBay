@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -146,6 +147,21 @@ public class MonitoringServiceTest {
 
         //ASSERT
         assertEquals(0,customer.getSubscribeTos().size());
+    }
 
+    @Test
+    void checkIfSubscribeTo(){
+        //ARRANGE
+        Customer customer = Customer.builder().userName("bigBrr").build();
+        SubscribeTo customerSubscribeTo = SubscribeTo.builder().username("c4").build();
+        customer.getSubscribeTos().add(customerSubscribeTo);
+
+        when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
+
+        //ACT
+        boolean customerIsSubscribedTo = monitoringService.checkIfSubscribeTo(customer.getUserName(),customerSubscribeTo.getUsername());
+
+        //ASSERT
+        assertTrue(customerIsSubscribedTo);
     }
 }

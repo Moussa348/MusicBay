@@ -42,5 +42,10 @@ public class MonitoringController {
         monitoringService.unSubscribe(username,usernameToUnFollow);
     }
 
+    @GetMapping("/checkIfSubscribeTo")
+    public boolean checkIfSubscribeTo(@RequestParam("username") String username,@RequestParam("usernameSubscribeTo")String usernameSubscribeTo){
+        return monitoringService.checkIfSubscribeTo(username,usernameSubscribeTo);
+    }
+
 
 }

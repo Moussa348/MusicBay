@@ -34,7 +34,7 @@ public class MonitoringService {
         Customer customer = customerRepository.findByUserName(username).get();
         Music music = musicRepository.findByTitle(title).get();
 
-        customer.getLikings().removeIf(liking -> liking.getMusic().getTitle().equals(title));
+         customer.getLikings().removeIf(liking -> liking.getMusic().getTitle().equals(title));
         decreaseLike(music);
 
         customerRepository.saveAndFlush(customer);
@@ -71,6 +71,7 @@ public class MonitoringService {
         customerRepository.save(customer);
     }
 
+    @Transactional
     public void subscribe(String username, String usernameToFollow) {
         Customer customer = customerRepository.findByUserName(username).get();
         Customer customerToFollow = customerRepository.findByUserName(usernameToFollow).get();
@@ -81,6 +82,7 @@ public class MonitoringService {
         customerRepository.saveAll(Arrays.asList(customer, customerToFollow));
     }
 
+    @Transactional
     public void unSubscribe(String username, String usernameToUnFollow) {
         Customer customer = customerRepository.findByUserName(username).get();
         Customer customerToUnFollow = customerRepository.findByUserName(usernameToUnFollow).get();
@@ -89,6 +91,11 @@ public class MonitoringService {
         customerToUnFollow.getSubscribers().removeIf(subscriber -> subscriber.getUsername().equals(username));
 
         customerRepository.saveAll(Arrays.asList(customer, customerToUnFollow));
+    }
+
+    public boolean checkIfSubscribeTo(String username,String usernameSubscribeTo){
+        Customer customer = customerRepository.findByUserName(username).get();
+        return customer.getSubscribeTos().stream().anyMatch(subscribeTo -> subscribeTo.getUsername().equals(usernameSubscribeTo));
     }
 
     private void increaseLike(Music music) {
