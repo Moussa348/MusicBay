@@ -2,18 +2,23 @@ package com.keita.musicbay.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.keita.musicbay.model.Customer;
+import com.keita.musicbay.model.dto.Registration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles("test")
@@ -30,19 +35,19 @@ public class CustomerControllerTest {
     @Test
     void createCustomer() throws Exception{
         //ARRANGE
-        Customer customer1 = Customer.builder().userName("brr").build();
-        Customer customer2 = Customer.builder().userName("bayDrip").build();
+        Registration registration1 = Registration.builder().username("brr").email("brr@gmail.com").build();
+        Registration registration2 = Registration.builder().username("bayDrip").email("bayDrip@gmail.com").build();
 
         //ACT
-        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.multipart("/customer/createCustomer").file("picture","".getBytes())
-                .content(mapper.writeValueAsString(customer1))
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.post("/customer/createCustomer")
+                .content(mapper.writeValueAsString(registration1))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
 
 
-        MvcResult mvcResult2 = mockMvc.perform(MockMvcRequestBuilders.multipart("/customer/createCustomer").file("picture","".getBytes())
-                .content(mapper.writeValueAsString(customer2))
+        MvcResult mvcResult2 = mockMvc.perform(MockMvcRequestBuilders.post("/customer/createCustomer")
+                .content(mapper.writeValueAsString(registration2))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
@@ -50,6 +55,32 @@ public class CustomerControllerTest {
         //ASSERT
         assertEquals("true",mvcResult1.getResponse().getContentAsString());
         assertEquals("false",mvcResult2.getResponse().getContentAsString());
+    }
+
+    @Test
+    void updateCustomer() throws Exception{
+        //ARRANGE
+        Registration registration1 = Registration.builder().username("brr").email("bigBrr@gmail.com").build();
+
+        //ACT
+        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/customer/updateCustomer").file("picture","".getBytes());
+        builder.with(new RequestPostProcessor() {
+            @Override
+            public MockHttpServletRequest postProcessRequest(MockHttpServletRequest mockHttpServletRequest) {
+                mockHttpServletRequest.setMethod("PATCH");
+                return mockHttpServletRequest;
+            }
+        });
+        MvcResult mvcResult1 = mockMvc.perform(builder
+                .content(mapper.writeValueAsString(registration1))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+
+
+
+        //ASSERT
+        assertNotNull(mvcResult1.getResponse().getContentAsString());
     }
 
     @Test

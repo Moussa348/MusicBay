@@ -4,6 +4,7 @@ import com.keita.musicbay.model.*;
 import com.keita.musicbay.model.dto.ConversationDTO;
 import com.keita.musicbay.model.dto.PostedComment;
 import com.keita.musicbay.model.enums.ConversationType;
+import com.keita.musicbay.repository.CustomerRepository;
 import com.keita.musicbay.repository.MusicRepository;
 import com.keita.musicbay.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,9 @@ public class DbInit implements CommandLineRunner {
     @Autowired
     private MonitoringService monitoringService;
 
+    @Autowired
+    private CustomerRepository customerRepository;
+
     private void insertCustomers() {
         List<Customer> customers = Arrays.asList(
                 Customer.builder().firstName("bay").lastName("drip").picture("".getBytes()).dateOfBirth(LocalDate.of(1999, 12, 22))
@@ -55,7 +59,7 @@ public class DbInit implements CommandLineRunner {
 
         customers.forEach(customer -> {
             try {
-                customerService.createCustomer(customer, null);
+                customerRepository.save(customer);
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -1,8 +1,11 @@
 package com.keita.musicbay.model;
 
+import com.keita.musicbay.model.dto.Profile;
+import com.keita.musicbay.model.dto.Registration;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
@@ -10,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +44,24 @@ public class Customer extends User implements Serializable {
         this.likings = likings;
         this.sharings = sharings;
         this.purchasings = purchasings;
+    }
+
+    public Customer(Registration registration){
+        super("", "",null,null,"","", registration.getEmail(), registration.getUsername(), registration.getPassword(), "");
+    }
+
+    public Customer(Registration registration, Customer customer, byte[] picture){
+        super("", "", picture, registration.getDate(),"", registration.getCity(), customer.getEmail(), customer.getUserName(), registration.getPassword(), registration.getBiography());
+        super.setUuid(customer.getUuid());
+        super.setSubscribers(customer.getSubscribers());
+        super.setSubscribeTos(customer.getSubscribeTos());
+        super.setActive(customer.isActive());
+        super.setRegistrationDate(customer.getRegistrationDate());
+        super.setUsers(customer.getUsers());
+        this.transactions = customer.getTransactions();
+        this.likings = customer.getLikings();
+        this.sharings = customer.getSharings();
+        this.purchasings = customer.getPurchasings();
     }
 
 }

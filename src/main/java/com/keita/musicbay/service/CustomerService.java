@@ -24,17 +24,19 @@ public class CustomerService {
     private CustomerRepository customerRepository;
 
     //Todo:add MultipartFile as argument
-    public boolean createCustomer(Customer customer, MultipartFile multipartFile) throws Exception {
-        if (!customerRepository.existsByEmail(customer.getEmail()) && !customerRepository.existsByUserName(customer.getUserName())) {
-
-            if(multipartFile != null)
-                customer.setPicture(multipartFile.getBytes());
-
-            customerRepository.save(customer);
-
+    public boolean createCustomer(Registration registration) {
+        if (!customerRepository.existsByEmail(registration.getEmail()) && !customerRepository.existsByUserName(registration.getUsername())) {
+            customerRepository.save(new Customer(registration));
             return true;
         }
         return false;
+    }
+
+    public Profile updateCustomer(Registration registration, byte[] picture) throws Exception {
+
+        Customer customer = customerRepository.findByEmail(registration.getEmail()).get();
+
+       return new Profile(customerRepository.save(new Customer(registration, customer, picture)));
     }
 
     public Profile getProfile(String username) {
@@ -47,7 +49,7 @@ public class CustomerService {
 
         InputStream inputStream = new ByteArrayInputStream(customerRepository.findByUserName(username).get().getPicture());
 
-        IOUtils.copy(inputStream,httpServletResponse.getOutputStream());
+        IOUtils.copy(inputStream, httpServletResponse.getOutputStream());
     }
 
     public List<LikedMusic> getListLikedMusic(String username) {

@@ -30,22 +30,36 @@ public class CustomerServiceTest {
     CustomerService customerService;
 
     @Test
-    void createCustomer() throws Exception {
+    void createCustomer() {
         //ARRANGE
-        Customer customer1 = Customer.builder().userName("ice").email("ice@gmail.com").build();
-        when(customerRepository.existsByEmail(customer1.getEmail()) && customerRepository.existsByUserName(customer1.getUserName())).thenReturn(false);
+        Registration registration1 = Registration.builder().username("ice").email("ice@gmail.com").password("sadadas").build();
+        when(customerRepository.existsByEmail(registration1.getEmail()) && customerRepository.existsByUserName(registration1.getUsername())).thenReturn(false);
 
-        Customer customer2 = Customer.builder().userName("brrr").email("brrr@gmail.com").build();
-        when(customerRepository.existsByEmail(customer2.getEmail()) && customerRepository.existsByUserName(customer2.getUserName())).thenReturn(true);
+        Registration registration2 = Registration.builder().username("brrr").email("brrr@gmail.com").password("brrr").build();
+        when(customerRepository.existsByEmail(registration2.getEmail()) && customerRepository.existsByUserName(registration2.getUsername())).thenReturn(true);
 
         when(customerRepository.save(any(Customer.class))).thenReturn(new Customer());
         //ACT
-        boolean customer1HasBeenSaved = customerService.createCustomer(customer1,new MockMultipartFile("taa.zip","content".getBytes()));
-        boolean customer2HasNotBeenSaved = customerService.createCustomer(customer2,new MockMultipartFile("taa.zip","content".getBytes()));
+        boolean customer1HasBeenSaved = customerService.createCustomer(registration1);
+        boolean customer2HasNotBeenSaved = customerService.createCustomer(registration2);
 
         //ASSERT
         assertTrue(customer1HasBeenSaved);
         assertFalse(customer2HasNotBeenSaved);
+    }
+
+    @Test
+    void updateCustomer() throws Exception{
+        //ARRANGE
+        Registration registration = Registration.builder().username("ice").email("ice@gmail.com").password("sadadas").build();
+        when(customerRepository.findByEmail(registration.getEmail())).thenReturn(Optional.of(Customer.builder().userName("taa").email("ice@gmail.com").build()));
+        when(customerRepository.save(any(Customer.class))).thenReturn(new Customer(registration));
+
+        //ACT
+        Profile updatedProfile = customerService.updateCustomer(registration,"".getBytes());
+
+        //ASSERT
+        assertEquals(registration.getUsername(),updatedProfile.getUsername());
     }
 
     @Test

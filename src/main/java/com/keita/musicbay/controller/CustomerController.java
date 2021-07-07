@@ -19,8 +19,13 @@ public class CustomerController {
     private CustomerService customerService;
 
     @PostMapping("/createCustomer")
-    public boolean createCustomer(@RequestBody Customer customer, @RequestParam("picture")MultipartFile multipartFile) throws Exception{
-        return customerService.createCustomer(customer,multipartFile);
+    public boolean createCustomer(@RequestBody Registration registration){
+        return customerService.createCustomer(registration);
+    }
+
+    @PatchMapping("/updateCustomer")
+    public Profile updateCustomer(@RequestBody Registration registration,@RequestParam("picture")MultipartFile multipartFile) throws Exception{
+        return customerService.updateCustomer(registration,multipartFile.getBytes());
     }
 
     @GetMapping("/getProfile/{username}")
