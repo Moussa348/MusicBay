@@ -31,10 +31,10 @@ public abstract class User implements Serializable {
     private List<User> users;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Subscriber> subscribers;
+    private List<Subscriber> subscribers = new ArrayList<>();
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<SubscribeTo> subscribeTos;
+    private List<SubscribeTo> subscribeTos = new ArrayList<>();
 
     public User(){}
 

@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -23,21 +24,21 @@ import java.util.List;
 public class Customer extends User implements Serializable {
 
     @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
-    private List<Transaction> transactions;
+    private List<Transaction> transactions = new ArrayList<>();
 
     @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Liking> likings;
+    private List<Liking> likings = new ArrayList<>();
 
     @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Sharing> sharings;
+    private List<Sharing> sharings = new ArrayList<>();
 
     @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Purchasing> purchasings;
+    private List<Purchasing> purchasings = new ArrayList<>();
 
     public Customer() { }
 
     @Builder
-    public Customer(String firstName, String lastName,byte[] picture, LocalDate dateOfBirth, String cellNumber, String city, String email, String userName, String password, String biography, List<Transaction> transactions,
+    public Customer(UUID uuid, String firstName, String lastName, byte[] picture, LocalDate dateOfBirth, String cellNumber, String city, String email, String userName, String password, String biography, List<Transaction> transactions,
                     List<Liking> likings, List<Sharing> sharings, List<Purchasing> purchasings) {
         super(firstName, lastName,picture,dateOfBirth,cellNumber,city, email, userName, password, biography);
         this.transactions = transactions;
@@ -50,8 +51,8 @@ public class Customer extends User implements Serializable {
         super("", "",null,null,"","", registration.getEmail(), registration.getUsername(), registration.getPassword(), "");
     }
 
-    public Customer(Registration registration, Customer customer, byte[] picture){
-        super("", "", picture, registration.getDate(),"", registration.getCity(), customer.getEmail(), customer.getUserName(), registration.getPassword(), registration.getBiography());
+    public Customer(Registration registration, Customer customer){
+        super("", "", customer.getPicture(), registration.getDate(),"", registration.getCity(), customer.getEmail(), registration.getUsername(), registration.getPassword(), registration.getBiography());
         super.setUuid(customer.getUuid());
         super.setSubscribers(customer.getSubscribers());
         super.setSubscribeTos(customer.getSubscribeTos());

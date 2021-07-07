@@ -45,13 +45,13 @@ public class DbInit implements CommandLineRunner {
 
     private void insertCustomers() {
         List<Customer> customers = Arrays.asList(
-                Customer.builder().firstName("bay").lastName("drip").picture("".getBytes()).dateOfBirth(LocalDate.of(1999, 12, 22))
+                Customer.builder().firstName("bay").lastName("drip").password("bayDrip123").picture("".getBytes()).dateOfBirth(LocalDate.of(1999, 12, 22))
                         .city("ATL").email("bayDrip@gmail.com").cellNumber("442-332-3421").userName("bayDrip").password("bayDrip123")
                         .biography("best rapper alive").build(),
-                Customer.builder().firstName("brr").lastName("Big").picture("".getBytes()).dateOfBirth(LocalDate.of(1967, 12, 22))
+                Customer.builder().firstName("brr").lastName("Big").password("bigBrr123").picture("".getBytes()).dateOfBirth(LocalDate.of(1967, 12, 22))
                         .city("ATL").email("bigBrr@gmail.com").cellNumber("442-332-3421").userName("bigBrr").password("bigBrr123")
                         .biography("brr..bigBrr...").build(),
-                Customer.builder().firstName("salehe").lastName("jojo").picture("".getBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
+                Customer.builder().firstName("salehe").lastName("jojo").password("bombay123").picture("".getBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
                         .city("MTL").email("bombay@gmail.com").cellNumber("514-987-3221").userName("bombay").password("bombay123")
                         .biography("I love alcool and weed").build()
         );

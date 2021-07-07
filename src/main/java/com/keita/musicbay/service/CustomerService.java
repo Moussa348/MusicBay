@@ -4,6 +4,7 @@ import com.keita.musicbay.model.Customer;
 import com.keita.musicbay.model.User;
 import com.keita.musicbay.model.dto.*;
 import com.keita.musicbay.repository.CustomerRepository;
+import lombok.extern.java.Log;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,26 +19,31 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Log
 public class CustomerService {
 
     @Autowired
     private CustomerRepository customerRepository;
 
-    //Todo:add MultipartFile as argument
     public boolean createCustomer(Registration registration) {
         if (!customerRepository.existsByEmail(registration.getEmail()) && !customerRepository.existsByUserName(registration.getUsername())) {
+            //TODO : add default profile picture
             customerRepository.save(new Customer(registration));
             return true;
         }
         return false;
     }
 
-    public Profile updateCustomer(Registration registration, byte[] picture) throws Exception {
+    public Profile updateCustomer(Registration registration) throws Exception {
+        Customer customer = customerRepository.findById(registration.getUuid()).get();
 
-        Customer customer = customerRepository.findByEmail(registration.getEmail()).get();
 
-       return new Profile(customerRepository.save(new Customer(registration, customer, picture)));
+        return  customer.getUserName().equals(registration.getUsername()) ||
+                !customerRepository.existsByUserName(registration.getUsername()) ?
+                new Profile(customerRepository.save(new Customer(registration, customer))):null;
     }
+
+    //TODO : add individual method to save picture
 
     public Profile getProfile(String username) {
         Customer customer = customerRepository.findByUserName(username).get();

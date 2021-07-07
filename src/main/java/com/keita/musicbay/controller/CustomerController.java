@@ -3,7 +3,9 @@ package com.keita.musicbay.controller;
 import com.keita.musicbay.model.Customer;
 import com.keita.musicbay.model.dto.*;
 import com.keita.musicbay.service.CustomerService;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/customer")
 @CrossOrigin(origins = "http://localhost:5001")
+@Log
 public class CustomerController {
 
     @Autowired
@@ -23,9 +26,14 @@ public class CustomerController {
         return customerService.createCustomer(registration);
     }
 
-    @PatchMapping("/updateCustomer")
-    public Profile updateCustomer(@RequestBody Registration registration,@RequestParam("picture")MultipartFile multipartFile) throws Exception{
-        return customerService.updateCustomer(registration,multipartFile.getBytes());
+    @PatchMapping( "/updateCustomer")
+    public Profile updateCustomer(@RequestBody Registration registration) {
+        try {
+            return customerService.updateCustomer(registration);
+        } catch (Exception e) {
+            log.warning(e.getMessage().toUpperCase());
+            return null;
+        }
     }
 
     @GetMapping("/getProfile/{username}")

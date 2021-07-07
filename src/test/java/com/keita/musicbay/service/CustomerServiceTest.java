@@ -3,6 +3,7 @@ package com.keita.musicbay.service;
 import com.keita.musicbay.model.*;
 import com.keita.musicbay.model.dto.*;
 import com.keita.musicbay.repository.CustomerRepository;
+import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,15 +13,13 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@Log
 public class CustomerServiceTest {
 
     @Mock
@@ -51,22 +50,31 @@ public class CustomerServiceTest {
     @Test
     void updateCustomer() throws Exception{
         //ARRANGE
-        Registration registration = Registration.builder().username("ice").email("ice@gmail.com").password("sadadas").build();
-        when(customerRepository.findByEmail(registration.getEmail())).thenReturn(Optional.of(Customer.builder().userName("taa").email("ice@gmail.com").build()));
-        when(customerRepository.save(any(Customer.class))).thenReturn(new Customer(registration));
+        Registration registration1 = Registration.builder().uuid(UUID.randomUUID()).username("ice").email("ice@gmail.com").password("sadadas").build();
+        Customer customer1 = Customer.builder().uuid(registration1.getUuid()).userName("ice").email("ice@gmail.com").build();
+        when(customerRepository.findById(registration1.getUuid())).thenReturn(Optional.of(customer1));
 
+        Registration registration2 = Registration.builder().uuid(UUID.randomUUID()).username("taa").email("bigBrr@gmail.com").password("sadadas").build();
+        Customer customer2 = Customer.builder().uuid(registration2.getUuid()).userName("bigBrr").email("bigBrr@gmail.com").build();
+        when(customerRepository.findById(registration2.getUuid())).thenReturn(Optional.of(customer2));
+        when(customerRepository.existsByUserName(registration1.getUsername())).thenReturn(true);
+        when(customerRepository.existsByUserName(registration2.getUsername())).thenReturn(false);
+
+        when(customerRepository.save(any(Customer.class))).thenReturn(new Customer(registration1,customer1)).thenReturn(new Customer(registration2,customer2));
         //ACT
-        Profile updatedProfile = customerService.updateCustomer(registration,"".getBytes());
+        Profile updateProfileWithSameUsername = customerService.updateCustomer(registration1);
+
+        Profile updatedProfileWithModifiedUser = customerService.updateCustomer(registration2);
 
         //ASSERT
-        assertEquals(registration.getUsername(),updatedProfile.getUsername());
+        assertEquals(registration1.getUsername(),updateProfileWithSameUsername.getUsername());
+        assertEquals(registration2.getUsername(),updatedProfileWithModifiedUser.getUsername());
     }
 
     @Test
     void getProfile(){
         //ARRANGE
         String username1 = "bigBrr";
-
         when(customerRepository.findByUserName(username1)).thenReturn(Optional.of(Customer.builder().likings(Collections.emptyList()).sharings(Collections.emptyList()).purchasings(Collections.emptyList()).build()));
 
         //ACT

@@ -63,20 +63,11 @@ public class CustomerControllerTest {
         Registration registration1 = Registration.builder().username("brr").email("bigBrr@gmail.com").build();
 
         //ACT
-        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/customer/updateCustomer").file("picture","".getBytes());
-        builder.with(new RequestPostProcessor() {
-            @Override
-            public MockHttpServletRequest postProcessRequest(MockHttpServletRequest mockHttpServletRequest) {
-                mockHttpServletRequest.setMethod("PATCH");
-                return mockHttpServletRequest;
-            }
-        });
-        MvcResult mvcResult1 = mockMvc.perform(builder
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/customer/updateCustomer")
                 .content(mapper.writeValueAsString(registration1))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
-
 
 
         //ASSERT
