@@ -5,15 +5,14 @@ import com.keita.musicbay.model.User;
 import com.keita.musicbay.model.dto.*;
 import com.keita.musicbay.repository.CustomerRepository;
 import lombok.extern.java.Log;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,21 +24,27 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public boolean createCustomer(Registration registration) {
-        if (!customerRepository.existsByEmail(registration.getEmail()) && !customerRepository.existsByUserName(registration.getUsername())) {
+    public boolean createCustomer(Registration registration) throws Exception {
+        if (!customerRepository.existsByEmail(registration.getEmail()) && !customerRepository.existsByUserName(registration.getUserName())) {
             //TODO : add default profile picture
-            customerRepository.save(new Customer(registration));
+            Customer customer = new Customer(registration, setDefaultProfilePicture());
+            customerRepository.save(customer);
             return true;
         }
         return false;
+    }
+
+    private byte[] setDefaultProfilePicture() throws Exception{
+        FileInputStream fileInputStream = new FileInputStream("./docs/noUser.jpg");
+        return fileInputStream.readAllBytes();
     }
 
     public Profile updateCustomer(Registration registration) throws Exception {
         Customer customer = customerRepository.findById(registration.getUuid()).get();
 
 
-        return  customer.getUserName().equals(registration.getUsername()) ||
-                !customerRepository.existsByUserName(registration.getUsername()) ?
+        return  customer.getUserName().equals(registration.getUserName()) ||
+                !customerRepository.existsByUserName(registration.getUserName()) ?
                 new Profile(customerRepository.save(new Customer(registration, customer))):null;
     }
 

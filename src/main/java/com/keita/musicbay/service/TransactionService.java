@@ -21,6 +21,12 @@ public class TransactionService {
     @Autowired
     private MusicRepository musicRepository;
 
+    public boolean checkIfTransactionPending(String username){
+        Customer customer = customerRepository.findByUserName(username).get();
+
+        return !customer.getTransactions().isEmpty() && !customer.getTransactions().get(customer.getTransactions().size() - 1).isConfirmed();
+    }
+
     @Transactional
     public TransactionDTO createTransaction(String username, String title) {
         Customer customer = customerRepository.findByUserName(username).get();
@@ -29,17 +35,21 @@ public class TransactionService {
         transaction.getMusics().add(musicRepository.findByTitle(title).get());
         customer.getTransactions().add(transaction);
 
-        return new TransactionDTO(customerRepository.save(customer).getTransactions().get(customer.getTransactions().size() - 1));
+        customerRepository.save(customer);
+
+        return new TransactionDTO(transaction);
     }
 
     public TransactionDTO addMusicToTransaction(String username, String title) {
         Customer customer = customerRepository.findByUserName(username).get();
         Music music = musicRepository.findByTitle(title).get();
-        int positionOfLastTransaction = customer.getTransactions().size()-1;
+        Transaction latestTransaction = customer.getTransactions().get(customer.getTransactions().size()-1);
 
-        customer.getTransactions().get(positionOfLastTransaction).getMusics().add(music);
+        latestTransaction.getMusics().add(music);
 
-        return new TransactionDTO(customerRepository.save(customer).getTransactions().get(positionOfLastTransaction));
+        customerRepository.save(customer);
+
+        return new TransactionDTO(latestTransaction);
     }
 
     public TransactionDTO removeMusicFromTransaction(String username, String title) {

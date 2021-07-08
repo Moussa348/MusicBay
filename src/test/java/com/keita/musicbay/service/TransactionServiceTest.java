@@ -10,10 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -31,16 +28,42 @@ public class TransactionServiceTest {
     TransactionService transactionService;
 
     @Test
+    void checkIfTransactionPending(){
+        //ARRANGE
+        Customer customer1 = Customer.builder().userName("brr").transactions(new ArrayList<>()).build();
+        List<Transaction> transactions = Arrays.asList(
+                Transaction.builder().build(),
+                Transaction.builder().build()
+        );
+        transactions.get(0).setConfirmed(true);
+        transactions.get(1).setConfirmed(false);
+
+        customer1.setTransactions(transactions);
+        when(customerRepository.findByUserName(customer1.getUserName())).thenReturn(Optional.of(customer1));
+
+        Customer customer2 = Customer.builder().userName("bay").transactions(new ArrayList<>()).build();
+        when(customerRepository.findByUserName(customer2.getUserName())).thenReturn(Optional.of(customer2));
+
+
+        //ACT
+        boolean oneTransactionPending = transactionService.checkIfTransactionPending(customer1.getUserName());
+        boolean noTransactionPending = transactionService.checkIfTransactionPending(customer2.getUserName());
+        //ASSERT
+        assertTrue(oneTransactionPending);
+        assertFalse(noTransactionPending);
+    }
+
+    @Test
     void createTransaction(){
         //ARRANGE
         Customer customer = Customer.builder().userName("brr").transactions(new ArrayList<>()).build();
         Transaction transaction = Transaction.builder().customer(customer).build();
         Music music = MixTape.builder().title("hoodSeason").build();
 
-        customer.getTransactions().add(transaction);
 
         when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
         when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
+        customer.getTransactions().add(transaction);
         when(customerRepository.save(customer)).thenReturn(customer);
         //ACT
         TransactionDTO createdTransaction = transactionService.createTransaction(customer.getUserName(),music.getTitle());

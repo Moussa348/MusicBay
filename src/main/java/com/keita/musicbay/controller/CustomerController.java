@@ -22,7 +22,7 @@ public class CustomerController {
     private CustomerService customerService;
 
     @PostMapping("/createCustomer")
-    public boolean createCustomer(@RequestBody Registration registration){
+    public boolean createCustomer(@RequestBody Registration registration) throws Exception{
         return customerService.createCustomer(registration);
     }
 

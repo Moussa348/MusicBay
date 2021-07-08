@@ -48,11 +48,15 @@ public class Customer extends User implements Serializable {
     }
 
     public Customer(Registration registration){
-        super("", "",null,null,"","", registration.getEmail(), registration.getUsername(), registration.getPassword(), "");
+        super("", "",null,null,"","", registration.getEmail(), registration.getUserName(), registration.getPassword(), "");
+    }
+
+    public Customer(Registration registration, byte[] picture){
+        super("", "",picture,null,"","", registration.getEmail(), registration.getUserName(), registration.getPassword(), "");
     }
 
     public Customer(Registration registration, Customer customer){
-        super("", "", customer.getPicture(), registration.getDate(),"", registration.getCity(), customer.getEmail(), registration.getUsername(), registration.getPassword(), registration.getBiography());
+        super("", "", customer.getPicture(), registration.getDate(),"", registration.getCity(), customer.getEmail(), registration.getUserName(), registration.getPassword(), registration.getBiography());
         super.setUuid(customer.getUuid());
         super.setSubscribers(customer.getSubscribers());
         super.setSubscribeTos(customer.getSubscribeTos());

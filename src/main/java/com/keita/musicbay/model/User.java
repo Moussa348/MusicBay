@@ -21,7 +21,6 @@ public abstract class User implements Serializable {
     private String firstName,lastName,email,userName,city,cellNumber,password,biography;
 
     @Lob
-    @Column(name ="picture",columnDefinition = "BLOB")
     private byte[] picture;
     private LocalDate dateOfBirth;
     private LocalDateTime registrationDate;

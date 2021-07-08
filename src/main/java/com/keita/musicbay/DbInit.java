@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -43,15 +44,16 @@ public class DbInit implements CommandLineRunner {
     @Autowired
     private CustomerRepository customerRepository;
 
-    private void insertCustomers() {
+    private void insertCustomers() throws Exception {
+        FileInputStream fileInputStream = new FileInputStream("./docs/noUser.jpg");
         List<Customer> customers = Arrays.asList(
                 Customer.builder().firstName("bay").lastName("drip").password("bayDrip123").picture("".getBytes()).dateOfBirth(LocalDate.of(1999, 12, 22))
-                        .city("ATL").email("bayDrip@gmail.com").cellNumber("442-332-3421").userName("bayDrip").password("bayDrip123")
+                        .city("ATL").picture(fileInputStream.readAllBytes()).email("bayDrip@gmail.com").cellNumber("442-332-3421").userName("bayDrip").password("bayDrip123")
                         .biography("best rapper alive").build(),
-                Customer.builder().firstName("brr").lastName("Big").password("bigBrr123").picture("".getBytes()).dateOfBirth(LocalDate.of(1967, 12, 22))
+                Customer.builder().firstName("brr").lastName("Big").picture(fileInputStream.readAllBytes()).password("bigBrr123").picture("".getBytes()).dateOfBirth(LocalDate.of(1967, 12, 22))
                         .city("ATL").email("bigBrr@gmail.com").cellNumber("442-332-3421").userName("bigBrr").password("bigBrr123")
                         .biography("brr..bigBrr...").build(),
-                Customer.builder().firstName("salehe").lastName("jojo").password("bombay123").picture("".getBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
+                Customer.builder().firstName("salehe").lastName("jojo").picture(fileInputStream.readAllBytes()).password("bombay123").picture("".getBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
                         .city("MTL").email("bombay@gmail.com").cellNumber("514-987-3221").userName("bombay").password("bombay123")
                         .biography("I love alcool and weed").build()
         );
@@ -59,7 +61,7 @@ public class DbInit implements CommandLineRunner {
 
         customers.forEach(customer -> {
             try {
-                customerRepository.save(customer);
+                customerRepository.saveAndFlush(customer);
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -29,13 +29,13 @@ public class CustomerServiceTest {
     CustomerService customerService;
 
     @Test
-    void createCustomer() {
+    void createCustomer() throws Exception {
         //ARRANGE
-        Registration registration1 = Registration.builder().username("ice").email("ice@gmail.com").password("sadadas").build();
-        when(customerRepository.existsByEmail(registration1.getEmail()) && customerRepository.existsByUserName(registration1.getUsername())).thenReturn(false);
+        Registration registration1 = Registration.builder().userName("ice").email("ice@gmail.com").password("sadadas").build();
+        when(customerRepository.existsByEmail(registration1.getEmail()) && customerRepository.existsByUserName(registration1.getUserName())).thenReturn(false);
 
-        Registration registration2 = Registration.builder().username("brrr").email("brrr@gmail.com").password("brrr").build();
-        when(customerRepository.existsByEmail(registration2.getEmail()) && customerRepository.existsByUserName(registration2.getUsername())).thenReturn(true);
+        Registration registration2 = Registration.builder().userName("brrr").email("brrr@gmail.com").password("brrr").build();
+        when(customerRepository.existsByEmail(registration2.getEmail()) && customerRepository.existsByUserName(registration2.getUserName())).thenReturn(true);
 
         when(customerRepository.save(any(Customer.class))).thenReturn(new Customer());
         //ACT
@@ -50,25 +50,24 @@ public class CustomerServiceTest {
     @Test
     void updateCustomer() throws Exception{
         //ARRANGE
-        Registration registration1 = Registration.builder().uuid(UUID.randomUUID()).username("ice").email("ice@gmail.com").password("sadadas").build();
+        Registration registration1 = Registration.builder().uuid(UUID.randomUUID()).userName("ice").email("ice@gmail.com").password("sadadas").build();
         Customer customer1 = Customer.builder().uuid(registration1.getUuid()).userName("ice").email("ice@gmail.com").build();
-        when(customerRepository.findById(registration1.getUuid())).thenReturn(Optional.of(customer1));
 
-        Registration registration2 = Registration.builder().uuid(UUID.randomUUID()).username("taa").email("bigBrr@gmail.com").password("sadadas").build();
+        Registration registration2 = Registration.builder().uuid(UUID.randomUUID()).userName("taa").email("bigBrr@gmail.com").password("sadadas").build();
         Customer customer2 = Customer.builder().uuid(registration2.getUuid()).userName("bigBrr").email("bigBrr@gmail.com").build();
-        when(customerRepository.findById(registration2.getUuid())).thenReturn(Optional.of(customer2));
-        when(customerRepository.existsByUserName(registration1.getUsername())).thenReturn(true);
-        when(customerRepository.existsByUserName(registration2.getUsername())).thenReturn(false);
 
-        when(customerRepository.save(any(Customer.class))).thenReturn(new Customer(registration1,customer1)).thenReturn(new Customer(registration2,customer2));
         //ACT
+        when(customerRepository.save(any(Customer.class))).thenReturn(new Customer(registration1,customer1)).thenReturn(new Customer(registration2,customer2));
+        when(customerRepository.findById(registration1.getUuid())).thenReturn(Optional.of(customer1));
         Profile updateProfileWithSameUsername = customerService.updateCustomer(registration1);
 
+        when(customerRepository.findById(registration2.getUuid())).thenReturn(Optional.of(customer2));
+        when(customerRepository.existsByUserName(registration2.getUserName())).thenReturn(false);
         Profile updatedProfileWithModifiedUser = customerService.updateCustomer(registration2);
 
         //ASSERT
-        assertEquals(registration1.getUsername(),updateProfileWithSameUsername.getUsername());
-        assertEquals(registration2.getUsername(),updatedProfileWithModifiedUser.getUsername());
+        assertEquals(registration1.getUserName(),updateProfileWithSameUsername.getUsername());
+        assertEquals(registration2.getUserName(),updatedProfileWithModifiedUser.getUsername());
     }
 
     @Test

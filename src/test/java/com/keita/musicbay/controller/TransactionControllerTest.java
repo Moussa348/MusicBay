@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -26,6 +27,21 @@ public class TransactionControllerTest {
 
     @Autowired
     ObjectMapper mapper;
+
+    @Test
+    void checkIfTransactionPending() throws Exception{
+        //ARRANGE
+        String username = "bayDrip";
+
+        //ACT
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.get("/transaction/checkIfTransactionPending/" + username)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+
+        //ASSERT
+        assertEquals("true",mvcResult1.getResponse().getContentAsString());
+    }
 
     @Test
     void createTransaction() throws Exception{
