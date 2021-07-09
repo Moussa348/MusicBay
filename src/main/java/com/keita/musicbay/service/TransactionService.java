@@ -30,6 +30,13 @@ public class TransactionService {
         return !customer.getTransactions().isEmpty() && !customer.getTransactions().get(customer.getTransactions().size() - 1).isConfirmed();
     }
 
+    public boolean checkIfArticleIsInTransaction(String username,String title){
+        Customer customer = customerRepository.findByUsername(username).get();
+        Transaction latestTransaction = customer.getTransactions().get(customer.getTransactions().size()-1);
+
+        return latestTransaction.getArticles().stream().anyMatch(article -> article.getMusic().getTitle().equals(title));
+    }
+
 
     @Transactional
     public TransactionDTO createTransaction(String username, String title, PriceType priceType) {

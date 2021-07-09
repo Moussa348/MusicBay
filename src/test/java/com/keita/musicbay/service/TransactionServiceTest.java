@@ -56,6 +56,24 @@ public class TransactionServiceTest {
     }
 
     @Test
+    void checkIfArticleIsInTransaction(){
+        //ARRANGE
+        Transaction transaction = Transaction.builder().build();
+        Article article = Article.builder().music(MixTape.builder().title("hoodSeason").basicPrice(24.5f).exclusivePrice(30.0f).build()).priceType(PriceType.BASIC).build();
+        transaction.getArticles().add(article);
+
+        Customer customer = Customer.builder().username("bigBrr").transactions(new ArrayList<>()).build();
+        customer.getTransactions().add(transaction);
+        when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
+
+        //ACT
+        boolean articleIsInTransaction = transactionService.checkIfArticleIsInTransaction(customer.getUsername(),article.getMusic().getTitle());
+
+        //ASSERT
+        assertTrue(articleIsInTransaction);
+    }
+
+    @Test
     void createTransaction(){
         //ARRANGE
         Customer customer = Customer.builder().username("brr").transactions(new ArrayList<>()).build();

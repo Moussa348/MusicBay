@@ -24,13 +24,13 @@ public class TransactionController {
     }
 
     @PostMapping("/createTransaction")
-    public TransactionDTO createTransaction(@RequestParam("username") String username,@RequestParam("title") String title,@RequestParam("priceType") PriceType priceType){
-        return transactionService.createTransaction(username,title,priceType);
+    public TransactionDTO createTransaction(@RequestParam("username") String username,@RequestParam("title") String title,@RequestParam("priceType") String priceType){
+        return transactionService.createTransaction(username,title,PriceType.valueOf(priceType.toUpperCase()));
     }
 
     @PatchMapping("/addArticleToTransaction")
-    public TransactionDTO addArticleToTransaction(@RequestParam("username") String username,@RequestParam("title") String title,@RequestParam("priceType") PriceType priceType){
-        return transactionService.addArticleToTransaction(username,title,priceType);
+    public TransactionDTO addArticleToTransaction(@RequestParam("username") String username,@RequestParam("title") String title,@RequestParam("priceType") String priceType){
+        return transactionService.addArticleToTransaction(username,title,PriceType.valueOf(priceType.toUpperCase()));
     }
 
     @DeleteMapping("/removeArticleFromTransaction")
