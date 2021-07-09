@@ -12,7 +12,7 @@ public class MusicDTO implements Serializable {
     private String title,description,tags,sharingMsg,creator,timeLength,type;
     private LocalDateTime date;
     private Integer nbrOfLike,nbrOfShare,nbrOfPlay,nbrOfPurchase,nbrOfComment;
-    private Float price;
+    private Float basicPrice,exclusivePrice;
 
     public MusicDTO(){}
 
@@ -25,7 +25,8 @@ public class MusicDTO implements Serializable {
         this.nbrOfLike = music.getNbrOfLike();
         this.nbrOfShare = music.getNbrOfShare();
         this.nbrOfPlay = music.getNbrOfPlay();
-        this.price = music.getPrice();
+        this.basicPrice = music.getBasicPrice();
+        this.exclusivePrice = music.getExclusivePrice();
         this.nbrOfComment = music.getComments().size();
         this.creator = "bombay";
         this.type = music instanceof Track ? "TRACK":"MIXTAPE";

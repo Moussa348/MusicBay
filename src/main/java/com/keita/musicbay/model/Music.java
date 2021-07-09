@@ -22,7 +22,7 @@ public abstract class Music implements Serializable {
     private String title,description,tags,timeLength;
     private LocalDateTime date;
     private Integer nbrOfLike,nbrOfShare,nbrOfPlay,nbrOfPurchase;
-    private Float price;
+    private Float basicPrice,exclusivePrice;
 
     @Lob
     @Column(name ="picture",columnDefinition = "BLOB")
@@ -38,7 +38,7 @@ public abstract class Music implements Serializable {
     public Music() {}
 
     public Music(String title,String timeLength, String description, String tags, Integer nbrOfLike,
-                 Integer nbrOfShare, Integer nbrOfPlay, Integer nbrOfPurchase,Float price) {
+                 Integer nbrOfShare, Integer nbrOfPlay, Integer nbrOfPurchase,Float basicPrice,Float exclusivePrice) {
         this.uuid = UUID.randomUUID();
         this.title = title;
         this.timeLength = timeLength;
@@ -49,7 +49,8 @@ public abstract class Music implements Serializable {
         this.nbrOfShare = nbrOfShare;
         this.nbrOfPlay = nbrOfPlay;
         this.nbrOfPurchase = nbrOfPurchase;
-        this.price = price;
+        this.basicPrice = basicPrice;
+        this.exclusivePrice = exclusivePrice;
         this.comments = new ArrayList<>();
     }
 }

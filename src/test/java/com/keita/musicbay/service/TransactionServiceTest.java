@@ -137,15 +137,10 @@ public class TransactionServiceTest {
         Customer customer1 =  Customer.builder().userName("bigBrr").transactions(Arrays.asList(Transaction.builder().build())).build();
         when(customerRepository.findByUserName(customer1.getUserName())).thenReturn(Optional.of(customer1));
 
-        Customer customer2 =  Customer.builder().userName("50cent").transactions(new ArrayList<>()).build();
-        when(customerRepository.findByUserName(customer2.getUserName())).thenReturn(Optional.of(customer2));
-
         //ACT
         TransactionDTO currentTransactionOfCustomer1 = transactionService.getCurrentTransaction(customer1.getUserName());
-        TransactionDTO currentTransactionOfCustomer2 = transactionService.getCurrentTransaction(customer2.getUserName());
 
         //ASSERT
         assertNotNull(currentTransactionOfCustomer1);
-        assertNull(currentTransactionOfCustomer2);
     }
 }

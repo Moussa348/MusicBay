@@ -24,8 +24,8 @@ public class Track extends Music implements Serializable {
 
     @Builder
     public Track(String title, String description, String tags, Integer nbrOfLike,String timeLength,
-                 Integer nbrOfShare, Integer nbrOfPLay, Integer nbrOfPurchase, Float price, Float bpm) {
-        super(title, timeLength,description, tags, nbrOfLike, nbrOfShare, nbrOfPLay, nbrOfPurchase,price);
+                 Integer nbrOfShare, Integer nbrOfPLay, Integer nbrOfPurchase,Float basicPrice,Float exclusivePrice, Float bpm) {
+        super(title, timeLength,description, tags, nbrOfLike, nbrOfShare, nbrOfPLay, nbrOfPurchase,basicPrice,exclusivePrice);
         this.bpm = bpm;
     }
 }

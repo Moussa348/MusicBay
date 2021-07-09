@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Entity
@@ -27,6 +28,9 @@ public class Transaction implements Serializable {
     @OneToMany
     private List<Music> musics;
 
+    @OneToMany(mappedBy = "transaction",orphanRemoval = true,cascade = CascadeType.ALL)
+    private List<Article> articles;
+
     public Transaction(){}
 
     @Builder
@@ -35,6 +39,7 @@ public class Transaction implements Serializable {
         this.date = LocalDateTime.now();
         this.total = total;
         this.musics = new ArrayList<>();
+        this.articles = new ArrayList<>();
         this.customer = customer;
         this.paymentApproved = false;
         this.confirmed = false;

@@ -23,7 +23,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 public class Customer extends User implements Serializable {
 
-    @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Transaction> transactions = new ArrayList<>();
 
     @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL,orphanRemoval = true)

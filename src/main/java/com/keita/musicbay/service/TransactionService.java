@@ -1,5 +1,6 @@
 package com.keita.musicbay.service;
 
+import com.keita.musicbay.model.Article;
 import com.keita.musicbay.model.Customer;
 import com.keita.musicbay.model.Music;
 import com.keita.musicbay.model.Transaction;
@@ -27,12 +28,26 @@ public class TransactionService {
         return !customer.getTransactions().isEmpty() && !customer.getTransactions().get(customer.getTransactions().size() - 1).isConfirmed();
     }
 
+
     @Transactional
     public TransactionDTO createTransaction(String username, String title) {
         Customer customer = customerRepository.findByUserName(username).get();
         Transaction transaction = Transaction.builder().customer(customer).build();
 
         transaction.getMusics().add(musicRepository.findByTitle(title).get());
+        customer.getTransactions().add(transaction);
+
+        customerRepository.save(customer);
+
+        return new TransactionDTO(transaction);
+    }
+
+    @Transactional
+    public TransactionDTO createTransaction(String username, Article article) {
+        Customer customer = customerRepository.findByUserName(username).get();
+        Transaction transaction = Transaction.builder().customer(customer).build();
+
+        transaction.getArticles().add(musicRepository.findByTitle(title).get());
         customer.getTransactions().add(transaction);
 
         customerRepository.save(customer);
@@ -73,6 +88,6 @@ public class TransactionService {
         Customer customer = customerRepository.findByUserName(username).get();
         int positionOfLastTransaction = customer.getTransactions().size()-1;
 
-        return customer.getTransactions().isEmpty() || customer.getTransactions().get(positionOfLastTransaction).isConfirmed() ? null:new TransactionDTO(customer.getTransactions().get(positionOfLastTransaction));
+        return customer.getTransactions().get(positionOfLastTransaction).isConfirmed() ? null:new TransactionDTO(customer.getTransactions().get(positionOfLastTransaction));
     }
 }

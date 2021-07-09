@@ -70,12 +70,12 @@ public class DbInit implements CommandLineRunner {
 
     private void insertMusic(){
         List<Music> musics = Arrays.asList(
-                MixTape.builder().timeLength("34:00").title("culture1").description("").tags("Dark Hip-Hop rap").nbrOfLike(0).nbrOfPLay(0).nbrOfShare(0).nbrOfPurchase(0).price(24.0f).build(),
-                MixTape.builder().timeLength("55:00").title("").title("culture2").description("").tags("Hip-Hop Rap").nbrOfLike(1).nbrOfPLay(1).nbrOfShare(1).nbrOfPurchase(0).price(50.0f).build(),
-                Track.builder().timeLength("2:00").title("redRoom").tags("RAP").description("").nbrOfLike(0).nbrOfPLay(0).nbrOfShare(0).nbrOfPurchase(0).price(30.0f).bpm(100f).build(),
-                Track.builder().timeLength("3:00").title("Ragnarok").tags("RAP").description("").nbrOfLike(0).nbrOfPLay(0).nbrOfShare(0).nbrOfPurchase(0).price(30.0f).bpm(100f).build(),
-                Track.builder().timeLength("1:50").title("Winter").tags("RAP").description("").nbrOfLike(0).nbrOfPLay(0).nbrOfShare(0).nbrOfPurchase(0).price(30.0f).bpm(100f).build(),
-                Track.builder().timeLength("2:30").title("Mob").tags("RAP").description("").nbrOfLike(0).nbrOfPLay(0).nbrOfShare(0).nbrOfPurchase(0).price(30.0f).bpm(100f).build()
+                MixTape.builder().timeLength("34:00").title("culture1").description("").tags("Dark Hip-Hop rap").nbrOfLike(0).nbrOfPLay(0).nbrOfShare(0).nbrOfPurchase(0).basicPrice(24.0f).exclusivePrice(100.0f).build(),
+                MixTape.builder().timeLength("55:00").title("").title("culture2").description("").tags("Hip-Hop Rap").nbrOfLike(1).nbrOfPLay(1).nbrOfShare(1).nbrOfPurchase(0).basicPrice(50.0f).exclusivePrice(200.0f).build(),
+                Track.builder().timeLength("2:00").title("redRoom").tags("RAP").description("").nbrOfLike(0).nbrOfPLay(0).nbrOfShare(0).nbrOfPurchase(0).basicPrice(30.0f).exclusivePrice(50f).bpm(100f).build(),
+                Track.builder().timeLength("3:00").title("Ragnarok").tags("RAP").description("").nbrOfLike(0).nbrOfPLay(0).nbrOfShare(0).nbrOfPurchase(0).basicPrice(30.0f).exclusivePrice(70f).bpm(100f).build(),
+                Track.builder().timeLength("1:50").title("Winter").tags("RAP").description("").nbrOfLike(0).nbrOfPLay(0).nbrOfShare(0).nbrOfPurchase(0).basicPrice(30.0f).exclusivePrice(800f).bpm(100f).build(),
+                Track.builder().timeLength("2:30").title("Mob").tags("RAP").description("").nbrOfLike(0).nbrOfPLay(0).nbrOfShare(0).nbrOfPurchase(0).basicPrice(30.0f).exclusivePrice(200f).bpm(100f).build()
         );
 
         musics.get(0).getComments().add(Comment.builder().id(1L).content("nice!!").sendBy("bayDrip").nbrLike(0).build());
@@ -83,9 +83,9 @@ public class DbInit implements CommandLineRunner {
         musicRepository.saveAll(musics);
     }
 
-    private void insertTransaction(){
-        transactionService.createTransaction("bayDrip","culture1");
-    }
+    //private void insertTransaction(){
+        //transactionService.createTransaction("bayDrip","culture1");
+    //}
 
     private void insertConversation(){
         List<ConversationDTO> conversationDTOS = Arrays.asList(
@@ -117,7 +117,7 @@ public class DbInit implements CommandLineRunner {
     public void run(String... args) throws Exception {
         insertCustomers();
         insertMusic();
-        insertTransaction();
+        //insertTransaction();
         insertConversation();
         insertComment();
         subscribe();

@@ -15,13 +15,16 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
+    /*
+
+
     @GetMapping("/checkIfTransactionPending/{username}")
     public boolean checkIfTransactionPending(@PathVariable String username){
         return transactionService.checkIfTransactionPending(username);
     }
 
     @PostMapping("/createTransaction")
-    public TransactionDTO createTransaction(@RequestParam("username") String username,@RequestParam("title") String title){
+    public TransactionDTO createTransaction(@RequestParam("username") String username,@RequestParam("title") String title,@RequestParam("priceType") String priceType){
         return transactionService.createTransaction(username,title);
     }
 
@@ -44,4 +47,5 @@ public class TransactionController {
     public TransactionDTO getCurrentTransaction(@PathVariable String username){
         return transactionService.getCurrentTransaction(username);
     }
+     */
 }
