@@ -45,6 +45,24 @@ public class TransactionControllerTest {
     }
 
     @Test
+    void checkIfArticleIsInTransaction() throws Exception{
+        //ARRANGE
+        String username = "bayDrip";
+        String title = "culture1";
+
+        //ACT
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.get("/transaction/checkIfArticleIsInTransaction/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("username",username)
+                .param("title",title)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+
+        //ASSERT
+        assertEquals("true",mvcResult1.getResponse().getContentAsString());
+    }
+
+    @Test
     void createTransaction() throws Exception{
         //ARRANGE
         String username = "bayDrip";

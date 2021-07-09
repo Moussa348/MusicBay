@@ -16,11 +16,14 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
-
-
     @GetMapping("/checkIfTransactionPending/{username}")
     public boolean checkIfTransactionPending(@PathVariable String username){
         return transactionService.checkIfTransactionPending(username);
+    }
+
+    @GetMapping("/checkIfArticleIsInTransaction/")
+    public boolean checkIfArticleIsInTransaction(@RequestParam("username") String username,@RequestParam("title") String title){
+        return transactionService.checkIfArticleIsInTransaction(username,title);
     }
 
     @PostMapping("/createTransaction")
