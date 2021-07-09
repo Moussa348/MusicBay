@@ -35,8 +35,8 @@ public class CustomerControllerTest {
     @Test
     void createCustomer() throws Exception{
         //ARRANGE
-        Registration registration1 = Registration.builder().userName("brr").email("brr@gmail.com").build();
-        Registration registration2 = Registration.builder().userName("bayDrip").email("bayDrip@gmail.com").build();
+        Registration registration1 = Registration.builder().username("brr").email("brr@gmail.com").build();
+        Registration registration2 = Registration.builder().username("bayDrip").email("bayDrip@gmail.com").build();
 
         //ACT
         MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.post("/customer/createCustomer")
@@ -60,7 +60,7 @@ public class CustomerControllerTest {
     @Test
     void updateCustomer() throws Exception{
         //ARRANGE
-        Registration registration1 = Registration.builder().userName("brr").email("bigBrr@gmail.com").build();
+        Registration registration1 = Registration.builder().username("brr").email("bigBrr@gmail.com").build();
 
         //ACT
         MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/customer/updateCustomer")

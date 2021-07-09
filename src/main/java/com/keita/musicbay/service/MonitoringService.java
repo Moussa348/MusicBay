@@ -21,7 +21,7 @@ public class MonitoringService {
 
 
     public void likeMusic(String username, String title) {
-        Customer customer = customerRepository.findByUserName(username).get();
+        Customer customer = customerRepository.findByUsername(username).get();
         Music music = musicRepository.findByTitle(title).get();
 
         increaseLike(music);
@@ -31,7 +31,7 @@ public class MonitoringService {
     }
 
     public void unLikeMusic(String username, String title) {
-        Customer customer = customerRepository.findByUserName(username).get();
+        Customer customer = customerRepository.findByUsername(username).get();
         Music music = musicRepository.findByTitle(title).get();
 
          customer.getLikings().removeIf(liking -> liking.getMusic().getTitle().equals(title));
@@ -41,7 +41,7 @@ public class MonitoringService {
     }
 
     public void shareMusic(String username, String title, String sharingMsg) {
-        Customer customer = customerRepository.findByUserName(username).get();
+        Customer customer = customerRepository.findByUsername(username).get();
         Music music = musicRepository.findByTitle(title).get();
 
         increaseShare(music);
@@ -51,7 +51,7 @@ public class MonitoringService {
     }
 
     public void unShareMusic(String username, String title) {
-        Customer customer = customerRepository.findByUserName(username).get();
+        Customer customer = customerRepository.findByUsername(username).get();
         Music music = musicRepository.findByTitle(title).get();
 
         customer.getSharings().removeIf(sharing -> sharing.getMusic().getTitle().equals(title));
@@ -61,7 +61,7 @@ public class MonitoringService {
     }
 
     public void purchaseMusic(String username, String title, LocalDateTime purchasingDate) {
-        Customer customer = customerRepository.findByUserName(username).get();
+        Customer customer = customerRepository.findByUsername(username).get();
         Music music = musicRepository.findByTitle(title).get();
 
         increasePurchase(music);
@@ -73,19 +73,19 @@ public class MonitoringService {
 
     @Transactional
     public void subscribe(String username, String usernameToFollow) {
-        Customer customer = customerRepository.findByUserName(username).get();
-        Customer customerToFollow = customerRepository.findByUserName(usernameToFollow).get();
+        Customer customer = customerRepository.findByUsername(username).get();
+        Customer customerToFollow = customerRepository.findByUsername(usernameToFollow).get();
 
-        customer.getSubscribeTos().add(new SubscribeTo(customerToFollow.getUserName(), customer));
-        customerToFollow.getSubscribers().add(new Subscriber(customer.getUserName(), customerToFollow));
+        customer.getSubscribeTos().add(new SubscribeTo(customerToFollow.getUsername(), customer));
+        customerToFollow.getSubscribers().add(new Subscriber(customer.getUsername(), customerToFollow));
 
         customerRepository.saveAll(Arrays.asList(customer, customerToFollow));
     }
 
     @Transactional
     public void unSubscribe(String username, String usernameToUnFollow) {
-        Customer customer = customerRepository.findByUserName(username).get();
-        Customer customerToUnFollow = customerRepository.findByUserName(usernameToUnFollow).get();
+        Customer customer = customerRepository.findByUsername(username).get();
+        Customer customerToUnFollow = customerRepository.findByUsername(usernameToUnFollow).get();
 
         customer.getSubscribeTos().removeIf(subscribeTo -> subscribeTo.getUsername().equals(usernameToUnFollow));
         customerToUnFollow.getSubscribers().removeIf(subscriber -> subscriber.getUsername().equals(username));
@@ -94,7 +94,7 @@ public class MonitoringService {
     }
 
     public boolean checkIfSubscribeTo(String username,String usernameSubscribeTo){
-        Customer customer = customerRepository.findByUserName(username).get();
+        Customer customer = customerRepository.findByUsername(username).get();
         return customer.getSubscribeTos().stream().anyMatch(subscribeTo -> subscribeTo.getUsername().equals(usernameSubscribeTo));
     }
 

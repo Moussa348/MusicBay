@@ -27,7 +27,7 @@ public class MusicService {
 
     @Transactional
     public Catalog getCatalog(String username){
-        return new Catalog(customerRepository.findByUserName(username).get(),musicRepository.findAll());
+        return new Catalog(customerRepository.findByUsername(username).get(),musicRepository.findAll());
     }
 
     @Transactional

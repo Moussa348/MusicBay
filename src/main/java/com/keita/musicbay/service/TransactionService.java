@@ -25,7 +25,7 @@ public class TransactionService {
     private MusicRepository musicRepository;
 
     public boolean checkIfTransactionPending(String username){
-        Customer customer = customerRepository.findByUserName(username).get();
+        Customer customer = customerRepository.findByUsername(username).get();
 
         return !customer.getTransactions().isEmpty() && !customer.getTransactions().get(customer.getTransactions().size() - 1).isConfirmed();
     }
@@ -33,7 +33,7 @@ public class TransactionService {
 
     @Transactional
     public TransactionDTO createTransaction(String username, String title, PriceType priceType) {
-        Customer customer = customerRepository.findByUserName(username).get();
+        Customer customer = customerRepository.findByUsername(username).get();
         Transaction transaction = Transaction.builder().customer(customer).build();
         Article article = new Article(priceType,transaction,musicRepository.findByTitle(title).get());
 
@@ -47,7 +47,7 @@ public class TransactionService {
     }
 
     public TransactionDTO addArticleToTransaction(String username, String title,PriceType priceType) {
-        Customer customer = customerRepository.findByUserName(username).get();
+        Customer customer = customerRepository.findByUsername(username).get();
         Transaction latestTransaction = customer.getTransactions().get(customer.getTransactions().size()-1);
         Article article = new Article(priceType,latestTransaction,musicRepository.findByTitle(title).get());
 
@@ -60,7 +60,7 @@ public class TransactionService {
     }
 
     public TransactionDTO removeArticleFromTransaction(String username, String title) {
-        Customer customer = customerRepository.findByUserName(username).get();
+        Customer customer = customerRepository.findByUsername(username).get();
         Transaction transaction = customer.getTransactions().get(customer.getTransactions().size() - 1);
 
         transaction.getArticles().removeIf(article -> article.getMusic().getTitle().equals(title));
@@ -69,7 +69,7 @@ public class TransactionService {
     }
 
     public void cancelTransaction(String username, UUID uuid) {
-        Customer customer = customerRepository.findByUserName(username).get();
+        Customer customer = customerRepository.findByUsername(username).get();
 
         customer.getTransactions().removeIf(transaction -> transaction.getUuid().equals(uuid));
 
@@ -77,7 +77,7 @@ public class TransactionService {
     }
 
     public TransactionDTO getCurrentTransaction(String username) {
-        Customer customer = customerRepository.findByUserName(username).get();
+        Customer customer = customerRepository.findByUsername(username).get();
         int positionOfLastTransaction = customer.getTransactions().size()-1;
 
         return customer.getTransactions().get(positionOfLastTransaction).isConfirmed() ? null:new TransactionDTO(customer.getTransactions().get(positionOfLastTransaction));

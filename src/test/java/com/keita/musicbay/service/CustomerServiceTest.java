@@ -31,11 +31,11 @@ public class CustomerServiceTest {
     @Test
     void createCustomer() throws Exception {
         //ARRANGE
-        Registration registration1 = Registration.builder().userName("ice").email("ice@gmail.com").password("sadadas").build();
-        when(customerRepository.existsByEmail(registration1.getEmail()) && customerRepository.existsByUserName(registration1.getUserName())).thenReturn(false);
+        Registration registration1 = Registration.builder().username("ice").email("ice@gmail.com").password("sadadas").build();
+        when(customerRepository.existsByEmail(registration1.getEmail()) && customerRepository.existsByUsername(registration1.getUsername())).thenReturn(false);
 
-        Registration registration2 = Registration.builder().userName("brrr").email("brrr@gmail.com").password("brrr").build();
-        when(customerRepository.existsByEmail(registration2.getEmail()) && customerRepository.existsByUserName(registration2.getUserName())).thenReturn(true);
+        Registration registration2 = Registration.builder().username("brrr").email("brrr@gmail.com").password("brrr").build();
+        when(customerRepository.existsByEmail(registration2.getEmail()) && customerRepository.existsByUsername(registration2.getUsername())).thenReturn(true);
 
         when(customerRepository.save(any(Customer.class))).thenReturn(new Customer());
         //ACT
@@ -50,11 +50,11 @@ public class CustomerServiceTest {
     @Test
     void updateCustomer() throws Exception{
         //ARRANGE
-        Registration registration1 = Registration.builder().uuid(UUID.randomUUID()).userName("ice").email("ice@gmail.com").password("sadadas").build();
-        Customer customer1 = Customer.builder().uuid(registration1.getUuid()).userName("ice").email("ice@gmail.com").build();
+        Registration registration1 = Registration.builder().uuid(UUID.randomUUID()).username("ice").email("ice@gmail.com").password("sadadas").build();
+        Customer customer1 = Customer.builder().uuid(registration1.getUuid()).username("ice").email("ice@gmail.com").build();
 
-        Registration registration2 = Registration.builder().uuid(UUID.randomUUID()).userName("taa").email("bigBrr@gmail.com").password("sadadas").build();
-        Customer customer2 = Customer.builder().uuid(registration2.getUuid()).userName("bigBrr").email("bigBrr@gmail.com").build();
+        Registration registration2 = Registration.builder().uuid(UUID.randomUUID()).username("taa").email("bigBrr@gmail.com").password("sadadas").build();
+        Customer customer2 = Customer.builder().uuid(registration2.getUuid()).username("bigBrr").email("bigBrr@gmail.com").build();
 
         //ACT
         when(customerRepository.save(any(Customer.class))).thenReturn(new Customer(registration1,customer1)).thenReturn(new Customer(registration2,customer2));
@@ -62,19 +62,19 @@ public class CustomerServiceTest {
         Profile updateProfileWithSameUsername = customerService.updateCustomer(registration1);
 
         when(customerRepository.findById(registration2.getUuid())).thenReturn(Optional.of(customer2));
-        when(customerRepository.existsByUserName(registration2.getUserName())).thenReturn(false);
+        when(customerRepository.existsByUsername(registration2.getUsername())).thenReturn(false);
         Profile updatedProfileWithModifiedUser = customerService.updateCustomer(registration2);
 
         //ASSERT
-        assertEquals(registration1.getUserName(),updateProfileWithSameUsername.getUsername());
-        assertEquals(registration2.getUserName(),updatedProfileWithModifiedUser.getUsername());
+        assertEquals(registration1.getUsername(),updateProfileWithSameUsername.getUsername());
+        assertEquals(registration2.getUsername(),updatedProfileWithModifiedUser.getUsername());
     }
 
     @Test
     void getProfile(){
         //ARRANGE
         String username1 = "bigBrr";
-        when(customerRepository.findByUserName(username1)).thenReturn(Optional.of(Customer.builder().likings(Collections.emptyList()).sharings(Collections.emptyList()).purchasings(Collections.emptyList()).build()));
+        when(customerRepository.findByUsername(username1)).thenReturn(Optional.of(Customer.builder().likings(Collections.emptyList()).sharings(Collections.emptyList()).purchasings(Collections.emptyList()).build()));
 
         //ACT
         Profile profileExist = customerService.getProfile(username1);
@@ -86,28 +86,28 @@ public class CustomerServiceTest {
     @Test
     void getPicture() throws IOException {
         //ARRANGE
-        Customer customer = Customer.builder().userName("bigBrr").build();
+        Customer customer = Customer.builder().username("bigBrr").build();
         customer.setPicture("sadasd".getBytes());
 
         MockHttpServletResponse mockHttpServletResponse = new MockHttpServletResponse();
 
         mockHttpServletResponse.setContentType("image/jpeg");
 
-        when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
+        when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
 
         //ACT
-        customerService.getPicture(customer.getUserName(),mockHttpServletResponse);
+        customerService.getPicture(customer.getUsername(),mockHttpServletResponse);
 
     }
 
     @Test
     void getListLikedMusic(){
         //ARRANGE
-        Customer customer = Customer.builder().userName("ceo").likings(Arrays.asList(Liking.builder().music(Track.builder().build()).build(), Liking.builder().music(Track.builder().build()).build())).build();
-        when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
+        Customer customer = Customer.builder().username("ceo").likings(Arrays.asList(Liking.builder().music(Track.builder().build()).build(), Liking.builder().music(Track.builder().build()).build())).build();
+        when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
 
         //ACT
-        List<LikedMusic> likedMusics = customerService.getListLikedMusic(customer.getUserName());
+        List<LikedMusic> likedMusics = customerService.getListLikedMusic(customer.getUsername());
 
         //ASSERT
         assertEquals(2,likedMusics.size());
@@ -116,12 +116,12 @@ public class CustomerServiceTest {
     @Test
     void getListSharedMusic(){
         //ARRANGE
-        Customer customer = Customer.builder().userName("ceo").sharings(Arrays.asList(Sharing.builder().music(Track.builder().build()).build(), Sharing.builder().music(Track.builder().build()).build())).build();
+        Customer customer = Customer.builder().username("ceo").sharings(Arrays.asList(Sharing.builder().music(Track.builder().build()).build(), Sharing.builder().music(Track.builder().build()).build())).build();
 
-        when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
+        when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
 
         //ACT
-        List<SharedMusic> sharedMusics = customerService.getListSharedMusic(customer.getUserName());
+        List<SharedMusic> sharedMusics = customerService.getListSharedMusic(customer.getUsername());
 
         //ASSERT
         assertEquals(2,sharedMusics.size());
@@ -130,12 +130,12 @@ public class CustomerServiceTest {
     @Test
     void getListPurchasedMusic(){
         //ARRANGE
-        Customer customer = Customer.builder().userName("ceo").purchasings(Arrays.asList(Purchasing.builder().music(Track.builder().build()).build(), Purchasing.builder().music(Track.builder().build()).build())).build();
+        Customer customer = Customer.builder().username("ceo").purchasings(Arrays.asList(Purchasing.builder().music(Track.builder().build()).build(), Purchasing.builder().music(Track.builder().build()).build())).build();
 
-        when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
+        when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
 
         //ACT
-        List<PurchasedMusic> purchasedMusics = customerService.getListPurchasedMusic(customer.getUserName());
+        List<PurchasedMusic> purchasedMusics = customerService.getListPurchasedMusic(customer.getUsername());
 
         //ASSERT
         assertEquals(2,purchasedMusics.size());
@@ -144,16 +144,16 @@ public class CustomerServiceTest {
     @Test
     void getListSubscriber(){
         //ARRANGE
-        Customer customer = Customer.builder().userName("bombay").build();
+        Customer customer = Customer.builder().username("bombay").build();
         Subscriber subscriber = Subscriber.builder().username("taa").build();
 
         customer.setSubscribers(Arrays.asList(subscriber));
 
-        when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
-        customer.getSubscribers().forEach(s -> when(customerRepository.findByUserName(s.getUsername())).thenReturn(Optional.of(Customer.builder().likings(Collections.emptyList()).sharings(Collections.emptyList()).purchasings(Collections.emptyList()).build())));
+        when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
+        customer.getSubscribers().forEach(s -> when(customerRepository.findByUsername(s.getUsername())).thenReturn(Optional.of(Customer.builder().likings(Collections.emptyList()).sharings(Collections.emptyList()).purchasings(Collections.emptyList()).build())));
 
         //ACT
-        List<Profile> subscribers = customerService.getListSubscriber(customer.getUserName());
+        List<Profile> subscribers = customerService.getListSubscriber(customer.getUsername());
 
         //ASSERT
         assertEquals(1,subscribers.size());
@@ -162,16 +162,16 @@ public class CustomerServiceTest {
     @Test
     void getListSubscribeTo(){
         //ARRANGE
-        Customer customer = Customer.builder().userName("bombay").build();
+        Customer customer = Customer.builder().username("bombay").build();
         SubscribeTo subscriberTo = SubscribeTo.builder().username("taa").build();
 
         customer.setSubscribeTos(Arrays.asList(subscriberTo));
 
-        when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
-        customer.getSubscribeTos().forEach(s -> when(customerRepository.findByUserName(s.getUsername())).thenReturn(Optional.of(Customer.builder().likings(Collections.emptyList()).sharings(Collections.emptyList()).purchasings(Collections.emptyList()).build())));
+        when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
+        customer.getSubscribeTos().forEach(s -> when(customerRepository.findByUsername(s.getUsername())).thenReturn(Optional.of(Customer.builder().likings(Collections.emptyList()).sharings(Collections.emptyList()).purchasings(Collections.emptyList()).build())));
 
         //ACT
-        List<Profile> subscriberTos = customerService.getListSubscribeTo(customer.getUserName());
+        List<Profile> subscriberTos = customerService.getListSubscribeTo(customer.getUsername());
 
         //ASSERT
         assertEquals(1,subscriberTos.size());

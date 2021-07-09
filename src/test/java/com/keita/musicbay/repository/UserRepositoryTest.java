@@ -37,7 +37,7 @@ public class UserRepositoryTest {
     @BeforeEach
     void insert(){
         List<User> users = Arrays.asList(
-                Customer.builder().email("cancre@gmail.com").userName("bigWolf22")
+                Customer.builder().email("cancre@gmail.com").username("bigWolf22")
                         .likings(Arrays.asList(Liking.builder().music(Track.builder().title("ice").build()).build())).build()
         );
         userRepository.saveAll(users);
@@ -46,11 +46,11 @@ public class UserRepositoryTest {
     @Test
     void findByUserName(){
         //ARRANGE
-        Customer customer1 = Customer.builder().userName("sdaasdas").build();
-        Customer customer2 = Customer.builder().userName("bigWolf22").build();
+        Customer customer1 = Customer.builder().username("sdaasdas").build();
+        Customer customer2 = Customer.builder().username("bigWolf22").build();
 
         //ACT
-        Customer customer = (Customer)  userRepository.findByUserName("bigWolf22").get();
+        Customer customer = (Customer)  userRepository.findByUsername("bigWolf22").get();
 
         log.info(customer.toString());
 

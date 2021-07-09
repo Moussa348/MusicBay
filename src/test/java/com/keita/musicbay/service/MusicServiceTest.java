@@ -57,10 +57,10 @@ public class MusicServiceTest {
                 Track.builder().title("").build()
         );
 
-        when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
+        when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
         when(musicRepository.findAll()).thenReturn(musics);
         //ACT
-        Catalog catalog = musicService.getCatalog(customer.getUserName());
+        Catalog catalog = musicService.getCatalog(customer.getUsername());
 
         //ASSERT
         assertEquals(4,catalog.getMusics().size());

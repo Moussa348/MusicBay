@@ -26,7 +26,7 @@ public class ConversationService {
     private UserRepository userRepository;
 
     public ConversationDTO createConversation(ConversationDTO conversationDTO){
-        List<User> users = conversationDTO.getUsernames().stream().map(username -> userRepository.findByUserName(username).get()).collect(Collectors.toList());
+        List<User> users = conversationDTO.getUsernames().stream().map(username -> userRepository.findByUsername(username).get()).collect(Collectors.toList());
 
         Conversation conversation = Conversation.builder()
                 .creationDate(conversationDTO.getCreationDate())
@@ -42,7 +42,7 @@ public class ConversationService {
     public ConversationDTO addUserInConversationGroup(Long id, String username){
         Conversation conversation = conversationRepository.getById(id);
 
-        conversation.getUsers().add(userRepository.findByUserName(username).get());
+        conversation.getUsers().add(userRepository.findByUsername(username).get());
 
         return new ConversationDTO(conversationRepository.save(conversation));
     }
@@ -50,7 +50,7 @@ public class ConversationService {
     public ConversationDTO removeUserFromConversationGroup(Long id,String username){
         Conversation conversation = conversationRepository.getById(id);
 
-        conversation.getUsers().removeIf(user -> user.getUserName().equals(username));
+        conversation.getUsers().removeIf(user -> user.getUsername().equals(username));
 
         return new ConversationDTO(conversationRepository.save(conversation));
     }
@@ -69,7 +69,7 @@ public class ConversationService {
 
     public List<SentMessage> getLastSentMessages(String username){
         List<Message> lastSentMessages = new ArrayList<>();
-        List<Conversation> conversations = conversationRepository.getByUser(userRepository.findByUserName(username).get());
+        List<Conversation> conversations = conversationRepository.getByUser(userRepository.findByUsername(username).get());
 
         conversations.forEach(conversation -> lastSentMessages.add(conversation.getMessages().get(conversation.getMessages().size()-1)));
 

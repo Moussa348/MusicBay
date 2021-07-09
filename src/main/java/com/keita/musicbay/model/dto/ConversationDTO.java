@@ -27,7 +27,7 @@ public class ConversationDTO implements Serializable {
         this.name = conversation.getName();
         this.creationDate = conversation.getCreationDate();
         this.conversationType = conversation.getConversationType();
-        this.usernames = conversation.getUsers().stream().map(User::getUserName).collect(Collectors.toList());
+        this.usernames = conversation.getUsers().stream().map(User::getUsername).collect(Collectors.toList());
         this.sentMessages = conversation.getMessages().stream().map(SentMessage::new).collect(Collectors.toList());
     }
 

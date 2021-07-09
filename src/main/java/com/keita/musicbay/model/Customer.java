@@ -38,9 +38,9 @@ public class Customer extends User implements Serializable {
     public Customer() { }
 
     @Builder
-    public Customer(UUID uuid, String firstName, String lastName, byte[] picture, LocalDate dateOfBirth, String cellNumber, String city, String email, String userName, String password, String biography, List<Transaction> transactions,
+    public Customer(UUID uuid, String firstName, String lastName, byte[] picture, LocalDate dateOfBirth, String cellNumber, String city, String email, String username, String password, String biography, List<Transaction> transactions,
                     List<Liking> likings, List<Sharing> sharings, List<Purchasing> purchasings) {
-        super(firstName, lastName,picture,dateOfBirth,cellNumber,city, email, userName, password, biography);
+        super(firstName, lastName,picture,dateOfBirth,cellNumber,city, email, username, password, biography);
         this.transactions = transactions;
         this.likings = likings;
         this.sharings = sharings;
@@ -48,15 +48,15 @@ public class Customer extends User implements Serializable {
     }
 
     public Customer(Registration registration){
-        super("", "",null,null,"","", registration.getEmail(), registration.getUserName(), registration.getPassword(), "");
+        super("", "",null,null,"","", registration.getEmail(), registration.getUsername(), registration.getPassword(), "");
     }
 
     public Customer(Registration registration, byte[] picture){
-        super("", "",picture,null,"","", registration.getEmail(), registration.getUserName(), registration.getPassword(), "");
+        super("", "",picture,null,"","", registration.getEmail(), registration.getUsername(), registration.getPassword(), "");
     }
 
     public Customer(Registration registration, Customer customer){
-        super("", "", customer.getPicture(), registration.getDate(),"", registration.getCity(), customer.getEmail(), registration.getUserName(), registration.getPassword(), registration.getBiography());
+        super("", "", customer.getPicture(), registration.getDate(),"", registration.getCity(), customer.getEmail(), registration.getUsername(), registration.getPassword(), registration.getBiography());
         super.setUuid(customer.getUuid());
         super.setSubscribers(customer.getSubscribers());
         super.setSubscribeTos(customer.getSubscribeTos());

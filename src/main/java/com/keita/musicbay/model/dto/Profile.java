@@ -18,7 +18,7 @@ public class Profile implements Serializable {
 
     public Profile(Customer customer){
         this.uuid = customer.getUuid();
-        this.username = customer.getUserName();
+        this.username = customer.getUsername();
         this.email = customer.getEmail();
         this.biography =customer.getBiography();
         this.city = customer.getCity();

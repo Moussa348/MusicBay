@@ -42,13 +42,13 @@ public class ConversationServiceTest {
                 .creationDate(LocalDateTime.now())
                 .name("GLowGanggg")
                 .conversationType(ConversationType.GROUP).build();
-        User user = Customer.builder().userName("brr").build();
+        User user = Customer.builder().username("brr").build();
 
         conversation.getUsers().add(user);
 
         ConversationDTO conversationDTO = new ConversationDTO(conversation);
 
-        conversation.getUsers().forEach(userToAdd -> when(userRepository.findByUserName(user.getUserName())).thenReturn(Optional.of(user)));
+        conversation.getUsers().forEach(userToAdd -> when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user)));
         when(conversationRepository.save(conversation)).thenReturn(conversation);
         //ACT
         ConversationDTO createdConversation = conversationService.createConversation(conversationDTO);
@@ -66,16 +66,16 @@ public class ConversationServiceTest {
                 .creationDate(LocalDateTime.now())
                 .name("GLowGanggg")
                 .conversationType(ConversationType.GROUP).build();
-        User user = Customer.builder().userName("bigBrr").build();
-        User userToAdd = Customer.builder().userName("brr").build();
+        User user = Customer.builder().username("bigBrr").build();
+        User userToAdd = Customer.builder().username("brr").build();
 
         conversation.getUsers().add(user);
 
-        when(userRepository.findByUserName(userToAdd.getUserName())).thenReturn(Optional.of(userToAdd));
+        when(userRepository.findByUsername(userToAdd.getUsername())).thenReturn(Optional.of(userToAdd));
         when(conversationRepository.getById(conversation.getId())).thenReturn(conversation);
         when(conversationRepository.save(conversation)).thenReturn(conversation);
         //ACT
-        ConversationDTO conversationDTO = conversationService.addUserInConversationGroup(conversation.getId(),userToAdd.getUserName());
+        ConversationDTO conversationDTO = conversationService.addUserInConversationGroup(conversation.getId(),userToAdd.getUsername());
 
         //ASSERT
         assertNotNull(conversationDTO);
@@ -90,8 +90,8 @@ public class ConversationServiceTest {
                 .creationDate(LocalDateTime.now())
                 .name("GLowGanggg")
                 .conversationType(ConversationType.GROUP).build();
-        User user = Customer.builder().userName("bigBrr").build();
-        User userToRemove = Customer.builder().userName("brr").build();
+        User user = Customer.builder().username("bigBrr").build();
+        User userToRemove = Customer.builder().username("brr").build();
 
         conversation.getUsers().add(user);
         conversation.getUsers().add(userToRemove);
@@ -99,7 +99,7 @@ public class ConversationServiceTest {
         when(conversationRepository.getById(conversation.getId())).thenReturn(conversation);
         when(conversationRepository.save(conversation)).thenReturn(conversation);
         //ACT
-        ConversationDTO conversationDTO = conversationService.removeUserFromConversationGroup(conversation.getId(),userToRemove.getUserName());
+        ConversationDTO conversationDTO = conversationService.removeUserFromConversationGroup(conversation.getId(),userToRemove.getUsername());
 
         //ASSERT
         assertNotNull(conversationDTO);
@@ -149,17 +149,17 @@ public class ConversationServiceTest {
     @Test
     void getLastSentMessages(){
         //ARRANGE
-        User user = Customer.builder().userName("bigBrr").build();
+        User user = Customer.builder().username("bigBrr").build();
         List<Conversation> conversations = Arrays.asList(
                 Conversation.builder().id(1L).build()
         );
         conversations.get(0).getMessages().add(new Message(1L,"allo","brr"));
 
-        when(userRepository.findByUserName(user.getUserName())).thenReturn(Optional.of(user));
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
         when(conversationRepository.getByUser(user)).thenReturn(conversations);
 
         //ACT
-        List<SentMessage> lastSentMessages = conversationService.getLastSentMessages(user.getUserName());
+        List<SentMessage> lastSentMessages = conversationService.getLastSentMessages(user.getUsername());
 
         //ASSERT
         assertEquals(1,lastSentMessages.size());

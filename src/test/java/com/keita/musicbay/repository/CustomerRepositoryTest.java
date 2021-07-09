@@ -24,7 +24,7 @@ public class CustomerRepositoryTest {
     @BeforeEach
     void insert(){
         List<Customer> customers = Arrays.asList(
-                Customer.builder().email("cancre@gmail.com").userName("bigWolf22").build()
+                Customer.builder().email("cancre@gmail.com").username("bigWolf22").build()
         );
         customerRepository.saveAll(customers);
     }
@@ -33,12 +33,12 @@ public class CustomerRepositoryTest {
     void existsByUserName(){
         //ARRANGE
 
-        Customer customer1 = Customer.builder().userName("sdaasdas").build();
-        Customer customer2 = Customer.builder().userName("bigWolf22").build();
+        Customer customer1 = Customer.builder().username("sdaasdas").build();
+        Customer customer2 = Customer.builder().username("bigWolf22").build();
 
         //ACT
-        boolean customerDoNotExist = customerRepository.existsByUserName(customer1.getUserName());
-        boolean customerExist = customerRepository.existsByUserName(customer2.getUserName());
+        boolean customerDoNotExist = customerRepository.existsByUsername(customer1.getUsername());
+        boolean customerExist = customerRepository.existsByUsername(customer2.getUsername());
 
         //ASSERT
         assertFalse(customerDoNotExist);
@@ -63,12 +63,12 @@ public class CustomerRepositoryTest {
     @Test
     void findByUserName(){
         //ARRANGE
-        Customer customer1 = Customer.builder().userName("sdaasdas").build();
-        Customer customer2 = Customer.builder().userName("bigWolf22").build();
+        Customer customer1 = Customer.builder().username("sdaasdas").build();
+        Customer customer2 = Customer.builder().username("bigWolf22").build();
 
         //ACT
-        boolean customerDoNotExist = customerRepository.findByUserName(customer1.getUserName()).isPresent();
-        boolean customerExist = customerRepository.findByUserName(customer2.getUserName()).isPresent();
+        boolean customerDoNotExist = customerRepository.findByUsername(customer1.getUsername()).isPresent();
+        boolean customerExist = customerRepository.findByUsername(customer2.getUsername()).isPresent();
 
         //ASSERT
         assertFalse(customerDoNotExist);
