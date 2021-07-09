@@ -1,6 +1,7 @@
 package com.keita.musicbay.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.keita.musicbay.model.enums.PriceType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -53,6 +54,7 @@ public class TransactionControllerTest {
         MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.post("/transaction/createTransaction/")
                 .param("username",username)
                 .param("title",title)
+                .param("priceType", PriceType.BASIC.toString())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
@@ -62,15 +64,16 @@ public class TransactionControllerTest {
     }
 
     @Test
-    void addMusicToTransaction() throws Exception{
+    void addArticleToTransaction() throws Exception{
         //ARRANGE
         String username = "bayDrip";
         String title = "culture2";
 
         //ACT
-        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/transaction/addMusicToTransaction/")
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/transaction/addArticleToTransaction/")
                 .param("username",username)
                 .param("title",title)
+                .param("priceType",PriceType.EXCLUSIVE.toString())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
@@ -80,13 +83,13 @@ public class TransactionControllerTest {
     }
 
     @Test
-    void removeMusicFromTransaction() throws Exception{
+    void removeArticleFromTransaction() throws Exception{
         //ARRANGE
         String username = "bayDrip";
         String title = "culture1";
 
         //ACT
-        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.delete("/transaction/removeMusicFromTransaction/")
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.delete("/transaction/removeArticleFromTransaction/")
                 .param("username",username)
                 .param("title",title)
                 .contentType(MediaType.APPLICATION_JSON)

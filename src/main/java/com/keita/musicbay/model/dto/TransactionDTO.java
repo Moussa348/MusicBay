@@ -21,6 +21,6 @@ public class TransactionDTO implements Serializable {
         this.uuid = transaction.getUuid();
         this.date = transaction.getDate();
         this.total = transaction.getTotal();
-        this.musicArticles = transaction.getMusics().stream().map(MusicArticle::new).collect(Collectors.toList());
+        this.musicArticles = transaction.getArticles().stream().map(MusicArticle::new).collect(Collectors.toList());
     }
 }

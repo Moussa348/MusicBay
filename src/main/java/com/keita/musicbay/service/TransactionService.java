@@ -4,7 +4,9 @@ import com.keita.musicbay.model.Article;
 import com.keita.musicbay.model.Customer;
 import com.keita.musicbay.model.Music;
 import com.keita.musicbay.model.Transaction;
+import com.keita.musicbay.model.dto.MusicArticle;
 import com.keita.musicbay.model.dto.TransactionDTO;
+import com.keita.musicbay.model.enums.PriceType;
 import com.keita.musicbay.repository.CustomerRepository;
 import com.keita.musicbay.repository.MusicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +32,13 @@ public class TransactionService {
 
 
     @Transactional
-    public TransactionDTO createTransaction(String username, String title) {
+    public TransactionDTO createTransaction(String username, String title, PriceType priceType) {
         Customer customer = customerRepository.findByUserName(username).get();
         Transaction transaction = Transaction.builder().customer(customer).build();
+        Article article = new Article(priceType,transaction,musicRepository.findByTitle(title).get());
 
-        transaction.getMusics().add(musicRepository.findByTitle(title).get());
+        transaction.getArticles().add(article);
+        transaction.setTotal(article.getPrice());
         customer.getTransactions().add(transaction);
 
         customerRepository.save(customer);
@@ -42,36 +46,24 @@ public class TransactionService {
         return new TransactionDTO(transaction);
     }
 
-    @Transactional
-    public TransactionDTO createTransaction(String username, Article article) {
+    public TransactionDTO addArticleToTransaction(String username, String title,PriceType priceType) {
         Customer customer = customerRepository.findByUserName(username).get();
-        Transaction transaction = Transaction.builder().customer(customer).build();
-
-        transaction.getArticles().add(musicRepository.findByTitle(title).get());
-        customer.getTransactions().add(transaction);
-
-        customerRepository.save(customer);
-
-        return new TransactionDTO(transaction);
-    }
-
-    public TransactionDTO addMusicToTransaction(String username, String title) {
-        Customer customer = customerRepository.findByUserName(username).get();
-        Music music = musicRepository.findByTitle(title).get();
         Transaction latestTransaction = customer.getTransactions().get(customer.getTransactions().size()-1);
+        Article article = new Article(priceType,latestTransaction,musicRepository.findByTitle(title).get());
 
-        latestTransaction.getMusics().add(music);
+        latestTransaction.getArticles().add(article);
+        latestTransaction.setTotal(latestTransaction.getTotal() + article.getPrice());
 
         customerRepository.save(customer);
 
         return new TransactionDTO(latestTransaction);
     }
 
-    public TransactionDTO removeMusicFromTransaction(String username, String title) {
+    public TransactionDTO removeArticleFromTransaction(String username, String title) {
         Customer customer = customerRepository.findByUserName(username).get();
         Transaction transaction = customer.getTransactions().get(customer.getTransactions().size() - 1);
 
-        transaction.getMusics().removeIf(music -> music.getTitle().equals(title));
+        transaction.getArticles().removeIf(article -> article.getMusic().getTitle().equals(title));
 
         return new TransactionDTO(customerRepository.save(customer).getTransactions().get(customer.getTransactions().size() - 1));
     }

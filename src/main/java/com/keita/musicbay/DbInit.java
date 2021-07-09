@@ -4,6 +4,7 @@ import com.keita.musicbay.model.*;
 import com.keita.musicbay.model.dto.ConversationDTO;
 import com.keita.musicbay.model.dto.PostedComment;
 import com.keita.musicbay.model.enums.ConversationType;
+import com.keita.musicbay.model.enums.PriceType;
 import com.keita.musicbay.repository.CustomerRepository;
 import com.keita.musicbay.repository.MusicRepository;
 import com.keita.musicbay.service.*;
@@ -83,9 +84,9 @@ public class DbInit implements CommandLineRunner {
         musicRepository.saveAll(musics);
     }
 
-    //private void insertTransaction(){
-        //transactionService.createTransaction("bayDrip","culture1");
-    //}
+    private void insertTransaction(){
+        transactionService.createTransaction("bayDrip","culture1", PriceType.BASIC);
+    }
 
     private void insertConversation(){
         List<ConversationDTO> conversationDTOS = Arrays.asList(
@@ -117,7 +118,7 @@ public class DbInit implements CommandLineRunner {
     public void run(String... args) throws Exception {
         insertCustomers();
         insertMusic();
-        //insertTransaction();
+        insertTransaction();
         insertConversation();
         insertComment();
         subscribe();

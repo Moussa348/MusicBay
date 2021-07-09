@@ -1,6 +1,7 @@
 package com.keita.musicbay.controller;
 
 import com.keita.musicbay.model.dto.TransactionDTO;
+import com.keita.musicbay.model.enums.PriceType;
 import com.keita.musicbay.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,6 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
-    /*
 
 
     @GetMapping("/checkIfTransactionPending/{username}")
@@ -24,18 +24,18 @@ public class TransactionController {
     }
 
     @PostMapping("/createTransaction")
-    public TransactionDTO createTransaction(@RequestParam("username") String username,@RequestParam("title") String title,@RequestParam("priceType") String priceType){
-        return transactionService.createTransaction(username,title);
+    public TransactionDTO createTransaction(@RequestParam("username") String username,@RequestParam("title") String title,@RequestParam("priceType") PriceType priceType){
+        return transactionService.createTransaction(username,title,priceType);
     }
 
-    @PatchMapping("/addMusicToTransaction")
-    public TransactionDTO addMusicToTransaction(@RequestParam("username") String username,@RequestParam("title") String title){
-        return transactionService.addMusicToTransaction(username,title);
+    @PatchMapping("/addArticleToTransaction")
+    public TransactionDTO addArticleToTransaction(@RequestParam("username") String username,@RequestParam("title") String title,@RequestParam("priceType") PriceType priceType){
+        return transactionService.addArticleToTransaction(username,title,priceType);
     }
 
-    @DeleteMapping("/removeMusicFromTransaction")
-    public TransactionDTO removeMusicFromTransaction(@RequestParam("username") String username,@RequestParam("title") String title){
-        return transactionService.removeMusicFromTransaction(username,title);
+    @DeleteMapping("/removeArticleFromTransaction")
+    public TransactionDTO removeArticleFromTransaction(@RequestParam("username") String username,@RequestParam("title") String title){
+        return transactionService.removeArticleFromTransaction(username,title);
     }
 
     @DeleteMapping("/cancelTransaction")
@@ -47,5 +47,4 @@ public class TransactionController {
     public TransactionDTO getCurrentTransaction(@PathVariable String username){
         return transactionService.getCurrentTransaction(username);
     }
-     */
 }

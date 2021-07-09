@@ -2,6 +2,7 @@ package com.keita.musicbay.service;
 
 import com.keita.musicbay.model.*;
 import com.keita.musicbay.model.dto.TransactionDTO;
+import com.keita.musicbay.model.enums.PriceType;
 import com.keita.musicbay.repository.CustomerRepository;
 import com.keita.musicbay.repository.MusicRepository;
 import org.junit.jupiter.api.Test;
@@ -57,53 +58,57 @@ public class TransactionServiceTest {
     void createTransaction(){
         //ARRANGE
         Customer customer = Customer.builder().userName("brr").transactions(new ArrayList<>()).build();
-        Transaction transaction = Transaction.builder().customer(customer).build();
-        Music music = MixTape.builder().title("hoodSeason").build();
+        Article article = Article.builder().music(MixTape.builder().title("hoodSeason").basicPrice(24.5f).exclusivePrice(30.0f).build()).priceType(PriceType.BASIC).build();
 
 
         when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
-        when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
-        customer.getTransactions().add(transaction);
+        when(musicRepository.findByTitle(article.getMusic().getTitle())).thenReturn(Optional.of(article.getMusic()));
         when(customerRepository.save(customer)).thenReturn(customer);
         //ACT
-        TransactionDTO createdTransaction = transactionService.createTransaction(customer.getUserName(),music.getTitle());
+       TransactionDTO createdTransaction = transactionService.createTransaction(customer.getUserName(),article.getMusic().getTitle(),article.getPriceType());
 
         //ASSERT
         assertNotNull(createdTransaction);
         assertEquals(1,createdTransaction.getMusicArticles().size());
+        assertEquals(24.5f,createdTransaction.getMusicArticles().get(0).getPrice());
     }
 
+
     @Test
-    void addMusicToTransaction(){
+    void addArticleToTransaction(){
         //ARRANGE
-        Customer customer = Customer.builder().userName("bigBrr").transactions(Arrays.asList(Transaction.builder().build())).build();
-        Music music = MixTape.builder().title("hoodSeason").build();
+        Transaction transaction = Transaction.builder().total(24.5f).build();
+        transaction.getArticles().add(Article.builder().music(MixTape.builder().title("hoodSeason").basicPrice(24.5f).exclusivePrice(30.0f).build()).priceType(PriceType.BASIC).build());
+
+        Customer customer = Customer.builder().userName("bigBrr").transactions(Arrays.asList(transaction)).build();
+        Article article = Article.builder().music(MixTape.builder().title("hoodSeason2").basicPrice(24.5f).exclusivePrice(30.0f).build()).priceType(PriceType.BASIC).build();
 
         when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
-        when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
+        when(musicRepository.findByTitle(article.getMusic().getTitle())).thenReturn(Optional.of(article.getMusic()));
         when(customerRepository.save(customer)).thenReturn(customer);
-
         //ACT
-        TransactionDTO addedMusicTransaction = transactionService.addMusicToTransaction(customer.getUserName(),music.getTitle());
+        TransactionDTO addedMusicTransaction = transactionService.addArticleToTransaction(customer.getUserName(),article.getMusic().getTitle(),PriceType.BASIC);
 
         //ASSERT
-        assertEquals(1,addedMusicTransaction.getMusicArticles().size());
+        assertEquals(2,addedMusicTransaction.getMusicArticles().size());
+        assertEquals(49.0f,addedMusicTransaction.getTotal());
     }
 
+
     @Test
-    void removeMusicFromTransaction(){
+    void removeArticleFromTransaction(){
         //ARRANGE
         Transaction transaction = Transaction.builder().build();
-        Music music = Track.builder().title("culture").build();
+        Article article = Article.builder().priceType(PriceType.BASIC).music(Track.builder().title("culture").build()).build();
         Customer customer = Customer.builder().userName("bigBrr").transactions(Arrays.asList(transaction)).build();
 
-        transaction.getMusics().add(music);
+        transaction.getArticles().add(article);
 
         when(customerRepository.findByUserName(customer.getUserName())).thenReturn(Optional.of(customer));
         when(customerRepository.save(customer)).thenReturn(customer);
 
         //ACT
-        TransactionDTO removedMusicTransaction = transactionService.removeMusicFromTransaction(customer.getUserName(),music.getTitle());
+        TransactionDTO removedMusicTransaction = transactionService.removeArticleFromTransaction(customer.getUserName(),article.getMusic().getTitle());
 
         //ASSERT
         assertEquals(0,removedMusicTransaction.getMusicArticles().size());
