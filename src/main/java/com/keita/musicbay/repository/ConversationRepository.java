@@ -13,8 +13,7 @@ import java.util.UUID;
 
 @Repository
 public interface ConversationRepository extends JpaRepository<Conversation,Long> {
-    @Transactional
-    @Query("SELECT c FROM Conversation c GROUP BY :user")
+    @Query("SELECT c FROM Conversation c GROUP BY :user,c.id")
     List<Conversation> getByUser(@Param("user")User user);
 
 }

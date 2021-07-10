@@ -12,6 +12,8 @@ public class SentMessage implements Serializable {
     private LocalDateTime date;
     private String content,sendBy;
 
+    public SentMessage(){}
+
     public SentMessage(Message message){
         this.id = message.getId();
         this.date = message.getDate();

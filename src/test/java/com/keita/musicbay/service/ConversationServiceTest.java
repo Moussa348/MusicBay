@@ -38,24 +38,21 @@ public class ConversationServiceTest {
     @Test
     void createConversation(){
         //ARRANGE
-        Conversation conversation = Conversation.builder()
-                .creationDate(LocalDateTime.now())
-                .name("GLowGanggg")
-                .conversationType(ConversationType.GROUP).build();
-        User user = Customer.builder().username("brr").build();
+        ConversationDTO conversationDTO = ConversationDTO.builder().createdBy("brr").name("glowGang").conversationType(ConversationType.GROUP).usernames(Arrays.asList("brr","bigBrr")).build();
+        List<User> users = Arrays.asList(
+                Customer.builder().username("brr").build(),
+                Customer.builder().username("bigBrr").build()
+        );
+        Conversation conversation = new Conversation(conversationDTO,users);
+        conversation.setId(1L);
 
-        conversation.getUsers().add(user);
+        conversationDTO.getUsernames().forEach(username -> when(userRepository.findByUsername(username)).thenReturn(Optional.of(users.get(0))).thenReturn(Optional.of(users.get(1))));
 
-        ConversationDTO conversationDTO = new ConversationDTO(conversation);
-
-        conversation.getUsers().forEach(userToAdd -> when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user)));
-        when(conversationRepository.save(conversation)).thenReturn(conversation);
         //ACT
         ConversationDTO createdConversation = conversationService.createConversation(conversationDTO);
 
         //ARRANGE
         assertNotNull(createdConversation);
-        assertEquals(1,createdConversation.getUsernames().size());
     }
 
     @Test
@@ -127,6 +124,20 @@ public class ConversationServiceTest {
         //ASSERT
         assertNotNull(newSentMessage);
         assertEquals(1,conversation.getMessages().size());
+    }
+
+    @Test
+    void deleteConversation(){
+        //ARRANGE
+        Conversation conversation = Conversation.builder().id(1L).build();
+        when(conversationRepository.getById(conversation.getId())).thenReturn(conversation);
+
+        //ACT
+        conversationService.deleteConversation(conversation.getId());
+
+        //ASSERT
+        assertFalse(conversation.isActive());
+
     }
 
     @Test

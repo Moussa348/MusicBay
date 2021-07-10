@@ -6,6 +6,7 @@ import com.keita.musicbay.service.ConversationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.PermitAll;
 import java.util.List;
 
 @RestController
@@ -31,9 +32,14 @@ public class ConversationController {
         return conversationService.removeUserFromConversationGroup(id,username);
     }
 
-    @PatchMapping("/sendMessageInConversation")
-    public SentMessage sendMessageInConversation(@RequestParam("conversationId") Long conversationId, @RequestBody SentMessage sentMessage){
+    @PatchMapping("/sendMessageInConversation/{conversationId}")
+    public SentMessage sendMessageInConversation(@PathVariable Long conversationId, @RequestBody SentMessage sentMessage){
         return conversationService.sendMessageInConversation(conversationId,sentMessage);
+    }
+
+    @DeleteMapping("/deleteConversation/{id}")
+    public void deleteConversation(@PathVariable Long id){
+        conversationService.deleteConversation(id);
     }
 
     @GetMapping("/getConversation/{id}")
@@ -43,7 +49,7 @@ public class ConversationController {
 
 
     @GetMapping("/getLastSentMessages/{username}")
-    public List<SentMessage> getConversation(@PathVariable String username){
+    public List<SentMessage> getLastSentMessages(@PathVariable String username){
         return conversationService.getLastSentMessages(username);
     }
 }

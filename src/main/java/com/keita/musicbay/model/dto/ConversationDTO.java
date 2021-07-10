@@ -3,6 +3,7 @@ package com.keita.musicbay.model.dto;
 import com.keita.musicbay.model.Conversation;
 import com.keita.musicbay.model.User;
 import com.keita.musicbay.model.enums.ConversationType;
+import lombok.Builder;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 @Data
 public class ConversationDTO implements Serializable {
     private Long id;
-    private String name;
+    private String name,createdBy;
     private LocalDateTime creationDate;
     private ConversationType conversationType;
     private List<String> usernames;
@@ -25,6 +26,7 @@ public class ConversationDTO implements Serializable {
     public ConversationDTO(Conversation conversation) {
         this.id = conversation.getId();
         this.name = conversation.getName();
+        this.createdBy = conversation.getCreatedBy();
         this.creationDate = conversation.getCreationDate();
         this.conversationType = conversation.getConversationType();
         this.usernames = conversation.getUsers().stream().map(User::getUsername).collect(Collectors.toList());
@@ -39,8 +41,10 @@ public class ConversationDTO implements Serializable {
         this.creationDate = LocalDateTime.now();
     }
 
-    public ConversationDTO(String name, ConversationType conversationType, List<String> usernames) {
+    @Builder
+    public ConversationDTO(String name,String createdBy, ConversationType conversationType, List<String> usernames) {
         this.name = name;
+        this.createdBy = createdBy;
         this.creationDate = LocalDateTime.now();
         this.conversationType = conversationType;
         this.usernames = usernames;

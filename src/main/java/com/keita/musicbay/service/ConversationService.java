@@ -11,6 +11,7 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,15 +29,9 @@ public class ConversationService {
     public ConversationDTO createConversation(ConversationDTO conversationDTO){
         List<User> users = conversationDTO.getUsernames().stream().map(username -> userRepository.findByUsername(username).get()).collect(Collectors.toList());
 
-        Conversation conversation = Conversation.builder()
-                .creationDate(conversationDTO.getCreationDate())
-                .name(conversationDTO.getName())
-                .conversationType(conversationDTO.getConversationType()).build();
+        conversationRepository.save(new Conversation(conversationDTO,users));
 
-        conversation.getUsers().addAll(users);
-
-        log.info(conversationDTO.toString());
-        return  new ConversationDTO(conversationRepository.save(conversation));
+        return conversationDTO;
     }
 
     public ConversationDTO addUserInConversationGroup(Long id, String username){
@@ -55,6 +50,7 @@ public class ConversationService {
         return new ConversationDTO(conversationRepository.save(conversation));
     }
 
+    @Transactional
     public SentMessage sendMessageInConversation(Long conversationId,SentMessage sentMessage){
         Conversation conversation = conversationRepository.getById(conversationId);
 
@@ -63,13 +59,20 @@ public class ConversationService {
         return new SentMessage(conversationRepository.save(conversation).getMessages().get(conversation.getMessages().size()-1));
     }
 
+    public void deleteConversation(Long id){
+        Conversation conversation = conversationRepository.getById(id);
+        conversation.setActive(false);
+
+        conversationRepository.save(conversation);
+    }
+
     public ConversationDTO getConversation(Long id){
         return new ConversationDTO(conversationRepository.getById(id));
     }
 
     public List<SentMessage> getLastSentMessages(String username){
         List<Message> lastSentMessages = new ArrayList<>();
-        List<Conversation> conversations = conversationRepository.getByUser(userRepository.findByUsername(username).get());
+        List<Conversation> conversations = conversationRepository.getByUser(userRepository.findByUsername(username).get()).stream().filter(Conversation::isActive).collect(Collectors.toList());
 
         conversations.forEach(conversation -> lastSentMessages.add(conversation.getMessages().get(conversation.getMessages().size()-1)));
 

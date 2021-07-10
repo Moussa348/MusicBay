@@ -3,6 +3,7 @@ package com.keita.musicbay;
 import com.keita.musicbay.model.*;
 import com.keita.musicbay.model.dto.ConversationDTO;
 import com.keita.musicbay.model.dto.PostedComment;
+import com.keita.musicbay.model.dto.SentMessage;
 import com.keita.musicbay.model.enums.ConversationType;
 import com.keita.musicbay.model.enums.PriceType;
 import com.keita.musicbay.repository.CustomerRepository;
@@ -90,12 +91,20 @@ public class DbInit implements CommandLineRunner {
 
     private void insertConversation(){
         List<ConversationDTO> conversationDTOS = Arrays.asList(
-                new ConversationDTO("migos", ConversationType.GROUP)
+                ConversationDTO.builder().createdBy("brr").name("glowGang").conversationType(ConversationType.GROUP).usernames(Arrays.asList("bigBrr","bombay")).build(),
+                ConversationDTO.builder().createdBy("brr").name("glowGang").conversationType(ConversationType.GROUP).usernames(Arrays.asList("bayDrip","bombay")).build()
         );
-        conversationDTOS.get(0).getUsernames().add("bigBrr");
-        conversationDTOS.get(0).getUsernames().add("bayDrip");
 
         conversationDTOS.forEach(conversationDTO -> conversationService.createConversation(conversationDTO));
+    }
+
+    private void sendMessagesInConversations(){
+        List<SentMessage> sentMessages = Arrays.asList(
+                new SentMessage(new Message(1L,"sdaad","bigBrr")),
+                new SentMessage(new Message(2L,"sdaad","bayDrip"))
+        );
+
+        sentMessages.forEach(sentMessage -> conversationService.sendMessageInConversation(sentMessage.getId(),sentMessage));
     }
 
     private void insertComment(){
@@ -120,6 +129,7 @@ public class DbInit implements CommandLineRunner {
         insertMusic();
         insertTransaction();
         insertConversation();
+        sendMessagesInConversations();
         insertComment();
         subscribe();
     }
