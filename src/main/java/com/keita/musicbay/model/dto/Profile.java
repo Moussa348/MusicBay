@@ -16,14 +16,14 @@ public class Profile implements Serializable {
 
     public Profile(){}
 
-    public Profile(Customer customer){
-        this.uuid = customer.getUuid();
-        this.username = customer.getUsername();
-        this.email = customer.getEmail();
-        this.biography =customer.getBiography();
-        this.city = customer.getCity();
-        this.nbrOfSubscriber = customer.getSubscribers().size();
-        this.nbrOfSubscribeTo = customer.getSubscribeTos().size();
+    public Profile(User user){
+        this.uuid = user.getUuid();
+        this.username = user.getUsername();
+        this.email = user.getEmail();
+        this.biography =user.getBiography();
+        this.city = user.getCity();
+        this.nbrOfSubscriber = user.getSubscribers().size();
+        this.nbrOfSubscribeTo = user.getSubscribeTos().size();
 
     }
 }

@@ -1,7 +1,6 @@
 package com.keita.musicbay.service;
 
-import com.keita.musicbay.model.Customer;
-import com.keita.musicbay.model.User;
+import com.keita.musicbay.model.*;
 import com.keita.musicbay.model.dto.*;
 import com.keita.musicbay.repository.CustomerRepository;
 import lombok.extern.java.Log;
@@ -13,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,7 +27,6 @@ public class CustomerService {
 
     public boolean createCustomer(Registration registration) throws Exception {
         if (!customerRepository.existsByEmail(registration.getEmail()) && !customerRepository.existsByUsername(registration.getUsername())) {
-            //TODO : add default profile picture
             Customer customer = new Customer(registration, setDefaultProfilePicture());
             customerRepository.save(customer);
             return true;
@@ -76,15 +76,15 @@ public class CustomerService {
     }
 
     public List<Profile> getListSubscriber(String username) {
-        Optional<Customer> customerOptional = customerRepository.findByUsername(username);
-        List<Customer> customers = customerOptional.get().getSubscribers().stream().map(subscriber -> customerRepository.findByUsername(subscriber.getUsername()).get()).collect(Collectors.toList());
+        Customer customer = customerRepository.findByUsername(username).get();
+        List<Customer> customers = customer.getSubscribers().stream().map(subscriber -> customerRepository.findByUsername(subscriber.getUsername()).get()).collect(Collectors.toList());
 
         return customers.stream().filter(Customer::isActive).map(Profile::new).collect(Collectors.toList());
     }
 
     public List<Profile> getListSubscribeTo(String username) {
-        Optional<Customer> customerOptional = customerRepository.findByUsername(username);
-        List<Customer> customers = customerOptional.get().getSubscribeTos().stream().map(subscribeTo -> customerRepository.findByUsername(subscribeTo.getUsername()).get()).collect(Collectors.toList());
+        Customer customer = customerRepository.findByUsername(username).get();
+        List<Customer> customers =customer.getSubscribeTos().stream().map(subscribeTo -> customerRepository.findByUsername(subscribeTo.getUsername()).get()).collect(Collectors.toList());
 
         return customers.stream().filter(Customer::isActive).map(Profile::new).collect(Collectors.toList());
     }
