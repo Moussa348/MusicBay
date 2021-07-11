@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class CustomerController {
     private CustomerService customerService;
 
     @PostMapping("/createCustomer")
+    @PermitAll
     public boolean createCustomer(@RequestBody Registration registration) throws Exception{
         return customerService.createCustomer(registration);
     }

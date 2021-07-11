@@ -6,6 +6,7 @@ import com.keita.musicbay.service.MusicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.PermitAll;
 import java.util.List;
 
 @RestController
@@ -21,6 +22,7 @@ public class MusicController {
         return musicService.getMusic(title);
     }
 
+    @PermitAll()
     @GetMapping("/getCatalog/{username}")
     public Catalog getCatalog(@PathVariable String username){
         return musicService.getCatalog(username);
