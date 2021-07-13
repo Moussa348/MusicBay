@@ -22,7 +22,6 @@ public class MusicController {
         return musicService.getMusic(title);
     }
 
-    @PermitAll()
     @GetMapping("/getCatalog/{username}")
     public Catalog getCatalog(@PathVariable String username){
         return musicService.getCatalog(username);

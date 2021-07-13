@@ -1,8 +1,7 @@
 package com.keita.musicbay.repository;
 
-import com.keita.musicbay.model.Liking;
-import com.keita.musicbay.model.Music;
-import com.keita.musicbay.model.Track;
+import com.keita.musicbay.model.entity.Music;
+import com.keita.musicbay.model.entity.Track;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;

@@ -1,4 +1,4 @@
-package com.keita.musicbay.model;
+package com.keita.musicbay.model.entity;
 
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-public class Subscriber implements Serializable {
+public class SubscribeTo implements Serializable {
 
     @Id
     @GeneratedValue
@@ -23,10 +23,10 @@ public class Subscriber implements Serializable {
     @ManyToOne
     private User user;
 
-    public Subscriber(){}
+    public SubscribeTo(){}
 
     @Builder
-    public Subscriber(String username,User user) {
+    public SubscribeTo(String username,User user) {
         this.date = LocalDateTime.now();
         this.username = username;
         this.user = user;

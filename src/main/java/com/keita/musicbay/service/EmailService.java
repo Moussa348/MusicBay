@@ -1,6 +1,6 @@
 package com.keita.musicbay.service;
 
-import com.keita.musicbay.model.Customer;
+import com.keita.musicbay.model.entity.Customer;
 import com.keita.musicbay.model.dto.TransactionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;

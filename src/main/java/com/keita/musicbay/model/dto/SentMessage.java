@@ -1,6 +1,6 @@
 package com.keita.musicbay.model.dto;
 
-import com.keita.musicbay.model.Message;
+import com.keita.musicbay.model.entity.Message;
 import lombok.Data;
 
 import java.io.Serializable;

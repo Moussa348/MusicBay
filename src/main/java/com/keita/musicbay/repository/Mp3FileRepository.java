@@ -1,6 +1,6 @@
 package com.keita.musicbay.repository;
 
-import com.keita.musicbay.model.Mp3File;
+import com.keita.musicbay.model.entity.Mp3File;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

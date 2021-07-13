@@ -1,7 +1,7 @@
 package com.keita.musicbay.repository;
 
-import com.keita.musicbay.model.Customer;
-import com.keita.musicbay.model.Sharing;
+import com.keita.musicbay.model.entity.Customer;
+import com.keita.musicbay.model.entity.Sharing;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,19 +1,15 @@
-package com.keita.musicbay.model;
+package com.keita.musicbay.model.entity;
 
-import com.keita.musicbay.model.dto.Profile;
 import com.keita.musicbay.model.dto.Registration;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.CascadeType;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -39,8 +35,8 @@ public class Customer extends User implements Serializable {
 
     @Builder
     public Customer(UUID uuid, String firstName, String lastName, byte[] picture, LocalDate dateOfBirth, String cellNumber, String city, String email, String username, String password, String biography, List<Transaction> transactions,
-                    List<Liking> likings, List<Sharing> sharings, List<Purchasing> purchasings) {
-        super(firstName, lastName,picture,dateOfBirth,cellNumber,city, email, username, password, biography);
+                    List<Liking> likings, List<Sharing> sharings, List<Purchasing> purchasings,String roles) {
+        super(firstName, lastName,picture,dateOfBirth,cellNumber,city, email, username, password, biography,roles);
         this.transactions = transactions;
         this.likings = likings;
         this.sharings = sharings;
@@ -48,15 +44,15 @@ public class Customer extends User implements Serializable {
     }
 
     public Customer(Registration registration){
-        super("", "",null,null,"","", registration.getEmail(), registration.getUsername(), registration.getPassword(), "");
+        super("", "",null,null,"","", registration.getEmail(), registration.getUsername(), registration.getPassword(), "","USER");
     }
 
     public Customer(Registration registration, byte[] picture){
-        super("", "",picture,null,"","", registration.getEmail(), registration.getUsername(), registration.getPassword(), "");
+        super("", "",picture,null,"","", registration.getEmail(), registration.getUsername(), registration.getPassword(), "","USER");
     }
 
     public Customer(Registration registration, Customer customer){
-        super("", "", customer.getPicture(), registration.getDate(),"", registration.getCity(), customer.getEmail(), registration.getUsername(), registration.getPassword(), registration.getBiography());
+        super("", "", customer.getPicture(), registration.getDate(),"", registration.getCity(), customer.getEmail(), registration.getUsername(), registration.getPassword(), registration.getBiography(),"USER");
         super.setUuid(customer.getUuid());
         super.setSubscribers(customer.getSubscribers());
         super.setSubscribeTos(customer.getSubscribeTos());

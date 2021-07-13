@@ -1,6 +1,9 @@
 package com.keita.musicbay.service;
 
-import com.keita.musicbay.model.*;
+import com.keita.musicbay.model.entity.Customer;
+import com.keita.musicbay.model.entity.Music;
+import com.keita.musicbay.model.entity.SubscribeTo;
+import com.keita.musicbay.model.entity.Track;
 import com.keita.musicbay.repository.CustomerRepository;
 import com.keita.musicbay.repository.MusicRepository;
 import org.junit.jupiter.api.Test;
@@ -11,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;

@@ -1,4 +1,4 @@
-package com.keita.musicbay.model;
+package com.keita.musicbay.model.entity;
 
 import lombok.Builder;
 import lombok.Data;
@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Entity

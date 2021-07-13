@@ -1,10 +1,8 @@
 package com.keita.musicbay.service;
 
-import com.keita.musicbay.model.Article;
-import com.keita.musicbay.model.Customer;
-import com.keita.musicbay.model.Music;
-import com.keita.musicbay.model.Transaction;
-import com.keita.musicbay.model.dto.MusicArticle;
+import com.keita.musicbay.model.entity.Article;
+import com.keita.musicbay.model.entity.Customer;
+import com.keita.musicbay.model.entity.Transaction;
 import com.keita.musicbay.model.dto.TransactionDTO;
 import com.keita.musicbay.model.enums.PriceType;
 import com.keita.musicbay.repository.CustomerRepository;

@@ -1,7 +1,7 @@
 package com.keita.musicbay.model.dto;
 
-import com.keita.musicbay.model.Conversation;
-import com.keita.musicbay.model.User;
+import com.keita.musicbay.model.entity.Conversation;
+import com.keita.musicbay.model.entity.User;
 import com.keita.musicbay.model.enums.ConversationType;
 import lombok.Builder;
 import lombok.Data;

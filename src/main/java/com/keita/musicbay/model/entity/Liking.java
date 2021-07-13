@@ -1,9 +1,7 @@
-package com.keita.musicbay.model;
+package com.keita.musicbay.model.entity;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-public class Sharing implements Serializable {
+public class Liking implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,16 +20,14 @@ public class Sharing implements Serializable {
 
     @OneToOne
     private Music music;
-    private LocalDateTime sharingDate;
-    private String sharingMsg;
+    private LocalDateTime likingDate;
 
-    public Sharing() { }
+    public Liking() { }
 
     @Builder
-    public Sharing( Customer customer,Music music, String sharingMsg) {
+    public Liking(Customer customer,Music music) {
         this.customer = customer;
         this.music = music;
-        this.sharingDate = LocalDateTime.now();
-        this.sharingMsg = sharingMsg;
+        this.likingDate = LocalDateTime.now();
     }
 }

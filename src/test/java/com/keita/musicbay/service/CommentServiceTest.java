@@ -1,10 +1,12 @@
 package com.keita.musicbay.service;
 
-import com.keita.musicbay.model.*;
 import com.keita.musicbay.model.dto.PostedComment;
+import com.keita.musicbay.model.entity.Comment;
+import com.keita.musicbay.model.entity.Music;
+import com.keita.musicbay.model.entity.Text;
+import com.keita.musicbay.model.entity.Track;
 import com.keita.musicbay.repository.MusicRepository;
 import com.keita.musicbay.repository.TextRepository;
-import com.keita.musicbay.repository.UserRepository;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,8 +1,8 @@
 package com.keita.musicbay.service;
 
-import com.keita.musicbay.model.*;
 import com.keita.musicbay.model.dto.Catalog;
 import com.keita.musicbay.model.dto.MusicDTO;
+import com.keita.musicbay.model.entity.*;
 import com.keita.musicbay.repository.CustomerRepository;
 import com.keita.musicbay.repository.MusicRepository;
 import org.junit.jupiter.api.Test;

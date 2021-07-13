@@ -1,4 +1,4 @@
-package com.keita.musicbay.model;
+package com.keita.musicbay.model.entity;
 
 import com.keita.musicbay.model.dto.ConversationDTO;
 import com.keita.musicbay.model.enums.ConversationType;
@@ -7,7 +7,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

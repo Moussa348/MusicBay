@@ -1,4 +1,4 @@
-package com.keita.musicbay.model;
+package com.keita.musicbay.model.entity;
 
 import com.keita.musicbay.model.dto.PostedComment;
 import lombok.Builder;

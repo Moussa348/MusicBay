@@ -1,7 +1,9 @@
 package com.keita.musicbay.service;
 
-import com.keita.musicbay.model.*;
 import com.keita.musicbay.model.dto.PostedComment;
+import com.keita.musicbay.model.entity.Comment;
+import com.keita.musicbay.model.entity.LikedBy;
+import com.keita.musicbay.model.entity.Music;
 import com.keita.musicbay.repository.MusicRepository;
 import com.keita.musicbay.repository.TextRepository;
 import com.keita.musicbay.repository.UserRepository;

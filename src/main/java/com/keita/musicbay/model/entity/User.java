@@ -1,4 +1,4 @@
-package com.keita.musicbay.model;
+package com.keita.musicbay.model.entity;
 
 import lombok.Data;
 
@@ -18,7 +18,7 @@ public abstract class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID uuid;
-    private String firstName,lastName,email,username,city,cellNumber,password,biography;
+    private String firstName,lastName,email,username,city,cellNumber,password,biography,roles;
 
     @Lob
     private byte[] picture;
@@ -40,7 +40,8 @@ public abstract class User implements Serializable {
 
     public User(){}
 
-    public User(String firstName, String lastName, byte[] picture,LocalDate dateOfBirth,String cellNumber,String city, String email, String username, String password, String biography) {
+    public User(String firstName, String lastName, byte[] picture,LocalDate dateOfBirth,String cellNumber,String city,
+                String email, String username, String password, String biography,String roles) {
         this.uuid = UUID.randomUUID();
         this.firstName = firstName;
         this.lastName = lastName;
@@ -56,6 +57,7 @@ public abstract class User implements Serializable {
         this.subscribeTos = new ArrayList<>();
         this.registrationDate = LocalDateTime.now();
         this.picture = picture;
+        this.roles = roles;
         this.active = true;
     }
 

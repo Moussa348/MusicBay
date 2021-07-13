@@ -1,6 +1,6 @@
-package com.keita.musicbay.model;
+package com.keita.musicbay.model.entity;
 
-import lombok.Builder;
+import com.keita.musicbay.model.dto.NotificationDTO;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -12,23 +12,23 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-public class SubscribeTo implements Serializable {
-
+public class Notification implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
+    private String event;
     private LocalDateTime date;
-    private String username;
+    private boolean seen;
 
     @ManyToOne
     private User user;
 
-    public SubscribeTo(){}
+    public Notification(){}
 
-    @Builder
-    public SubscribeTo(String username,User user) {
+    public Notification(String event, User user) {
+        this.event = event;
         this.date = LocalDateTime.now();
-        this.username = username;
+        this.seen = false;
         this.user = user;
     }
 }

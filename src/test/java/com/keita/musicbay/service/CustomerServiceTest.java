@@ -1,7 +1,7 @@
 package com.keita.musicbay.service;
 
-import com.keita.musicbay.model.*;
 import com.keita.musicbay.model.dto.*;
+import com.keita.musicbay.model.entity.*;
 import com.keita.musicbay.repository.CustomerRepository;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.IOException;
 import java.util.*;

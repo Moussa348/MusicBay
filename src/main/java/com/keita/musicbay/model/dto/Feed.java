@@ -1,9 +1,9 @@
 package com.keita.musicbay.model.dto;
 
-import com.keita.musicbay.model.Liking;
-import com.keita.musicbay.model.Purchasing;
-import com.keita.musicbay.model.Sharing;
-import com.keita.musicbay.model.User;
+import com.keita.musicbay.model.entity.Liking;
+import com.keita.musicbay.model.entity.Purchasing;
+import com.keita.musicbay.model.entity.Sharing;
+import com.keita.musicbay.model.entity.User;
 import lombok.Data;
 
 import java.io.Serializable;

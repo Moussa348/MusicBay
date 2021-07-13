@@ -1,13 +1,11 @@
 package com.keita.musicbay.service;
 
-import com.keita.musicbay.model.*;
 import com.keita.musicbay.model.dto.*;
+import com.keita.musicbay.model.entity.Customer;
 import com.keita.musicbay.repository.CustomerRepository;
 import lombok.extern.java.Log;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -89,10 +87,5 @@ public class CustomerService {
         List<Customer> customers =customer.getSubscribeTos().stream().map(subscribeTo -> customerRepository.findByUsername(subscribeTo.getUsername()).get()).collect(Collectors.toList());
 
         return customers.stream().filter(Customer::isActive).map(Profile::new).collect(Collectors.toList());
-    }
-
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder(){
-        return new BCryptPasswordEncoder(16);
     }
 }

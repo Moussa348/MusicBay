@@ -1,8 +1,8 @@
 package com.keita.musicbay.service;
 
-import com.keita.musicbay.model.Conversation;
-import com.keita.musicbay.model.Message;
-import com.keita.musicbay.model.User;
+import com.keita.musicbay.model.entity.Conversation;
+import com.keita.musicbay.model.entity.Message;
+import com.keita.musicbay.model.entity.User;
 import com.keita.musicbay.model.dto.ConversationDTO;
 import com.keita.musicbay.model.dto.SentMessage;
 import com.keita.musicbay.repository.ConversationRepository;

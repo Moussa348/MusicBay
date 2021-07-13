@@ -1,7 +1,7 @@
 package com.keita.musicbay.model.dto;
 
-import com.keita.musicbay.model.Customer;
-import com.keita.musicbay.model.Music;
+import com.keita.musicbay.model.entity.Customer;
+import com.keita.musicbay.model.entity.Music;
 import lombok.Data;
 
 import java.io.Serializable;

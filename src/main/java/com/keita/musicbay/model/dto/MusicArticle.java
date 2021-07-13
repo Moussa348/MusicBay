@@ -1,7 +1,7 @@
 package com.keita.musicbay.model.dto;
 
-import com.keita.musicbay.model.Article;
-import com.keita.musicbay.model.Music;
+import com.keita.musicbay.model.entity.Article;
+import com.keita.musicbay.model.entity.Music;
 import com.keita.musicbay.model.enums.PriceType;
 import lombok.Data;
 

@@ -1,7 +1,7 @@
 package com.keita.musicbay.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.keita.musicbay.model.Message;
+import com.keita.musicbay.model.entity.Message;
 import com.keita.musicbay.model.dto.ConversationDTO;
 import com.keita.musicbay.model.dto.SentMessage;
 import com.keita.musicbay.model.enums.ConversationType;

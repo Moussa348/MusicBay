@@ -1,7 +1,6 @@
 package com.keita.musicbay.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.keita.musicbay.model.Customer;
 import com.keita.musicbay.model.dto.PostedComment;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

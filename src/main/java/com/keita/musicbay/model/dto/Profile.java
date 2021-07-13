@@ -1,11 +1,9 @@
 package com.keita.musicbay.model.dto;
 
-import com.keita.musicbay.model.*;
-import lombok.Builder;
+import com.keita.musicbay.model.entity.User;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.UUID;
 
 @Data

@@ -1,9 +1,8 @@
-package com.keita.musicbay.model;
+package com.keita.musicbay.model.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import java.io.Serializable;
 

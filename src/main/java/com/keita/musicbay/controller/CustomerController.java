@@ -1,15 +1,12 @@
 package com.keita.musicbay.controller;
 
-import com.keita.musicbay.model.Customer;
 import com.keita.musicbay.model.dto.*;
 import com.keita.musicbay.service.CustomerService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -23,7 +20,7 @@ public class CustomerController {
     private CustomerService customerService;
 
     @PostMapping("/createCustomer")
-    @PermitAll
+    @PreAuthorize("isAnonymous()")
     public boolean createCustomer(@RequestBody Registration registration) throws Exception{
         return customerService.createCustomer(registration);
     }

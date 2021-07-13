@@ -1,7 +1,7 @@
 package com.keita.musicbay.model.dto;
 
-import com.keita.musicbay.model.Comment;
-import com.keita.musicbay.model.LikedBy;
+import com.keita.musicbay.model.entity.Comment;
+import com.keita.musicbay.model.entity.LikedBy;
 import lombok.Data;
 
 import java.io.Serializable;

@@ -1,6 +1,6 @@
 package com.keita.musicbay.model.dto;
 
-import com.keita.musicbay.model.Sharing;
+import com.keita.musicbay.model.entity.Sharing;
 import lombok.Data;
 
 import java.io.Serializable;

@@ -1,7 +1,7 @@
 package com.keita.musicbay.repository;
 
-import com.keita.musicbay.model.Customer;
-import com.keita.musicbay.model.Sharing;
+import com.keita.musicbay.model.entity.Customer;
+import com.keita.musicbay.model.entity.Sharing;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

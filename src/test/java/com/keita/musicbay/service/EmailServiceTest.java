@@ -1,14 +1,13 @@
 package com.keita.musicbay.service;
 
-import com.keita.musicbay.model.Customer;
-import com.keita.musicbay.model.Transaction;
+import com.keita.musicbay.model.entity.Customer;
+import com.keita.musicbay.model.entity.Transaction;
 import com.keita.musicbay.model.dto.TransactionDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;

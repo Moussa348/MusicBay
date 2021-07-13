@@ -1,10 +1,10 @@
 package com.keita.musicbay.repository;
 
 
-import com.keita.musicbay.model.Customer;
-import com.keita.musicbay.model.Liking;
-import com.keita.musicbay.model.Track;
-import com.keita.musicbay.model.User;
+import com.keita.musicbay.model.entity.Customer;
+import com.keita.musicbay.model.entity.Liking;
+import com.keita.musicbay.model.entity.Track;
+import com.keita.musicbay.model.entity.User;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
