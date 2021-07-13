@@ -50,9 +50,9 @@ public class FeedService {
         List<Customer> listCustomersThatYouAreSubscribeTo = customer.getSubscribeTos().stream().map(subscribeTo -> customerRepository.findByUsername(subscribeTo.getUsername()).get()).collect(Collectors.toList());
 
         listCustomersThatYouAreSubscribeTo.forEach(customerThatYouAreSubscribeTo -> {
-            likings.addAll(likingRepository.getAllByCustomer(customerThatYouAreSubscribeTo, PageRequest.of(noPage, 2, Sort.by("likingDate").descending())));
-            sharings.addAll(sharingRepository.getAllByCustomer(customerThatYouAreSubscribeTo, PageRequest.of(noPage, 2, Sort.by("sharingDate").descending())));
-            purchasings.addAll(purchasingRepository.getAllByCustomer(customerThatYouAreSubscribeTo, PageRequest.of(noPage, 2, Sort.by("purchasingDate").descending())));
+            likings.addAll(likingRepository.getAllByCustomer(customerThatYouAreSubscribeTo, PageRequest.of(noPage, 5, Sort.by("likingDate").descending())));
+            sharings.addAll(sharingRepository.getAllByCustomer(customerThatYouAreSubscribeTo, PageRequest.of(noPage, 5, Sort.by("sharingDate").descending())));
+            purchasings.addAll(purchasingRepository.getAllByCustomer(customerThatYouAreSubscribeTo, PageRequest.of(noPage, 5, Sort.by("purchasingDate").descending())));
         });
 
         return new Feed(likings, sharings, purchasings);
@@ -73,22 +73,22 @@ public class FeedService {
 
     public List<LikedMusic> getListLikedMusic(String username,Integer noPage) {
         Customer customer = getCustomerByUsername(username);
-        return likingRepository.getAllByCustomer(customer,PageRequest.of(noPage, 3, Sort.by("likingDate").descending())).stream().map(LikedMusic::new).collect(Collectors.toList());
+        return likingRepository.getAllByCustomer(customer,PageRequest.of(noPage, 5, Sort.by("likingDate").descending())).stream().map(LikedMusic::new).collect(Collectors.toList());
     }
 
     public List<SharedMusic> getListSharedMusic(String username,Integer noPage) {
         Customer customer = getCustomerByUsername(username);
-        return sharingRepository.getAllByCustomer(customer,PageRequest.of(noPage, 3, Sort.by("sharingDate").descending())).stream().map(SharedMusic::new).collect(Collectors.toList());
+        return sharingRepository.getAllByCustomer(customer,PageRequest.of(noPage, 5, Sort.by("sharingDate").descending())).stream().map(SharedMusic::new).collect(Collectors.toList());
     }
 
     public List<PurchasedMusic> getListPurchasedMusic(String username, Integer noPage) {
         Customer customer = getCustomerByUsername(username);
-        return purchasingRepository.getAllByCustomer(customer,PageRequest.of(noPage, 3, Sort.by("purchasingDate").descending())).stream().map(PurchasedMusic::new).collect(Collectors.toList());
+        return purchasingRepository.getAllByCustomer(customer,PageRequest.of(noPage, 5, Sort.by("purchasingDate").descending())).stream().map(PurchasedMusic::new).collect(Collectors.toList());
     }
 
     public List<Profile> getListSubscriber(String username,Integer noPage) {
         User user = getUserByUsername(username);
-        List<User> users = subscriberRepository.getAllByUser(user,PageRequest.of(noPage,3, Sort.by("date").ascending()))
+        List<User> users = subscriberRepository.getAllByUser(user,PageRequest.of(noPage,10, Sort.by("date").ascending()))
                 .stream()
                 .map(subscriber -> userRepository.findByUsername(subscriber.getUsername()).get())
                 .collect(Collectors.toList());
@@ -98,7 +98,7 @@ public class FeedService {
 
     public List<Profile> getListSubscribeTo(String username,Integer noPage) {
         User user = getUserByUsername(username);
-        List<User> users = subscribeToRepository.getAllByUser(user,PageRequest.of(noPage,3, Sort.by("date").ascending()))
+        List<User> users = subscribeToRepository.getAllByUser(user,PageRequest.of(noPage,10, Sort.by("date").ascending()))
                 .stream()
                 .map(subscriberTo -> userRepository.findByUsername(subscriberTo.getUsername()).get())
                 .collect(Collectors.toList());

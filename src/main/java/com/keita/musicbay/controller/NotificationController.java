@@ -19,7 +19,7 @@ public class NotificationController {
     private NotificationService notificationService;
 
     @GetMapping("/getRecentNotifications")
-    public List<RecentNotification> getRecentNotifications(@RequestParam("username")String username,@RequestParam("date")String date,@RequestParam("nbrOfDays")Integer nbrOfDays ){
-        return notificationService.getRecentNotifications(username,date,nbrOfDays);
+    public List<RecentNotification> getRecentNotifications(@RequestParam("username")String username,@RequestParam("noPage")Integer noPage ){
+        return notificationService.getRecentNotifications(username,noPage);
     }
 }

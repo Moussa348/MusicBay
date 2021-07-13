@@ -5,7 +5,10 @@ import com.keita.musicbay.model.entity.Notification;
 import com.keita.musicbay.model.entity.User;
 import com.keita.musicbay.model.enums.NotificationEvent;
 import com.keita.musicbay.repository.NotificationRepository;
+import com.keita.musicbay.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,6 +21,9 @@ public class NotificationService {
 
     @Autowired
     private NotificationRepository notificationRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public void saveNotification(NotificationEvent notificationEvent, User user){
         notificationRepository.save(new Notification(notificationEvent,user));
@@ -32,10 +38,9 @@ public class NotificationService {
         notificationRepository.save(notification);
     }
 
-    public List<RecentNotification> getRecentNotifications(String username, String date, Integer nbrOfDays){
-        LocalDateTime todayDate = LocalDateTime.parse(date,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    public List<RecentNotification> getRecentNotifications(String username, Integer noPage){
 
-        return notificationRepository.getByUserUsernameAndDateBetween(username,todayDate.minusDays(nbrOfDays),todayDate)
+        return notificationRepository.getAllByUserAndSeenFalse(userRepository.findByUsername(username).get(), PageRequest.of(0,10, Sort.by("date").ascending()))
                 .stream().map(RecentNotification::new).collect(Collectors.toList());
     }
 }

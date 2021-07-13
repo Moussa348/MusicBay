@@ -6,16 +6,20 @@ import com.keita.musicbay.model.entity.Notification;
 import com.keita.musicbay.model.entity.User;
 import com.keita.musicbay.model.enums.NotificationEvent;
 import com.keita.musicbay.repository.NotificationRepository;
+import com.keita.musicbay.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -25,6 +29,9 @@ public class NotificationServiceTest {
 
     @Mock
     NotificationRepository notificationRepository;
+
+    @Mock
+    UserRepository userRepository;
 
     @InjectMocks
     NotificationService notificationService;
@@ -54,8 +61,7 @@ public class NotificationServiceTest {
     void getRecentNotifications(){
         //ARRANGE
         Customer customer = Customer.builder().username("brr").build();
-        LocalDateTime date = LocalDateTime.parse("2021-07-12 07:27", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-        int nbrOfDays = 2;
+        int noPage = 0;
 
         List<Notification> notifications = Arrays.asList(
                 new Notification(NotificationEvent.LIKING,customer),
@@ -63,9 +69,11 @@ public class NotificationServiceTest {
                 new Notification(NotificationEvent.LIKING,customer)
         );
 
-        when(notificationRepository.getByUserUsernameAndDateBetween(customer.getUsername(),date.minusDays(nbrOfDays),date)).thenReturn(notifications);
+        when(userRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
+
+        when(notificationRepository.getAllByUserAndSeenFalse(customer, PageRequest.of(noPage,10, Sort.by("date").ascending()))).thenReturn(notifications);
         //ACT
-        List<RecentNotification> recentNotifications = notificationService.getRecentNotifications(customer.getUsername(),"2021-07-12 07:27",nbrOfDays);
+        List<RecentNotification> recentNotifications = notificationService.getRecentNotifications(customer.getUsername(),noPage);
 
         //ASSERT
         assertEquals(3,recentNotifications.size());
