@@ -11,3 +11,5 @@ spring:
   profiles:
     active: test
 
+  pagination:
+    feed: 2

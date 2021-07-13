@@ -1,7 +1,6 @@
 package com.keita.musicbay.service;
 
-import com.keita.musicbay.model.dto.Feed;
-import com.keita.musicbay.model.dto.ProfileToSubscribeTo;
+import com.keita.musicbay.model.dto.*;
 import com.keita.musicbay.model.entity.*;
 import com.keita.musicbay.repository.*;
 import org.junit.jupiter.api.Test;
@@ -9,18 +8,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.support.PagedListHolder;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -44,6 +37,12 @@ public class FeedServiceTest {
     @Mock
     PurchasingRepository purchasingRepository;
 
+    @Mock
+    SubscriberRepository subscriberRepository;
+
+    @Mock
+    SubscribeToRepository subscribeToRepository;
+
     @InjectMocks
     FeedService feedService;
 
@@ -53,7 +52,6 @@ public class FeedServiceTest {
         //ARRANGE
         Customer customer = Customer.builder().username("brr").build();
         Customer customerSubscribeTo = Customer.builder().username("bigBrr").build();
-        LocalDateTime date = LocalDateTime.parse("2021-07-12 07:27", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         int noPage = 0;
 
         List<Liking> likings = Arrays.asList(
@@ -86,8 +84,8 @@ public class FeedServiceTest {
         assertEquals(2,yourFeed.getLikedMusics().size());
         assertEquals(2,yourFeed.getSharedMusics().size());
         assertEquals(2,yourFeed.getPurchasedMusics().size());
-
     }
+
 
     @Test
     void getListPossibleSubscribeTo(){
@@ -111,5 +109,105 @@ public class FeedServiceTest {
 
         //ASSERT
         assertEquals(2,possibleSubscribeTos.size());
+    }
+
+    @Test
+    void getListLikedMusic(){
+        //ARRANGE
+        Customer customer = Customer.builder().username("ceo").likings(new ArrayList<>()).build();
+        int noPage = 0;
+        List<Liking> likings = Arrays.asList(
+                Liking.builder().customer(customer).music(Track.builder().build()).build(),
+                Liking.builder().customer(customer).music(Track.builder().build()).build()
+        );
+
+        when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
+        when(likingRepository.getAllByCustomer(customer,PageRequest.of(noPage,3,Sort.by("likingDate").descending()))).thenReturn(likings);
+        //ACT
+        List<LikedMusic> likedMusics = feedService.getListLikedMusic(customer.getUsername(),0);
+
+        //ASSERT
+        assertEquals(2,likedMusics.size());
+    }
+
+    @Test
+    void getListSharedMusic(){
+        //ARRANGE
+        Customer customer = Customer.builder().username("ceo").likings(new ArrayList<>()).build();
+        int noPage = 0;
+        List<Sharing> sharings = Arrays.asList(
+                Sharing.builder().customer(customer).music(Track.builder().build()).build(),
+                Sharing.builder().customer(customer).music(Track.builder().build()).build()
+        );
+
+        when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
+        when(sharingRepository.getAllByCustomer(customer,PageRequest.of(noPage,3,Sort.by("sharingDate").descending()))).thenReturn(sharings);
+        //ACT
+        List<SharedMusic> sharedMusics = feedService.getListSharedMusic(customer.getUsername(),0);
+
+        //ASSERT
+        assertEquals(2,sharedMusics.size());
+    }
+
+    @Test
+    void getListPurchasedMusic(){
+        //ARRANGE
+
+        //ARRANGE
+        Customer customer = Customer.builder().username("ceo").likings(new ArrayList<>()).build();
+        int noPage = 0;
+        List<Purchasing> purchasings = Arrays.asList(
+                Purchasing.builder().customer(customer).music(Track.builder().build()).build(),
+                Purchasing.builder().customer(customer).music(Track.builder().build()).build()
+        );
+
+        when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
+        when(purchasingRepository.getAllByCustomer(customer,PageRequest.of(noPage,3,Sort.by("purchasingDate").descending()))).thenReturn(purchasings);
+
+
+        //ACT
+        List<PurchasedMusic> purchasedMusics = feedService.getListPurchasedMusic(customer.getUsername(),0);
+
+        //ASSERT
+        assertEquals(2,purchasedMusics.size());
+    }
+
+    @Test
+    void getListSubscriber(){
+        //ARRANGE
+        User user = Customer.builder().username("bombay").build();
+        Subscriber subscriber = Subscriber.builder().username("taa").user(user).build();
+        int noPage = 0;
+
+        user.setSubscribers(Arrays.asList(subscriber));
+
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        user.getSubscribers().forEach(s -> when(userRepository.findByUsername(s.getUsername())).thenReturn(Optional.of(Customer.builder().likings(Collections.emptyList()).sharings(Collections.emptyList()).purchasings(Collections.emptyList()).build())));
+        when(subscriberRepository.getAllByUser(user,PageRequest.of(noPage,3, Sort.by("date").ascending()))).thenReturn(user.getSubscribers());
+        //ACT
+        List<Profile> subscribers = feedService.getListSubscriber(user.getUsername(),noPage);
+
+        //ASSERT
+        assertEquals(1,subscribers.size());
+    }
+
+    @Test
+    void getListSubscribeTo(){
+        //ARRANGE
+        User user = Customer.builder().username("bombay").build();
+        SubscribeTo subscriberTo = SubscribeTo.builder().username("taa").build();
+        int noPage = 0;
+
+        user.setSubscribeTos(Arrays.asList(subscriberTo));
+
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        user.getSubscribeTos().forEach(s -> when(userRepository.findByUsername(s.getUsername())).thenReturn(Optional.of(Customer.builder().likings(Collections.emptyList()).sharings(Collections.emptyList()).purchasings(Collections.emptyList()).build())));
+        when(subscribeToRepository.getAllByUser(user,PageRequest.of(noPage,3, Sort.by("date").ascending()))).thenReturn(user.getSubscribeTos());
+
+        //ACT
+        List<Profile> subscriberTos = feedService.getListSubscribeTo(user.getUsername(),noPage);
+
+        //ASSERT
+        assertEquals(1,subscriberTos.size());
     }
 }

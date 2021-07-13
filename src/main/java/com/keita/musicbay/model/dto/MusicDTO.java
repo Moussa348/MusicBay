@@ -25,6 +25,7 @@ public class MusicDTO implements Serializable {
         this.nbrOfLike = music.getNbrOfLike();
         this.nbrOfShare = music.getNbrOfShare();
         this.nbrOfPlay = music.getNbrOfPlay();
+        this.nbrOfPurchase = music.getNbrOfPurchase();
         this.basicPrice = music.getBasicPrice();
         this.exclusivePrice = music.getExclusivePrice();
         this.nbrOfComment = music.getComments().size();

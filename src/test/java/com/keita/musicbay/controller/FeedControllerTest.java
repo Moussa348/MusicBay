@@ -64,4 +64,101 @@ public class FeedControllerTest {
         assertNotNull(mvcResult1.getResponse().getContentAsString());
 
     }
+
+    @Test
+    void getListLikedMusic() throws Exception{
+        //ARRANGE
+        String username = "bombay";
+        int noPage = 0;
+
+        //ACT
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.get("/feed/getListLikedMusic/")
+                .param("username",username)
+                .param("noPage", Integer.toString(noPage))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+
+
+        //ASSERT
+        assertNotNull(mvcResult1.getResponse().getContentAsString());
+
+    }
+
+    @Test
+    void getListSharedMusic() throws Exception{
+        //ARRANGE
+        String username = "bombay";
+        int noPage = 0;
+
+        //ACT
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.get("/feed/getListSharedMusic/")
+                .param("username",username)
+                .param("noPage", Integer.toString(noPage))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+
+
+        //ASSERT
+        assertNotNull(mvcResult1.getResponse().getContentAsString());
+    }
+
+
+    @Test
+    void getListPurchasedMusic() throws Exception{
+        //ARRANGE
+        String username = "bombay";
+        int noPage = 0;
+
+        //ACT
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.get("/feed/getListPurchasedMusic/")
+                .param("username",username)
+                .param("noPage", Integer.toString(noPage))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+
+
+        //ASSERT
+        assertNotNull(mvcResult1.getResponse().getContentAsString());
+    }
+
+    @Test
+    void getListSubscriber() throws Exception{
+        //ARRANGE
+        String username = "bombay";
+        int noPage = 0;
+
+        //ACT
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.get("/feed/getListSubscriber/")
+                .param("username",username)
+                .param("noPage", Integer.toString(noPage))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+
+
+        //ASSERT
+        assertNotNull(mvcResult1.getResponse().getContentAsString());
+    }
+
+    @Test
+    void getListSubscribeTo() throws Exception{
+        //ARRANGE
+        String username = "bombay";
+        int noPage = 0;
+
+        //ACT
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.get("/feed/getListSubscribeTo/")
+                .param("username",username)
+                .param("noPage", Integer.toString(noPage))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+
+
+        //ASSERT
+        assertNotNull(mvcResult1.getResponse().getContentAsString());
+    }
 }

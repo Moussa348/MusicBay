@@ -53,4 +53,15 @@ public class SubscriberRepositoryTest {
         //ASSERT
         assertEquals(2,subscribers.size());
     }
+
+    @Test
+    void getAllByUser(){
+        //ARRANGE
+        Customer customer = customerRepository.findByUsername("brr").get();
+
+        //ACT
+        List<Subscriber> subscribers = subscriberRepository.getAllByUser(customer, PageRequest.of(0,3, Sort.by("date").ascending()));
+        //ASSERT
+        assertEquals(2,subscribers.size());
+    }
 }
