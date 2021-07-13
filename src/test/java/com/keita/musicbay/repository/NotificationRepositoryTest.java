@@ -3,6 +3,7 @@ package com.keita.musicbay.repository;
 import com.keita.musicbay.model.entity.Customer;
 import com.keita.musicbay.model.entity.Notification;
 import com.keita.musicbay.model.entity.Purchasing;
+import com.keita.musicbay.model.enums.NotificationEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -33,9 +34,9 @@ public class NotificationRepositoryTest {
         Customer customer = Customer.builder().username("brr").build();
         customerRepository.save(customer);
         List<Notification> notifications = Arrays.asList(
-                new Notification("",customerRepository.findByUsername(customer.getUsername()).get()),
-                new Notification("",customerRepository.findByUsername(customer.getUsername()).get()),
-                new Notification("",customerRepository.findByUsername(customer.getUsername()).get())
+                new Notification(NotificationEvent.LIKING,customerRepository.findByUsername(customer.getUsername()).get()),
+                new Notification(NotificationEvent.LIKING,customerRepository.findByUsername(customer.getUsername()).get()),
+                new Notification(NotificationEvent.LIKING,customerRepository.findByUsername(customer.getUsername()).get())
         );
 
 

@@ -1,8 +1,9 @@
 package com.keita.musicbay.service;
 
-import com.keita.musicbay.model.dto.NotificationDTO;
+import com.keita.musicbay.model.dto.RecentNotification;
 import com.keita.musicbay.model.entity.Notification;
 import com.keita.musicbay.model.entity.User;
+import com.keita.musicbay.model.enums.NotificationEvent;
 import com.keita.musicbay.repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,8 @@ public class NotificationService {
     @Autowired
     private NotificationRepository notificationRepository;
 
-    public void saveNotification(String event, User user){
-        notificationRepository.save(new Notification(event,user));
+    public void saveNotification(NotificationEvent notificationEvent, User user){
+        notificationRepository.save(new Notification(notificationEvent,user));
     }
 
 
@@ -31,10 +32,10 @@ public class NotificationService {
         notificationRepository.save(notification);
     }
 
-    public List<NotificationDTO> getRecentNotification(String username, String date, Integer nbrOfDays){
+    public List<RecentNotification> getRecentNotifications(String username, String date, Integer nbrOfDays){
         LocalDateTime todayDate = LocalDateTime.parse(date,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 
         return notificationRepository.getByUserUsernameAndDateBetween(username,todayDate.minusDays(nbrOfDays),todayDate)
-                .stream().map(NotificationDTO::new).collect(Collectors.toList());
+                .stream().map(RecentNotification::new).collect(Collectors.toList());
     }
 }

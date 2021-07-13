@@ -1,22 +1,24 @@
 package com.keita.musicbay.model.dto;
 
 import com.keita.musicbay.model.entity.Notification;
+import com.keita.musicbay.model.enums.NotificationEvent;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
-public class NotificationDTO implements Serializable {
+public class RecentNotification implements Serializable {
     private Long id;
-    private String event,username;
+    private String username;
+    private NotificationEvent notificationEvent;
     private LocalDateTime date;
 
-    public NotificationDTO(){}
+    public RecentNotification(){}
 
-    public NotificationDTO(Notification notification){
+    public RecentNotification(Notification notification){
         this.id = notification.getId();
-        this.event = notification.getEvent();
+        this.notificationEvent = notification.getNotificationEvent();
         this.username = notification.getUser().getUsername();
         this.date = notification.getDate();
     }

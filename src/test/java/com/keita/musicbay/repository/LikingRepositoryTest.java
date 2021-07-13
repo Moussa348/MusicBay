@@ -2,21 +2,28 @@ package com.keita.musicbay.repository;
 
 import com.keita.musicbay.model.entity.Customer;
 import com.keita.musicbay.model.entity.Liking;
+import lombok.extern.java.Log;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ActiveProfiles("test")
+@Log
 public class LikingRepositoryTest {
 
     @Autowired
@@ -49,7 +56,19 @@ public class LikingRepositoryTest {
         List<Liking> likings = likingRepository.getByCustomerAndLikingDateBetween(customer,LocalDateTime.now().minusDays(2),LocalDateTime.now());
 
         //ASSERT
-        Assertions.assertEquals(2,likings.size());
+        assertEquals(2,likings.size());
 
     }
+
+    @Test
+    void getAllByCustomer(){
+        //ARRANGE
+        Customer customer = customerRepository.findByUsername("brr").get();
+
+        //ACT
+        List<Liking> likings = likingRepository.getAllByCustomer(customer, PageRequest.of(0,3, Sort.by("likingDate").ascending()));
+        //ASSERT
+        assertEquals(3,likings.size());
+    }
+
 }

@@ -32,6 +32,7 @@ public class EmailService {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage,true);
 
+        //mimeMessageHelper.setText("",true);
         mimeMessageHelper.setTo(customer.getEmail());
         mimeMessageHelper.setSubject("Transaction Cancelled");
         mimeMessageHelper

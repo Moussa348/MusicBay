@@ -1,6 +1,7 @@
 package com.keita.musicbay.service;
 
 import com.keita.musicbay.model.dto.Feed;
+import com.keita.musicbay.model.dto.ProfileToSubscribeTo;
 import com.keita.musicbay.model.entity.*;
 import com.keita.musicbay.repository.*;
 import org.junit.jupiter.api.Test;
@@ -8,12 +9,19 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.support.PagedListHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -39,49 +47,69 @@ public class FeedServiceTest {
     @InjectMocks
     FeedService feedService;
 
+
     @Test
-    void getFeed() {
+    void getFeed(){
         //ARRANGE
         Customer customer = Customer.builder().username("brr").build();
         Customer customerSubscribeTo = Customer.builder().username("bigBrr").build();
         LocalDateTime date = LocalDateTime.parse("2021-07-12 07:27", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-        int nbrOfDays = 2;
+        int noPage = 0;
 
         List<Liking> likings = Arrays.asList(
-                Liking.builder().customer(customerSubscribeTo).music(Track.builder().build()).build(),
                 Liking.builder().customer(customerSubscribeTo).music(Track.builder().build()).build(),
                 Liking.builder().customer(customerSubscribeTo).music(Track.builder().build()).build()
         );
         List<Sharing> sharings = Arrays.asList(
                 Sharing.builder().customer(customerSubscribeTo).music(Track.builder().build()).build(),
-                Sharing.builder().customer(customerSubscribeTo).music(Track.builder().build()).build(),
                 Sharing.builder().customer(customerSubscribeTo).music(Track.builder().build()).build()
         );
         List<Purchasing> purchasings = Arrays.asList(
-                Purchasing.builder().customer(customerSubscribeTo).music(Track.builder().build()).build(),
                 Purchasing.builder().customer(customerSubscribeTo).music(Track.builder().build()).build(),
                 Purchasing.builder().customer(customerSubscribeTo).music(Track.builder().build()).build()
         );
 
         customer.getSubscribeTos().add(SubscribeTo.builder().username(customerSubscribeTo.getUsername()).build());
-        customerSubscribeTo.setLikings(likings);
-        customerSubscribeTo.setSharings(sharings);
-        customerSubscribeTo.setPurchasings(purchasings);
 
-        when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customerSubscribeTo)).thenReturn(Optional.of(customerSubscribeTo));
+        when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
         customer.getSubscribeTos().forEach(subscribeTo -> when(customerRepository.findByUsername(subscribeTo.getUsername())).thenReturn(Optional.of(customerSubscribeTo)));
 
-        when(likingRepository.getByCustomerAndLikingDateBetween(customerSubscribeTo, date.minusDays(nbrOfDays), date)).thenReturn(likings);
-        when(sharingRepository.getByCustomerAndSharingDateBetween(customerSubscribeTo, date.minusDays(nbrOfDays), date)).thenReturn(sharings);
-        when(purchasingRepository.getByCustomerAndPurchasingDateBetween(customerSubscribeTo, date.minusDays(nbrOfDays), date)).thenReturn(purchasings);
+        when(likingRepository.getAllByCustomer(customerSubscribeTo,PageRequest.of(noPage,2,Sort.by("likingDate").descending()))).thenReturn(likings);
+        when(sharingRepository.getAllByCustomer(customerSubscribeTo,PageRequest.of(noPage,2,Sort.by("sharingDate").descending()))).thenReturn(sharings);
+        when(purchasingRepository.getAllByCustomer(customerSubscribeTo,PageRequest.of(noPage,2,Sort.by("purchasingDate").descending()))).thenReturn(purchasings);
 
         //ACT
-        Feed yourFeed = feedService.getFeed(customerSubscribeTo.getUsername(), "2021-07-12 07:27", nbrOfDays);
+        Feed yourFeed = feedService.getFeed(customer.getUsername(),0);
 
         //ASSERT
-        //assertEquals(3, yourFeed.getLikedMusics().size());
-        assertEquals(3, yourFeed.getSharedMusics().size());
-        assertEquals(3, yourFeed.getPurchasedMusics().size());
-        assertTrue(yourFeed.getProfiles().isEmpty());
+        assertNotNull(yourFeed);
+        assertEquals(2,yourFeed.getLikedMusics().size());
+        assertEquals(2,yourFeed.getSharedMusics().size());
+        assertEquals(2,yourFeed.getPurchasedMusics().size());
+
+    }
+
+    @Test
+    void getListPossibleSubscribeTo(){
+        //ARRANGE
+        User user = Customer.builder().username("brr").build();
+        int begin = 0;
+        int end = 5;
+        List<User> users = new ArrayList<>();
+
+        users.add(Customer.builder().username("grr").build());
+        users.add(Customer.builder().username("araa").build());
+        users.add(Customer.builder().username("gav").build());
+
+        user.getSubscribeTos().add(SubscribeTo.builder().username("araa").build());
+
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        when(userRepository.getAllByUsernameNot(user.getUsername(),PageRequest.of(begin,end, Sort.by("username"))))
+                .thenReturn(users.stream().filter(user1 -> ! user1.getUsername().equals(user.getSubscribeTos().get(0).getUsername())).collect(Collectors.toList()));
+        //ACT
+        List<ProfileToSubscribeTo> possibleSubscribeTos = feedService.getListPossibleSubscribeTo(user.getUsername(),0);
+
+        //ASSERT
+        assertEquals(2,possibleSubscribeTos.size());
     }
 }

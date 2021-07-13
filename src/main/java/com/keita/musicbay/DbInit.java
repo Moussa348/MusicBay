@@ -14,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.io.FileInputStream;
@@ -50,19 +48,17 @@ public class DbInit implements CommandLineRunner {
     @Autowired
     private CustomerRepository customerRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     private void insertCustomers() throws Exception {
         FileInputStream fileInputStream = new FileInputStream("./docs/noUser.jpg");
         List<Customer> customers = Arrays.asList(
-                Customer.builder().firstName("bay").lastName("drip").password(passwordEncoder.encode("bayDrip123")).picture("".getBytes()).dateOfBirth(LocalDate.of(1999, 12, 22))
+                Customer.builder().firstName("bay").lastName("drip").password("bayDrip123").picture("".getBytes()).dateOfBirth(LocalDate.of(1999, 12, 22))
                         .city("ATL").picture(fileInputStream.readAllBytes()).email("bayDrip@gmail.com").cellNumber("442-332-3421").username("bayDrip").password("bayDrip123")
                         .biography("best rapper alive").roles("USER").build(),
-                Customer.builder().firstName("brr").lastName("Big").picture(fileInputStream.readAllBytes()).password(passwordEncoder.encode("bigBrr123")).picture("".getBytes()).dateOfBirth(LocalDate.of(1967, 12, 22))
+                Customer.builder().firstName("brr").lastName("Big").picture(fileInputStream.readAllBytes()).password("bigBrr123").picture("".getBytes()).dateOfBirth(LocalDate.of(1967, 12, 22))
                         .city("ATL").email("bigBrr@gmail.com").cellNumber("442-332-3421").username("bigBrr").password("bigBrr123")
                         .biography("brr..bigBrr...").roles("USER").build(),
-                Customer.builder().firstName("salehe").lastName("jojo").picture(fileInputStream.readAllBytes()).password(passwordEncoder.encode("bombay123")).picture("".getBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
+                Customer.builder().firstName("salehe").lastName("jojo").picture(fileInputStream.readAllBytes()).password("bombay123").picture("".getBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
                         .city("MTL").email("bombay@gmail.com").cellNumber("514-987-3221").username("bombay").password("bombay123")
                         .biography("I love alcool and weed").roles("USER ADMIN").build()
         );

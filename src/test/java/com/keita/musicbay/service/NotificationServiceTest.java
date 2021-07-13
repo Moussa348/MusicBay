@@ -1,9 +1,10 @@
 package com.keita.musicbay.service;
 
-import com.keita.musicbay.model.dto.NotificationDTO;
+import com.keita.musicbay.model.dto.RecentNotification;
 import com.keita.musicbay.model.entity.Customer;
 import com.keita.musicbay.model.entity.Notification;
 import com.keita.musicbay.model.entity.User;
+import com.keita.musicbay.model.enums.NotificationEvent;
 import com.keita.musicbay.repository.NotificationRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,18 +32,18 @@ public class NotificationServiceTest {
     @Test
     void saveNotification(){
         //ARRANGE
-        String event = "sharing";
+        NotificationEvent notificationEvent = NotificationEvent.PURCHASING;
         User user = Customer.builder().username("bigBrr").build();
 
         //ACT
-        notificationService.saveNotification(event,user);
+        notificationService.saveNotification(notificationEvent,user);
     }
 
     @Test
     void notificationSeen(){
         //ARRANGE
         Long id = 1L;
-        Notification notification = new Notification("liking",Customer.builder().build());
+        Notification notification = new Notification(NotificationEvent.LIKING,Customer.builder().build());
         when(notificationRepository.getById(id)).thenReturn(notification);
 
         //ACT
@@ -50,21 +51,21 @@ public class NotificationServiceTest {
     }
 
     @Test
-    void getRecentNotification(){
+    void getRecentNotifications(){
         //ARRANGE
         Customer customer = Customer.builder().username("brr").build();
         LocalDateTime date = LocalDateTime.parse("2021-07-12 07:27", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         int nbrOfDays = 2;
 
         List<Notification> notifications = Arrays.asList(
-                new Notification("",customer),
-                new Notification("",customer),
-                new Notification("",customer)
+                new Notification(NotificationEvent.LIKING,customer),
+                new Notification(NotificationEvent.LIKING,customer),
+                new Notification(NotificationEvent.LIKING,customer)
         );
 
         when(notificationRepository.getByUserUsernameAndDateBetween(customer.getUsername(),date.minusDays(nbrOfDays),date)).thenReturn(notifications);
         //ACT
-        List<NotificationDTO> recentNotifications = notificationService.getRecentNotification(customer.getUsername(),"2021-07-12 07:27",nbrOfDays);
+        List<RecentNotification> recentNotifications = notificationService.getRecentNotifications(customer.getUsername(),"2021-07-12 07:27",nbrOfDays);
 
         //ASSERT
         assertEquals(3,recentNotifications.size());

@@ -1,6 +1,6 @@
 package com.keita.musicbay.model.entity;
 
-import com.keita.musicbay.model.dto.NotificationDTO;
+import com.keita.musicbay.model.enums.NotificationEvent;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -16,7 +16,7 @@ public class Notification implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
-    private String event;
+    private NotificationEvent notificationEvent;
     private LocalDateTime date;
     private boolean seen;
 
@@ -25,8 +25,8 @@ public class Notification implements Serializable {
 
     public Notification(){}
 
-    public Notification(String event, User user) {
-        this.event = event;
+    public Notification(NotificationEvent notificationEvent, User user) {
+        this.notificationEvent = notificationEvent;
         this.date = LocalDateTime.now();
         this.seen = false;
         this.user = user;

@@ -4,7 +4,6 @@ import com.keita.musicbay.model.dto.*;
 import com.keita.musicbay.service.CustomerService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +19,6 @@ public class CustomerController {
     private CustomerService customerService;
 
     @PostMapping("/createCustomer")
-    @PreAuthorize("isAnonymous()")
     public boolean createCustomer(@RequestBody Registration registration) throws Exception{
         return customerService.createCustomer(registration);
     }

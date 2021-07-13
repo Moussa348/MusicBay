@@ -1,9 +1,6 @@
 package com.keita.musicbay.service;
 
-import com.keita.musicbay.model.entity.Customer;
-import com.keita.musicbay.model.entity.Music;
-import com.keita.musicbay.model.entity.SubscribeTo;
-import com.keita.musicbay.model.entity.Track;
+import com.keita.musicbay.model.entity.*;
 import com.keita.musicbay.repository.CustomerRepository;
 import com.keita.musicbay.repository.MusicRepository;
 import org.junit.jupiter.api.Test;
@@ -27,6 +24,9 @@ public class MonitoringServiceTest {
 
     @Mock
     MusicRepository musicRepository;
+
+    @Mock
+    NotificationService notificationService;
 
     @InjectMocks
     MonitoringService monitoringService;

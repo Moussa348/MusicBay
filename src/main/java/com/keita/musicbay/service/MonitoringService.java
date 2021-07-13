@@ -1,6 +1,7 @@
 package com.keita.musicbay.service;
 
 import com.keita.musicbay.model.entity.*;
+import com.keita.musicbay.model.enums.NotificationEvent;
 import com.keita.musicbay.repository.CustomerRepository;
 import com.keita.musicbay.repository.MusicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class MonitoringService {
     @Autowired
     private MusicRepository musicRepository;
 
+    @Autowired
+    private NotificationService notificationService;
+
 
     public void likeMusic(String username, String title) {
         Customer customer = customerRepository.findByUsername(username).get();
@@ -28,6 +32,8 @@ public class MonitoringService {
         customer.getLikings().add(new Liking(customer, music));
 
         customerRepository.save(customer);
+
+        notificationService.saveNotification(NotificationEvent.LIKING,customer);
     }
 
     public void unLikeMusic(String username, String title) {
@@ -48,6 +54,8 @@ public class MonitoringService {
         customer.getSharings().add(new Sharing(customer, music, sharingMsg));
 
         customerRepository.save(customer);
+
+        notificationService.saveNotification(NotificationEvent.SHARING,customer);
     }
 
     public void unShareMusic(String username, String title) {
@@ -69,6 +77,8 @@ public class MonitoringService {
         customer.getPurchasings().add(new Purchasing(customer, music, purchasingDate));
 
         customerRepository.save(customer);
+
+        notificationService.saveNotification(NotificationEvent.PURCHASING,customer);
     }
 
     @Transactional
@@ -80,6 +90,8 @@ public class MonitoringService {
         customerToFollow.getSubscribers().add(new Subscriber(customer.getUsername(), customerToFollow));
 
         customerRepository.saveAll(Arrays.asList(customer, customerToFollow));
+
+        notificationService.saveNotification(NotificationEvent.SUBSCRIPTION,customerToFollow);
     }
 
     @Transactional

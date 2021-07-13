@@ -6,7 +6,6 @@ import com.keita.musicbay.repository.CustomerRepository;
 import lombok.extern.java.Log;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
@@ -21,12 +20,9 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     public boolean createCustomer(Registration registration) throws Exception {
         if (!customerRepository.existsByEmail(registration.getEmail()) && !customerRepository.existsByUsername(registration.getUsername())) {
-           registration.setPassword(passwordEncoder.encode(registration.getPassword()));
             Customer customer = new Customer(registration, setDefaultProfilePicture());
             customerRepository.save(customer);
             return true;

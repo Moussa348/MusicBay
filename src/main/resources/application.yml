@@ -10,3 +10,4 @@ spring:
       starttls.required: true
   profiles:
     active: test
+

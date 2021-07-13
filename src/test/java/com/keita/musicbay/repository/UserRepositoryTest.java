@@ -11,13 +11,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -36,8 +38,11 @@ public class UserRepositoryTest {
     @BeforeEach
     void insert(){
         List<User> users = Arrays.asList(
-                Customer.builder().email("cancre@gmail.com").username("bigWolf22")
-                        .likings(Arrays.asList(Liking.builder().music(Track.builder().title("ice").build()).build())).build()
+                Customer.builder().email("cancre@gmail.com").username("bigWolf22").build(),
+                Customer.builder().email("cancre@gmail.com").username("bigBrr").build(),
+                Customer.builder().email("cancre@gmail.com").username("brr").build(),
+                Customer.builder().email("cancre@gmail.com").username("offset").build(),
+                Customer.builder().email("cancre@gmail.com").username("fghdt").build()
         );
         userRepository.saveAll(users);
     }
@@ -54,5 +59,17 @@ public class UserRepositoryTest {
         log.info(customer.toString());
 
         //ASSERT
+    }
+
+    @Test
+    void getAllByUsernameNot(){
+        //ARRANGE
+        String username = "brr";
+
+        //ACT
+        List<User> users = userRepository.getAllByUsernameNot(username, PageRequest.of(0,5,Sort.by("username")));
+
+        //ASSERT
+        assertEquals(4,users.size());
     }
 }
