@@ -84,6 +84,68 @@ public class MusicServiceTest {
 
         //ASSERT
         assertEquals(4,musicDTOS.size());
+    }
+
+    @Test
+    void increaseLike(){
+        //ARRANGE
+        Music music = Track.builder().title("IT").nbrOfLike(4).build();
+
+        //ACT
+        musicService.increaseLike(music);
+
+        //ASSERT
+        assertEquals(5,music.getNbrOfLike());
 
     }
+
+    @Test
+    void decreaseLike(){
+        //ARRANGE
+        Music music = Track.builder().title("IT").nbrOfLike(4).build();
+
+        //ACT
+        musicService.decreaseLike(music);
+
+        //ASSERT
+        assertEquals(3,music.getNbrOfLike());
+
+    }
+
+    @Test
+    void increaseShare(){
+        //ARRANGE
+        Music music = Track.builder().title("IT").nbrOfShare(4).build();
+
+        //ACT
+        musicService.increaseShare(music);
+
+        //ASSERT
+        assertEquals(5,music.getNbrOfShare());
+    }
+
+    @Test
+    void decreaseShare(){
+        //ARRANGE
+        Music music = Track.builder().title("IT").nbrOfShare(4).build();
+
+        //ACT
+        musicService.decreaseShare(music);
+
+        //ASSERT
+        assertEquals(3,music.getNbrOfShare());
+    }
+
+    @Test
+    void increasePurchase(){
+        //ARRANGE
+        Music music = Track.builder().title("IT").nbrOfPurchase(4).build();
+
+        //ACT
+        musicService.increasePurchase(music);
+
+        //ASSERT
+        assertEquals(5,music.getNbrOfPurchase());
+    }
+
 }

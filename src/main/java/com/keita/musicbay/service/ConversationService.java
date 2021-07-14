@@ -72,6 +72,7 @@ public class ConversationService {
 
     public List<SentMessage> getLastSentMessages(String username){
         List<Message> lastSentMessages = new ArrayList<>();
+        //TODO : in repo create getAllByUser(User user, Pageable pageable)
         List<Conversation> conversations = conversationRepository.getByUser(userRepository.findByUsername(username).get()).stream().filter(Conversation::isActive).collect(Collectors.toList());
 
         conversations.forEach(conversation -> lastSentMessages.add(conversation.getMessages().get(conversation.getMessages().size()-1)));

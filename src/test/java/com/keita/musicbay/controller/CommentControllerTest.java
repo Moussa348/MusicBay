@@ -86,9 +86,12 @@ public class CommentControllerTest {
     void getListCommentOfMusic() throws Exception{
         //ARRANGE
         String title = "redRoom";
+        int noPage = 0;
 
         //ACT
-        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.get("/comment/getListCommentOfMusic/" + title)
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.get("/comment/getListCommentOfMusic/")
+                .param("title",title)
+                .param("noPage",Integer.toString(noPage))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();

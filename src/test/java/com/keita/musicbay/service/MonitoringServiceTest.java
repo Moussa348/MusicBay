@@ -3,20 +3,26 @@ package com.keita.musicbay.service;
 import com.keita.musicbay.model.entity.*;
 import com.keita.musicbay.repository.CustomerRepository;
 import com.keita.musicbay.repository.MusicRepository;
+import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.Answer;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@Log
 public class MonitoringServiceTest {
 
     @Mock
@@ -27,6 +33,9 @@ public class MonitoringServiceTest {
 
     @Mock
     NotificationService notificationService;
+
+    @Mock
+    MusicService musicService;
 
     @InjectMocks
     MonitoringService monitoringService;
@@ -40,12 +49,15 @@ public class MonitoringServiceTest {
 
         when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
         when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
-
+        doAnswer(invocationOnMock -> {
+            Music musicUpdated = (Music) invocationOnMock.getArgument(0);
+            musicUpdated.setNbrOfLike(musicUpdated.getNbrOfLike()+1);
+            return null;
+        }).when(musicService).increaseLike(music);
         //ACT
         monitoringService.likeMusic(customer.getUsername(), music.getTitle());
 
         //ASSERT
-        assertEquals(5,music.getNbrOfLike());
         assertNotNull(customer.getLikings().stream().filter(liking -> music.getTitle().equals(liking.getMusic().getTitle())));
     }
 
@@ -57,12 +69,15 @@ public class MonitoringServiceTest {
 
         when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
         when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
-
+        doAnswer(invocationOnMock -> {
+            Music musicUpdated =  invocationOnMock.getArgument(0);
+            musicUpdated.setNbrOfLike(musicUpdated.getNbrOfLike()-1);
+            return null;
+        }).when(musicService).decreaseLike(music);
         //ACT
         monitoringService.unLikeMusic(customer.getUsername(), music.getTitle());
 
         //ASSERT
-        assertEquals(3,music.getNbrOfLike());
         assertNotNull(customer.getLikings().stream().filter(liking -> music.getTitle().equals(liking.getMusic().getTitle())));
     }
 
@@ -74,12 +89,15 @@ public class MonitoringServiceTest {
 
         when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
         when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
-
+        doAnswer(invocationOnMock -> {
+            Music musicUpdated = invocationOnMock.getArgument(0);
+            musicUpdated.setNbrOfShare(musicUpdated.getNbrOfShare()+1);
+            return null;
+        }).when(musicService).increaseShare(music);
         //ACT
         monitoringService.shareMusic(customer.getUsername(), music.getTitle(),"Nice one");
 
         //ASSERT
-        assertEquals(5,music.getNbrOfShare());
         assertNotNull(customer.getSharings().stream().filter(sharing -> music.getTitle().equals(sharing.getMusic().getTitle())));
     }
 
@@ -91,12 +109,15 @@ public class MonitoringServiceTest {
 
         when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
         when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
-
+        doAnswer(invocationOnMock -> {
+            Music musicUpdated = invocationOnMock.getArgument(0);
+            musicUpdated.setNbrOfShare(musicUpdated.getNbrOfShare()-1);
+            return null;
+        }).when(musicService).decreaseShare(music);
         //ACT
         monitoringService.unShareMusic(customer.getUsername(), music.getTitle());
 
         //ASSERT
-        assertEquals(3,music.getNbrOfShare());
         assertNotNull(customer.getSharings().stream().filter(sharing -> music.getTitle().equals(sharing.getMusic().getTitle())));
     }
 
@@ -108,12 +129,15 @@ public class MonitoringServiceTest {
 
         when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
         when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
-
+        doAnswer(invocationOnMock -> {
+            Music musicUpdated = invocationOnMock.getArgument(0);
+            musicUpdated.setNbrOfPurchase(musicUpdated.getNbrOfPurchase()+1);
+            return null;
+        }).when(musicService).increasePurchase(music);
         //ACT
         monitoringService.purchaseMusic(customer.getUsername(), music.getTitle(), LocalDateTime.now());
 
         //ASSERT
-        assertEquals(5,music.getNbrOfPurchase());
         assertNotNull(customer.getPurchasings().stream().filter(purchasing -> music.getTitle().equals(purchasing.getMusic().getTitle())));
     }
 

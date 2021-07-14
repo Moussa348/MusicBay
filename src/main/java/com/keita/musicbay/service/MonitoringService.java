@@ -23,12 +23,16 @@ public class MonitoringService {
     @Autowired
     private NotificationService notificationService;
 
+    @Autowired
+    private MusicService musicService;
+
 
     public void likeMusic(String username, String title) {
         Customer customer = customerRepository.findByUsername(username).get();
         Music music = musicRepository.findByTitle(title).get();
 
-        increaseLike(music);
+        musicService.increaseLike(music);
+
         customer.getLikings().add(new Liking(customer, music));
 
         customerRepository.save(customer);
@@ -41,7 +45,8 @@ public class MonitoringService {
         Music music = musicRepository.findByTitle(title).get();
 
          customer.getLikings().removeIf(liking -> liking.getMusic().getTitle().equals(title));
-        decreaseLike(music);
+
+         musicService.decreaseLike(music);
 
         customerRepository.saveAndFlush(customer);
     }
@@ -50,7 +55,8 @@ public class MonitoringService {
         Customer customer = customerRepository.findByUsername(username).get();
         Music music = musicRepository.findByTitle(title).get();
 
-        increaseShare(music);
+        musicService.increaseShare(music);
+
         customer.getSharings().add(new Sharing(customer, music, sharingMsg));
 
         customerRepository.save(customer);
@@ -63,7 +69,8 @@ public class MonitoringService {
         Music music = musicRepository.findByTitle(title).get();
 
         customer.getSharings().removeIf(sharing -> sharing.getMusic().getTitle().equals(title));
-        decreaseShare(music);
+
+        musicService.decreaseShare(music);
 
         customerRepository.save(customer);
     }
@@ -72,7 +79,7 @@ public class MonitoringService {
         Customer customer = customerRepository.findByUsername(username).get();
         Music music = musicRepository.findByTitle(title).get();
 
-        increasePurchase(music);
+        musicService.increasePurchase(music);
 
         customer.getPurchasings().add(new Purchasing(customer, music, purchasingDate));
 
@@ -110,36 +117,4 @@ public class MonitoringService {
         return customer.getSubscribeTos().stream().anyMatch(subscribeTo -> subscribeTo.getUsername().equals(usernameSubscribeTo));
     }
 
-    private void increaseLike(Music music) {
-        music.setNbrOfLike(music.getNbrOfLike() + 1);
-        musicRepository.saveAndFlush(music);
-    }
-
-    private void decreaseLike(Music music) {
-        int nbrLike = music.getNbrOfLike();
-
-        if (nbrLike > 0) {
-            music.setNbrOfLike(nbrLike - 1);
-            musicRepository.saveAndFlush(music);
-        }
-    }
-
-    private void increaseShare(Music music) {
-        music.setNbrOfShare(music.getNbrOfShare() + 1);
-        musicRepository.saveAndFlush(music);
-    }
-
-    private void decreaseShare(Music music) {
-        int nbrShare = music.getNbrOfShare();
-
-        if (nbrShare > 0) {
-            music.setNbrOfShare(nbrShare - 1);
-            musicRepository.saveAndFlush(music);
-        }
-    }
-
-    private void increasePurchase(Music music) {
-        music.setNbrOfPurchase(music.getNbrOfPurchase() + 1);
-        musicRepository.saveAndFlush(music);
-    }
 }

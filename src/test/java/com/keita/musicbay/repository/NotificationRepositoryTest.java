@@ -50,17 +50,6 @@ public class NotificationRepositoryTest {
     }
 
     @Test
-    void getByUserUsernameAndDateBetween(){
-        //ARRANGE
-        String username = "brr";
-        //ACT
-        List<Notification> notifications = notificationRepository.getByUserUsernameAndDateBetween(username,LocalDateTime.now().minusDays(2),LocalDateTime.now());
-
-        //ASSERT
-        assertEquals(3,notifications.size());
-    }
-
-    @Test
     void getAllByUserAndSeenFalse(){
         //ARRANGE
         User user = customerRepository.findByUsername("brr").get();

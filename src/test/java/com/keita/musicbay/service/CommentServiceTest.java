@@ -5,6 +5,7 @@ import com.keita.musicbay.model.entity.Comment;
 import com.keita.musicbay.model.entity.Music;
 import com.keita.musicbay.model.entity.Text;
 import com.keita.musicbay.model.entity.Track;
+import com.keita.musicbay.repository.CommentRepository;
 import com.keita.musicbay.repository.MusicRepository;
 import com.keita.musicbay.repository.TextRepository;
 import lombok.extern.java.Log;
@@ -13,6 +14,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +30,7 @@ import static org.mockito.Mockito.when;
 public class CommentServiceTest {
 
     @Mock
-    TextRepository textRepository;
+    CommentRepository commentRepository;
 
     @Mock
     MusicRepository musicRepository;
@@ -41,7 +44,7 @@ public class CommentServiceTest {
         PostedComment postedComment = new PostedComment("this shit is fire no cap!!!","migos",0);
         Music music = Track.builder().title("culture3").build();
         when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
-        when(textRepository.save(any(Text.class))).thenReturn(Comment.builder().content(postedComment.getContent()).music(music).build());
+        when(commentRepository.save(any())).thenReturn(Comment.builder().content(postedComment.getContent()).music(music).build());
 
         //ACT
         String returnedContent = commentService.postComment(postedComment,music.getTitle()).getContent();
@@ -56,8 +59,8 @@ public class CommentServiceTest {
         Comment comment = Comment.builder().id(1L).nbrLike(5).music(Track.builder().title("halloween").build()).build();
         String username = "bombay";
 
-        when(textRepository.findById(comment.getId())).thenReturn(Optional.of(comment));
-        when(textRepository.save(comment)).thenReturn(comment);
+        when(commentRepository.findById(comment.getId())).thenReturn(Optional.of(comment));
+        when(commentRepository.save(any())).thenReturn(comment);
 
         //ACT
         Integer nbrLike = commentService.increaseLike(comment.getId(),username).getNbrLike();
@@ -72,8 +75,8 @@ public class CommentServiceTest {
         Comment comment = Comment.builder().id(1L).nbrLike(5).music(Track.builder().title("halloween").build()).build();
         String username = "bombay";
 
-        when(textRepository.findById(comment.getId())).thenReturn(Optional.of(comment));
-        when(textRepository.save(comment)).thenReturn(comment);
+        when(commentRepository.findById(comment.getId())).thenReturn(Optional.of(comment));
+        when(commentRepository.save(comment)).thenReturn(comment);
 
         //ACT
         Integer nbrLike = commentService.decreaseLike(comment.getId(),username).getNbrLike();
@@ -86,11 +89,13 @@ public class CommentServiceTest {
     void getListCommentOfMusic(){
         //ARRANGE
         Music music = Track.builder().title("culture3").build();
-        music.setComments(Arrays.asList(new Comment(),new Comment()));
-        when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
+        int noPage = 0;
+        music.setComments(Arrays.asList(Comment.builder().music(music).build(),Comment.builder().music(music).build()));
 
+        when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
+        when(commentRepository.getAllByMusic(music, PageRequest.of(noPage,10, Sort.by("date").descending()))).thenReturn(music.getComments());
         //ACT
-        List<PostedComment> postedComments = commentService.getListCommentOfMusic(music.getTitle());
+        List<PostedComment> postedComments = commentService.getListCommentOfMusic(music.getTitle(),noPage);
 
         //ASSERT
         assertEquals(2,postedComments.size());

@@ -11,5 +11,6 @@ spring:
   profiles:
     active: test
 
-  pagination:
-    feed: 2
+  security:
+    jwt:
+      duration: 2

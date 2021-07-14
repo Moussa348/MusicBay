@@ -30,11 +30,9 @@ public class CommentController {
         return commentService.decreaseLike(id,username);
     }
 
-
-
-    @GetMapping("/getListCommentOfMusic/{title}")
-    public List<PostedComment> getListCommentOfMusic(@PathVariable String title){
-        return commentService.getListCommentOfMusic(title);
+    @GetMapping("/getListCommentOfMusic/")
+    public List<PostedComment> getListCommentOfMusic(@RequestParam("title") String title, @RequestParam("noPage")Integer noPage){
+        return commentService.getListCommentOfMusic(title,noPage);
     }
 
 }

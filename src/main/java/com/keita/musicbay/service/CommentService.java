@@ -4,10 +4,13 @@ import com.keita.musicbay.model.dto.PostedComment;
 import com.keita.musicbay.model.entity.Comment;
 import com.keita.musicbay.model.entity.LikedBy;
 import com.keita.musicbay.model.entity.Music;
+import com.keita.musicbay.repository.CommentRepository;
 import com.keita.musicbay.repository.MusicRepository;
 import com.keita.musicbay.repository.TextRepository;
 import com.keita.musicbay.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +20,7 @@ import java.util.stream.Collectors;
 public class CommentService {
 
     @Autowired
-    private TextRepository textRepository;
+    private CommentRepository commentRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -28,30 +31,31 @@ public class CommentService {
 
     public PostedComment postComment(PostedComment postedComment,String musicTitle){
         Music music = musicRepository.findByTitle(musicTitle).get();
-        return new PostedComment(textRepository.save(new Comment(postedComment,music)));
+        return new PostedComment(commentRepository.save(new Comment(postedComment,music)));
     }
 
     public PostedComment increaseLike(Long id,String username){
-        Comment comment = (Comment) textRepository.findById(id).get();
+        Comment comment = commentRepository.findById(id).get();
 
         comment.setNbrLike(comment.getNbrLike()+1);
         comment.getLikedByList().add(new LikedBy(username,comment));
 
-        return new PostedComment(textRepository.save(comment));
+        return new PostedComment(commentRepository.save(comment));
     }
 
     public PostedComment decreaseLike(Long id,String username){
-        Comment comment = (Comment) textRepository.findById(id).get();
+        Comment comment = commentRepository.findById(id).get();
 
         comment.setNbrLike(comment.getNbrLike()-1);
         comment.getLikedByList().removeIf(likedBy -> likedBy.getUsername().equals(username));
 
-        return new PostedComment(textRepository.save(comment));
+        return new PostedComment(commentRepository.save(comment));
     }
 
-    public List<PostedComment> getListCommentOfMusic(String title){
+    public List<PostedComment> getListCommentOfMusic(String title,Integer noPage){
         Music music = musicRepository.findByTitle(title).get();
-        return music.getComments().stream().map(PostedComment::new).collect(Collectors.toList());
+        return commentRepository.getAllByMusic(music, PageRequest.of(noPage,10, Sort.by("date").descending()))
+        .stream().map(PostedComment::new).collect(Collectors.toList());
     }
 
 }

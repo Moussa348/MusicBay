@@ -42,29 +42,4 @@ public class CustomerController {
     public void getPicture(@PathVariable String username, HttpServletResponse httpServletResponse) throws Exception{
         customerService.getPicture(username,httpServletResponse);
     }
-
-    @GetMapping("/getListLikedMusic/{username}")
-    public List<LikedMusic> getListLikedMusic(@PathVariable String username){
-        return customerService.getListLikedMusic(username);
-    }
-
-    @GetMapping("/getListSharedMusic/{username}")
-    public List<SharedMusic> getListSharedMusic(@PathVariable String username){
-        return customerService.getListSharedMusic(username);
-    }
-
-    @GetMapping("/getListPurchasedMusic/{username}")
-    public List<PurchasedMusic> getListPurchasedMusic(@PathVariable String username){
-        return customerService.getListPurchasedMusic(username);
-    }
-
-    @GetMapping("/getListSubscriber/{username}")
-    public List<Profile> getListSubscriber(@PathVariable String username){
-        return customerService.getListSubscriber(username);
-    }
-
-    @GetMapping("/getListSubscribeTo/{username}")
-    public List<Profile> getListSubscribeTo(@PathVariable String username){
-        return customerService.getListSubscribeTo(username);
-    }
 }

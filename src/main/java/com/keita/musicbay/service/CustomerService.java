@@ -63,29 +63,4 @@ public class CustomerService {
         IOUtils.copy(inputStream, httpServletResponse.getOutputStream());
     }
 
-    public List<LikedMusic> getListLikedMusic(String username) {
-        return customerRepository.findByUsername(username).get().getLikings().stream().map(LikedMusic::new).collect(Collectors.toList());
-    }
-
-    public List<SharedMusic> getListSharedMusic(String username) {
-        return customerRepository.findByUsername(username).get().getSharings().stream().map(SharedMusic::new).collect(Collectors.toList());
-    }
-
-    public List<PurchasedMusic> getListPurchasedMusic(String username) {
-        return customerRepository.findByUsername(username).get().getPurchasings().stream().map(PurchasedMusic::new).collect(Collectors.toList());
-    }
-
-    public List<Profile> getListSubscriber(String username) {
-        Customer customer = customerRepository.findByUsername(username).get();
-        List<Customer> customers = customer.getSubscribers().stream().map(subscriber -> customerRepository.findByUsername(subscriber.getUsername()).get()).collect(Collectors.toList());
-
-        return customers.stream().filter(Customer::isActive).map(Profile::new).collect(Collectors.toList());
-    }
-
-    public List<Profile> getListSubscribeTo(String username) {
-        Customer customer = customerRepository.findByUsername(username).get();
-        List<Customer> customers = customer.getSubscribeTos().stream().map(subscribeTo -> customerRepository.findByUsername(subscribeTo.getUsername()).get()).collect(Collectors.toList());
-
-        return customers.stream().filter(Customer::isActive).map(Profile::new).collect(Collectors.toList());
-    }
 }

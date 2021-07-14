@@ -88,7 +88,7 @@ public class FeedService {
 
     public List<Profile> getListSubscriber(String username,Integer noPage) {
         User user = getUserByUsername(username);
-        List<User> users = subscriberRepository.getAllByUser(user,PageRequest.of(noPage,10, Sort.by("date").ascending()))
+        List<User> users = subscriberRepository.getAllByUser(user,PageRequest.of(noPage,10, Sort.by("date").descending()))
                 .stream()
                 .map(subscriber -> userRepository.findByUsername(subscriber.getUsername()).get())
                 .collect(Collectors.toList());
@@ -98,7 +98,7 @@ public class FeedService {
 
     public List<Profile> getListSubscribeTo(String username,Integer noPage) {
         User user = getUserByUsername(username);
-        List<User> users = subscribeToRepository.getAllByUser(user,PageRequest.of(noPage,10, Sort.by("date").ascending()))
+        List<User> users = subscribeToRepository.getAllByUser(user,PageRequest.of(noPage,10, Sort.by("date").descending()))
                 .stream()
                 .map(subscriberTo -> userRepository.findByUsername(subscriberTo.getUsername()).get())
                 .collect(Collectors.toList());
