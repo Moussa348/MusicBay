@@ -12,8 +12,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -34,7 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //Configure http security
         http.cors().and().csrf().disable()
                 //url that can be accessed without authentication
-                .authorizeRequests().antMatchers("/music/getCatalog/**").permitAll()
+                .authorizeRequests().antMatchers("/music/getCatalog/**","/authentication/login/**").permitAll()
 
                 .anyRequest().authenticated().and().httpBasic()
 
@@ -49,6 +53,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
 
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource(){
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
+
+        configuration.addAllowedHeader("content-type");
+        configuration.addAllowedHeader("Access-Control-Allow-Origin");
+        configuration.addAllowedHeader("Authorization");
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+        source.registerCorsConfiguration("/**",configuration);
+        return source;
     }
 
     @Bean

@@ -25,7 +25,7 @@ public class JwtProvider {
 
     public static String ROLE_CLAIM_NAME = "role";
     public static String EMAIL_CLAIM_NAME = "email";
-    public static String USER_ID_CLAIM_NAME = "userId";
+    public static String USER_UUID_CLAIM_NAME = "userUUId";
 
     //add @Value
     public JwtProvider() {
@@ -41,7 +41,7 @@ public class JwtProvider {
                 .withSubject(user.getUuid().toString())
                 .withClaim(ROLE_CLAIM_NAME,user.getRoles())
                 .withClaim(EMAIL_CLAIM_NAME,user.getEmail())
-                .withClaim(USER_ID_CLAIM_NAME,user.getUuid().toString())
+                .withClaim(USER_UUID_CLAIM_NAME,user.getUuid().toString())
                 .withIssuedAt(new Date(time))
                 .withExpiresAt(new Date(time + duration))
                 .sign(algorithm);
@@ -53,7 +53,7 @@ public class JwtProvider {
             throw new JWTVerificationException(("Token cannot be null"));
 
         if(token.startsWith("Bearer "))
-            token = token.replace("Bearer","");
+            token = token.replace("Bearer ","");
 
         return jwtVerifier.verify(token);
     }

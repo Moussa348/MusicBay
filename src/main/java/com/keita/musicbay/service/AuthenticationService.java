@@ -1,9 +1,13 @@
 package com.keita.musicbay.service;
 
+import com.keita.musicbay.model.dto.JwtToken;
+import com.keita.musicbay.model.entity.User;
 import com.keita.musicbay.repository.UserRepository;
 import com.keita.musicbay.security.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AuthenticationService {
@@ -15,12 +19,13 @@ public class AuthenticationService {
     private JwtProvider jwtProvider;
 
 
+    public JwtToken login(String username,String password) {
+        Optional<User> user = userRepository.findByUsername(username);
 
-    /*
-        TODO
-            -findByEmail()
-            -check password
-            -jwtProvider.generate(user)
-            -return JWTtoken
-     */
+        if(user.isPresent() && user.get().getPassword().equals(password))
+            return new JwtToken(username, jwtProvider.generate(user.get()));
+
+        return null;
+    }
+
 }

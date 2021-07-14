@@ -5,7 +5,9 @@ import com.keita.musicbay.model.entity.Music;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Data
@@ -16,9 +18,9 @@ public class Catalog implements Serializable {
 
     public Catalog(){}
 
-    public Catalog(Customer customer, List<Music> musics){
-        this.likedMusicTitles = customer.getLikings().stream().map(liking -> liking.getMusic().getTitle()).collect(Collectors.toList());
-        this.sharedMusicTitles = customer.getSharings().stream().map(sharing -> sharing.getMusic().getTitle()).collect(Collectors.toList());
+    public Catalog(Optional<Customer> customer, List<Music> musics){
+        this.likedMusicTitles = customer.map(value -> value.getLikings().stream().map(liking -> liking.getMusic().getTitle()).collect(Collectors.toList())).orElse(Collections.emptyList());
+        this.sharedMusicTitles = customer.map(value -> value.getSharings().stream().map(sharing -> sharing.getMusic().getTitle()).collect(Collectors.toList())).orElse(Collections.emptyList());
         this.musics = musics.stream().map(MusicDTO::new).collect(Collectors.toList());
     }
 }
