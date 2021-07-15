@@ -11,6 +11,5 @@ import java.util.List;
 
 @Repository
 public interface SubscriberRepository extends JpaRepository<Subscriber,Long> {
-    List<Subscriber> getByUserUsername(String username);
-    List<Subscriber> getAllByUser(User user, Pageable pageable);
+    List<Subscriber> getAllByUserUsername(String username,Pageable pageable);
 }

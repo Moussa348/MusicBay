@@ -105,8 +105,8 @@ public class DbInit implements CommandLineRunner {
 
     private void sendMessagesInConversations(){
         List<SentMessage> sentMessages = Arrays.asList(
-                new SentMessage(new Message(1L,"sdaad","bigBrr")),
-                new SentMessage(new Message(2L,"sdaad","bayDrip"))
+                new SentMessage(Message.builder().content("allo").sendBy("brrr").build()),
+                new SentMessage(Message.builder().content("allo").sendBy("bayDrip").build())
         );
 
         sentMessages.forEach(sentMessage -> conversationService.sendMessageInConversation(sentMessage.getId(),sentMessage));

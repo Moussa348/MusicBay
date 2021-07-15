@@ -44,26 +44,15 @@ public class PurchasingRepositoryTest {
         customerRepository.saveAndFlush(customer);
     }
 
-    @Test
-    void getByCustomerAndPurchasingDateBetween(){
-        //ARRANGE
-        Customer customer = customerRepository.findByUsername("brr").get();
-
-        //ACT
-        List<Purchasing> purchasings = purchasingRepository.getByCustomerAndPurchasingDateBetween(customer,LocalDateTime.now().minusDays(2),LocalDateTime.now().plusDays(2));
-
-        //ASSERT
-        Assertions.assertEquals(3,purchasings.size());
-
-    }
 
     @Test
-    void getAllByCustomer(){
+    void getAllByCustomerUsername(){
         //ARRANGE
-        Customer customer = customerRepository.findByUsername("brr").get();
+        String username = "brr";
 
         //ACT
-        List<Purchasing> purchasings = purchasingRepository.getAllByCustomer(customer, PageRequest.of(0,3, Sort.by("purchasingDate").ascending()));
+        List<Purchasing> purchasings = purchasingRepository.getAllByCustomerUsername(username, PageRequest.of(0,3, Sort.by("purchasingDate").ascending()));
+
         //ASSERT
         assertEquals(3,purchasings.size());
     }

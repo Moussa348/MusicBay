@@ -40,24 +40,12 @@ public class SubscribeToRepositoryTest {
     }
 
     @Test
-    void getByUserUsername(){
+    void getAllByUserUsername(){
         //ARRANGE
         String username = "brr";
 
         //ACT
-        List<SubscribeTo> subscribersTo = subscribeToRepository.getByUserUsername(username);
-
-        //ASSERT
-        assertEquals(2,subscribersTo.size());
-    }
-
-    @Test
-    void getAllByUser(){
-        //ARRANGE
-        Customer customer = customerRepository.findByUsername("brr").get();
-
-        //ACT
-        List<SubscribeTo> subscribeTos = subscribeToRepository.getAllByUser(customer, PageRequest.of(0,3, Sort.by("date").ascending()));
+        List<SubscribeTo> subscribeTos = subscribeToRepository.getAllByUserUsername(username, PageRequest.of(0,3, Sort.by("date").ascending()));
         //ASSERT
         assertEquals(2,subscribeTos.size());
     }

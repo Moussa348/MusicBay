@@ -69,9 +69,8 @@ public class NotificationServiceTest {
                 new Notification(NotificationEvent.LIKING,customer)
         );
 
-        when(userRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
 
-        when(notificationRepository.getAllByUserAndSeenFalse(customer, PageRequest.of(noPage,10, Sort.by("date").ascending()))).thenReturn(notifications);
+        when(notificationRepository.getAllByUserUsernameAndSeenFalse(customer.getUsername(), PageRequest.of(noPage,10, Sort.by("date").ascending()))).thenReturn(notifications);
         //ACT
         List<RecentNotification> recentNotifications = notificationService.getRecentNotifications(customer.getUsername(),noPage);
 

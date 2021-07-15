@@ -6,7 +6,6 @@ import com.keita.musicbay.model.entity.LikedBy;
 import com.keita.musicbay.model.entity.Music;
 import com.keita.musicbay.repository.CommentRepository;
 import com.keita.musicbay.repository.MusicRepository;
-import com.keita.musicbay.repository.TextRepository;
 import com.keita.musicbay.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -53,8 +52,7 @@ public class CommentService {
     }
 
     public List<PostedComment> getListCommentOfMusic(String title,Integer noPage){
-        Music music = musicRepository.findByTitle(title).get();
-        return commentRepository.getAllByMusic(music, PageRequest.of(noPage,10, Sort.by("date").descending()))
+        return commentRepository.getAllByMusicTitle(title, PageRequest.of(noPage,10, Sort.by("date").descending()))
         .stream().map(PostedComment::new).collect(Collectors.toList());
     }
 

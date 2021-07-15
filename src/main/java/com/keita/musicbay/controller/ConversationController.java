@@ -42,10 +42,12 @@ public class ConversationController {
         conversationService.deleteConversation(id);
     }
 
+    /*
     @GetMapping("/getConversation/{id}")
     public ConversationDTO getConversation(@PathVariable Long id){
         return conversationService.getConversation(id);
     }
+     */
 
 
     @GetMapping("/getLastSentMessages/{username}")

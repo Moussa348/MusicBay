@@ -11,6 +11,5 @@ import java.util.List;
 
 @Repository
 public interface PurchasingRepository extends JpaRepository<Purchasing,Long> {
-    List<Purchasing> getByCustomerAndPurchasingDateBetween(Customer customer, LocalDateTime date1,LocalDateTime date2);
-    List<Purchasing> getAllByCustomer(Customer customer, Pageable pageable);
+    List<Purchasing> getAllByCustomerUsername(String username,Pageable pageable);
 }

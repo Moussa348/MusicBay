@@ -70,11 +70,9 @@ public class FeedServiceTest {
         customer.getSubscribeTos().add(SubscribeTo.builder().username(customerSubscribeTo.getUsername()).build());
 
         when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
-        customer.getSubscribeTos().forEach(subscribeTo -> when(customerRepository.findByUsername(subscribeTo.getUsername())).thenReturn(Optional.of(customerSubscribeTo)));
-
-        when(likingRepository.getAllByCustomer(customerSubscribeTo,PageRequest.of(noPage,5,Sort.by("likingDate").descending()))).thenReturn(likings);
-        when(sharingRepository.getAllByCustomer(customerSubscribeTo,PageRequest.of(noPage,5,Sort.by("sharingDate").descending()))).thenReturn(sharings);
-        when(purchasingRepository.getAllByCustomer(customerSubscribeTo,PageRequest.of(noPage,5,Sort.by("purchasingDate").descending()))).thenReturn(purchasings);
+        when(likingRepository.getAllByCustomerUsername(customerSubscribeTo.getUsername(),PageRequest.of(noPage,5,Sort.by("likingDate").descending()))).thenReturn(likings);
+        when(sharingRepository.getAllByCustomerUsername(customerSubscribeTo.getUsername(),PageRequest.of(noPage,5,Sort.by("sharingDate").descending()))).thenReturn(sharings);
+        when(purchasingRepository.getAllByCustomerUsername(customerSubscribeTo.getUsername(),PageRequest.of(noPage,5,Sort.by("purchasingDate").descending()))).thenReturn(purchasings);
 
         //ACT
         Feed yourFeed = feedService.getFeed(customer.getUsername(),0);
@@ -120,8 +118,7 @@ public class FeedServiceTest {
                 Liking.builder().customer(customer).music(Track.builder().build()).build()
         );
 
-        when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
-        when(likingRepository.getAllByCustomer(customer,PageRequest.of(noPage,5,Sort.by("likingDate").descending()))).thenReturn(likings);
+        when(likingRepository.getAllByCustomerUsername(customer.getUsername(),PageRequest.of(noPage,5,Sort.by("likingDate").descending()))).thenReturn(likings);
         //ACT
         List<LikedMusic> likedMusics = feedService.getListLikedMusic(customer.getUsername(),0);
 
@@ -139,8 +136,8 @@ public class FeedServiceTest {
                 Sharing.builder().customer(customer).music(Track.builder().build()).build()
         );
 
-        when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
-        when(sharingRepository.getAllByCustomer(customer,PageRequest.of(noPage,5,Sort.by("sharingDate").descending()))).thenReturn(sharings);
+        when(sharingRepository.getAllByCustomerUsername(customer.getUsername(),PageRequest.of(noPage,5,Sort.by("sharingDate").descending()))).thenReturn(sharings);
+
         //ACT
         List<SharedMusic> sharedMusics = feedService.getListSharedMusic(customer.getUsername(),0);
 
@@ -151,8 +148,6 @@ public class FeedServiceTest {
     @Test
     void getListPurchasedMusic(){
         //ARRANGE
-
-        //ARRANGE
         Customer customer = Customer.builder().username("ceo").likings(new ArrayList<>()).build();
         int noPage = 0;
         List<Purchasing> purchasings = Arrays.asList(
@@ -160,9 +155,7 @@ public class FeedServiceTest {
                 Purchasing.builder().customer(customer).music(Track.builder().build()).build()
         );
 
-        when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
-        when(purchasingRepository.getAllByCustomer(customer,PageRequest.of(noPage,5,Sort.by("purchasingDate").descending()))).thenReturn(purchasings);
-
+        when(purchasingRepository.getAllByCustomerUsername(customer.getUsername(),PageRequest.of(noPage,5,Sort.by("purchasingDate").descending()))).thenReturn(purchasings);
 
         //ACT
         List<PurchasedMusic> purchasedMusics = feedService.getListPurchasedMusic(customer.getUsername(),0);
@@ -180,9 +173,8 @@ public class FeedServiceTest {
 
         user.setSubscribers(Arrays.asList(subscriber));
 
-        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
         user.getSubscribers().forEach(s -> when(userRepository.findByUsername(s.getUsername())).thenReturn(Optional.of(Customer.builder().likings(Collections.emptyList()).sharings(Collections.emptyList()).purchasings(Collections.emptyList()).build())));
-        when(subscriberRepository.getAllByUser(user,PageRequest.of(noPage,10, Sort.by("date").descending()))).thenReturn(user.getSubscribers());
+        when(subscriberRepository.getAllByUserUsername(user.getUsername(),PageRequest.of(noPage,10, Sort.by("date").descending()))).thenReturn(user.getSubscribers());
         //ACT
         List<Profile> subscribers = feedService.getListSubscriber(user.getUsername(),noPage);
 
@@ -199,9 +191,8 @@ public class FeedServiceTest {
 
         user.setSubscribeTos(Arrays.asList(subscriberTo));
 
-        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
         user.getSubscribeTos().forEach(s -> when(userRepository.findByUsername(s.getUsername())).thenReturn(Optional.of(Customer.builder().likings(Collections.emptyList()).sharings(Collections.emptyList()).purchasings(Collections.emptyList()).build())));
-        when(subscribeToRepository.getAllByUser(user,PageRequest.of(noPage,10, Sort.by("date").descending()))).thenReturn(user.getSubscribeTos());
+        when(subscribeToRepository.getAllByUserUsername(user.getUsername(),PageRequest.of(noPage,10, Sort.by("date").descending()))).thenReturn(user.getSubscribeTos());
 
         //ACT
         List<Profile> subscriberTos = feedService.getListSubscribeTo(user.getUsername(),noPage);

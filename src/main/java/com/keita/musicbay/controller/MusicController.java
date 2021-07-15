@@ -22,8 +22,13 @@ public class MusicController {
         return musicService.getMusic(title);
     }
 
-    @GetMapping("/getCatalog/{username}")
-    public Catalog getCatalog(@PathVariable String username){
-        return musicService.getCatalog(username);
+    @GetMapping("/getCatalog")
+    public Catalog getCatalog(@RequestParam("username") String username,@RequestParam("noPage")Integer noPage){
+        return musicService.getCatalog(username,noPage);
+    }
+
+    @GetMapping("/getListMusic/{noPage}")
+    public List<MusicDTO> getListMusic(@PathVariable Integer noPage){
+        return musicService.getListMusic(noPage);
     }
 }

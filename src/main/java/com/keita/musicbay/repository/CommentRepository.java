@@ -10,5 +10,5 @@ import java.util.List;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment,Long> {
-    List<Comment> getAllByMusic(Music music, Pageable pageable);
+    List<Comment> getAllByMusicTitle(String title,Pageable pageable);
 }

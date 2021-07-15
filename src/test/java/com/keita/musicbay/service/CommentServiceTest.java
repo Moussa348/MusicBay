@@ -3,11 +3,9 @@ package com.keita.musicbay.service;
 import com.keita.musicbay.model.dto.PostedComment;
 import com.keita.musicbay.model.entity.Comment;
 import com.keita.musicbay.model.entity.Music;
-import com.keita.musicbay.model.entity.Text;
 import com.keita.musicbay.model.entity.Track;
 import com.keita.musicbay.repository.CommentRepository;
 import com.keita.musicbay.repository.MusicRepository;
-import com.keita.musicbay.repository.TextRepository;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -90,10 +88,9 @@ public class CommentServiceTest {
         //ARRANGE
         Music music = Track.builder().title("culture3").build();
         int noPage = 0;
-        music.setComments(Arrays.asList(Comment.builder().music(music).build(),Comment.builder().music(music).build()));
+        List<Comment> comments = Arrays.asList(Comment.builder().music(music).build(),Comment.builder().music(music).build());
 
-        when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
-        when(commentRepository.getAllByMusic(music, PageRequest.of(noPage,10, Sort.by("date").descending()))).thenReturn(music.getComments());
+        when(commentRepository.getAllByMusicTitle(music.getTitle(), PageRequest.of(noPage,10, Sort.by("date").descending()))).thenReturn(comments);
         //ACT
         List<PostedComment> postedComments = commentService.getListCommentOfMusic(music.getTitle(),noPage);
 

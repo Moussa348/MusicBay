@@ -45,9 +45,26 @@ public class MusicControllerTest {
     void getCatalog() throws Exception{
         //ARRANGE
         String username = "bigBrr";
+        int noPage = 0;
 
         //ACT
-        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.get("/music/getCatalog/" + username)
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.get("/music/getCatalog/")
+                .param("username",username)
+                .param("noPage",String.valueOf(noPage))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+
+        //ASSERT
+        assertNotNull(mvcResult1.getResponse().getContentAsString());
+    }
+
+    @Test
+    void getListMusic() throws Exception{
+        //ARRANGE
+        int noPage = 0;
+        //ACT
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.get("/music/getListMusic/" + noPage)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();

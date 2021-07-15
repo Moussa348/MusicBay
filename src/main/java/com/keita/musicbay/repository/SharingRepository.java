@@ -11,6 +11,5 @@ import java.util.List;
 
 @Repository
 public interface SharingRepository extends JpaRepository<Sharing,Long> {
-    List<Sharing> getByCustomerAndSharingDateBetween(Customer customer, LocalDateTime date1,LocalDateTime date2);
-    List<Sharing> getAllByCustomer(Customer customer, Pageable pageable);
+    List<Sharing> getAllByCustomerUsername(String username,Pageable pageable);
 }

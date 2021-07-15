@@ -7,11 +7,10 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.keita.musicbay.model.entity.User;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.SecureRandom;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -24,8 +23,7 @@ public class JwtProvider {
     private final long duration;
 
     public static String ROLE_CLAIM_NAME = "role";
-    public static String EMAIL_CLAIM_NAME = "email";
-    public static String USER_UUID_CLAIM_NAME = "userUUId";
+    public static String USER_USERNAME_CLAIM_NAME = "userUsername";
 
     //add @Value
     public JwtProvider() {
@@ -38,19 +36,18 @@ public class JwtProvider {
         final long time = System.currentTimeMillis();
 
         return JWT.create()
-                .withSubject(user.getUuid().toString())
+                .withSubject(user.getUsername())
                 .withClaim(ROLE_CLAIM_NAME,user.getRoles())
-                .withClaim(EMAIL_CLAIM_NAME,user.getEmail())
-                .withClaim(USER_UUID_CLAIM_NAME,user.getUuid().toString())
+                .withClaim(USER_USERNAME_CLAIM_NAME,user.getUsername())
                 .withIssuedAt(new Date(time))
                 .withExpiresAt(new Date(time + duration))
                 .sign(algorithm);
 
     }
 
-    public DecodedJWT verify(String token) throws JWTVerificationException{
+    public DecodedJWT verify(String token, HttpServletRequest httpServletRequest) throws JWTVerificationException{
         if(token == null)
-            throw new JWTVerificationException(("Token cannot be null"));
+            throw new JWTVerificationException(("Token cannot be null," + "url=" + httpServletRequest.getRequestURL()));
 
         if(token.startsWith("Bearer "))
             token = token.replace("Bearer ","");

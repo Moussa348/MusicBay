@@ -1,4 +1,5 @@
 package com.keita.musicbay.security;
+/*
 
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -12,9 +13,10 @@ import java.util.Collection;
 public class JwtAuthentication implements Authentication {
 
     private final DecodedJWT token;
+    private final String ipAddress;
 
-    public JwtAuthentication(DecodedJWT token) {
-        this.token = token;
+    public JwtAuthentication(DecodedJWT token,String ipAddress) {
+        this.token = token; this.ipAddress = ipAddress;
     }
 
     @Override
@@ -55,3 +57,4 @@ public class JwtAuthentication implements Authentication {
         return token.getSubject();
     }
 }
+ */

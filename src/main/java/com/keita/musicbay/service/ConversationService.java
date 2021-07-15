@@ -6,9 +6,12 @@ import com.keita.musicbay.model.entity.User;
 import com.keita.musicbay.model.dto.ConversationDTO;
 import com.keita.musicbay.model.dto.SentMessage;
 import com.keita.musicbay.repository.ConversationRepository;
+import com.keita.musicbay.repository.MessageRepository;
 import com.keita.musicbay.repository.UserRepository;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -22,6 +25,9 @@ public class ConversationService {
 
     @Autowired
     private ConversationRepository conversationRepository;
+
+    @Autowired
+    private MessageRepository messageRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -56,7 +62,9 @@ public class ConversationService {
 
         conversation.getMessages().add(new Message(sentMessage,conversation));
 
-        return new SentMessage(conversationRepository.save(conversation).getMessages().get(conversation.getMessages().size()-1));
+        conversationRepository.save(conversation);
+
+        return sentMessage;
     }
 
     public void deleteConversation(Long id){
@@ -66,8 +74,9 @@ public class ConversationService {
         conversationRepository.save(conversation);
     }
 
-    public ConversationDTO getConversation(Long id){
-        return new ConversationDTO(conversationRepository.getById(id));
+    public List<SentMessage> getMessagesFromConversation(Long id,Integer noPage){
+        return messageRepository.getAllByConversationId(id, PageRequest.of(noPage,20, Sort.by("date").descending()))
+                .stream().map(SentMessage::new).collect(Collectors.toList());
     }
 
     public List<SentMessage> getLastSentMessages(String username){

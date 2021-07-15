@@ -45,25 +45,13 @@ public class SharingRepositoryTest {
     }
 
     @Test
-    void getByCustomerAndSharingDateBetween(){
+    void getAllByCustomerUsername(){
         //ARRANGE
-        Customer customer = customerRepository.findByUsername("brr").get();
+        String username = "brr";
 
         //ACT
-        List<Sharing> sharings = sharingRepository.getByCustomerAndSharingDateBetween(customer, LocalDateTime.now().minusDays(2),LocalDateTime.now().plusDays(2));
+        List<Sharing> sharings = sharingRepository.getAllByCustomerUsername(username, PageRequest.of(0,3, Sort.by("sharingDate").ascending()));
 
-        //ASSERT
-        Assertions.assertEquals(3,sharings.size());
-
-    }
-
-    @Test
-    void getAllByCustomer(){
-        //ARRANGE
-        Customer customer = customerRepository.findByUsername("brr").get();
-
-        //ACT
-        List<Sharing> sharings = sharingRepository.getAllByCustomer(customer, PageRequest.of(0,3, Sort.by("sharingDate").ascending()));
         //ASSERT
         assertEquals(3,sharings.size());
     }

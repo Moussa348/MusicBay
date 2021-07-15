@@ -1,6 +1,5 @@
 package com.keita.musicbay.controller;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
-public class NotificationControllerTest {
+public class AuthControllerTest {
+
     @Autowired
     MockMvc mockMvc;
 
@@ -26,31 +26,15 @@ public class NotificationControllerTest {
     ObjectMapper mapper;
 
     @Test
-    void notificationSeen() throws Exception{
-        //ARRANGE
-        long id = 1L;
-
-        //ACT
-        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/notification/notificationSeen/" + id)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk()).andReturn();
-
-
-        //ASSERT
-        assertNotNull(mvcResult1.getResponse().getContentAsString());
-    }
-
-    @Test
-    void getRecentNotifications() throws Exception{
+    void login() throws Exception{
         //ARRANGE
         String username = "bombay";
-        int noPage = 0;
+        String password = "bombay123";
 
         //ACT
-        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.get("/notification/getRecentNotifications/")
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.get("/auth/login/")
                 .param("username",username)
-                .param("noPage", Integer.toString(noPage))
+                .param("password",password)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
@@ -58,5 +42,6 @@ public class NotificationControllerTest {
 
         //ASSERT
         assertNotNull(mvcResult1.getResponse().getContentAsString());
+
     }
 }

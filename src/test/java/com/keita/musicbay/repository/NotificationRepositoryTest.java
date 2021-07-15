@@ -50,11 +50,11 @@ public class NotificationRepositoryTest {
     }
 
     @Test
-    void getAllByUserAndSeenFalse(){
+    void getAllByUserUsernameAndSeenFalse(){
         //ARRANGE
-        User user = customerRepository.findByUsername("brr").get();
+        String username = "brr";
         //ACT
-        List<Notification> notifications = notificationRepository.getAllByUserAndSeenFalse(user, PageRequest.of(0,3, Sort.by("date").ascending()));
+        List<Notification> notifications = notificationRepository.getAllByUserUsernameAndSeenFalse(username, PageRequest.of(0,3, Sort.by("date").ascending()));
 
         //ASSERT
         assertEquals(2,notifications.size());

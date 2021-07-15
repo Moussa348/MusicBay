@@ -85,7 +85,7 @@ public class ConversationControllerTest {
     void sendMessageInConversation() throws Exception{
         //ARRANGE
         long conversationId = 2L;
-        SentMessage sentMessage = new SentMessage(new Message(1L,"sdaad","brr"));
+        SentMessage sentMessage = new SentMessage(Message.builder().content("allo").sendBy("brrr").build());
         //ACT
         MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/conversation/sendMessageInConversation/" + conversationId)
                 .content(mapper.writeValueAsString(sentMessage))

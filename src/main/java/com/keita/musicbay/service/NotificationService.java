@@ -40,7 +40,7 @@ public class NotificationService {
 
     public List<RecentNotification> getRecentNotifications(String username, Integer noPage){
 
-        return notificationRepository.getAllByUserAndSeenFalse(userRepository.findByUsername(username).get(), PageRequest.of(0,10, Sort.by("date").ascending()))
+        return notificationRepository.getAllByUserUsernameAndSeenFalse(username, PageRequest.of(noPage,10, Sort.by("date").ascending()))
                 .stream().map(RecentNotification::new).collect(Collectors.toList());
     }
 }

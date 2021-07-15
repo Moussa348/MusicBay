@@ -10,6 +10,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.util.Arrays;
 import java.util.List;
@@ -50,6 +54,7 @@ public class MusicServiceTest {
         Customer customer = Customer.builder()
                 .sharings(Arrays.asList(Sharing.builder().music(Track.builder().title("").build()).build()))
                 .likings(Arrays.asList(Liking.builder().music(Track.builder().title("").build()).build())).build();
+        int noPage = 0;
         List<Music> musics = Arrays.asList(
                 Track.builder().title("").build(),
                 MixTape.builder().title("").build(),
@@ -58,9 +63,9 @@ public class MusicServiceTest {
         );
 
         when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
-        when(musicRepository.findAll()).thenReturn(musics);
+        when(musicRepository.findAll(PageRequest.of(noPage, 30, Sort.by("date").descending()))).thenReturn(new PageImpl<>(musics));
         //ACT
-        Catalog catalog = musicService.getCatalog(customer.getUsername());
+        Catalog catalog = musicService.getCatalog(customer.getUsername(),noPage);
 
         //ASSERT
         assertEquals(4,catalog.getMusics().size());
@@ -77,10 +82,11 @@ public class MusicServiceTest {
                 MixTape.builder().build(),
                 Track.builder().build()
         );
+        int noPage = 0;
 
-        when(musicRepository.findAll()).thenReturn(musics);
+        when(musicRepository.findAll(PageRequest.of(noPage, 30, Sort.by("date").descending()))).thenReturn(new PageImpl<>(musics));
         //ACT
-        List<MusicDTO> musicDTOS = musicService.getListMusic();
+        List<MusicDTO> musicDTOS = musicService.getListMusic(noPage);
 
         //ASSERT
         assertEquals(4,musicDTOS.size());

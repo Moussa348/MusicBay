@@ -18,9 +18,9 @@ public class Catalog implements Serializable {
 
     public Catalog(){}
 
-    public Catalog(Optional<Customer> customer, List<Music> musics){
-        this.likedMusicTitles = customer.map(value -> value.getLikings().stream().map(liking -> liking.getMusic().getTitle()).collect(Collectors.toList())).orElse(Collections.emptyList());
-        this.sharedMusicTitles = customer.map(value -> value.getSharings().stream().map(sharing -> sharing.getMusic().getTitle()).collect(Collectors.toList())).orElse(Collections.emptyList());
+    public Catalog(Customer customer, List<Music> musics){
+        this.likedMusicTitles = customer.getLikings().stream().map(liking -> liking.getMusic().getTitle()).collect(Collectors.toList());
+        this.sharedMusicTitles = customer.getSharings().stream().map(sharing -> sharing.getMusic().getTitle()).collect(Collectors.toList());
         this.musics = musics.stream().map(MusicDTO::new).collect(Collectors.toList());
     }
 }

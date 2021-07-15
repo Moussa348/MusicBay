@@ -44,12 +44,12 @@ public class CommentRepositoryTest {
     }
 
     @Test
-    void getAllByMusic(){
+    void getAllByMusicTitle(){
         //ARRANGE
-        Music music = musicRepository.findByTitle("hope").get();
+        String title = "hope";
 
         //ACT
-        List<Comment> comments = commentRepository.getAllByMusic(music, PageRequest.of(0,3, Sort.by("date").descending()));
+        List<Comment> comments = commentRepository.getAllByMusicTitle("hope", PageRequest.of(0,3, Sort.by("date").descending()));
         //ASSERT
         assertEquals(3,comments.size());
     }

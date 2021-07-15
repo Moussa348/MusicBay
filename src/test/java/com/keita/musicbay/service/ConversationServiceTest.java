@@ -8,12 +8,15 @@ import com.keita.musicbay.model.dto.ConversationDTO;
 import com.keita.musicbay.model.dto.SentMessage;
 import com.keita.musicbay.model.enums.ConversationType;
 import com.keita.musicbay.repository.ConversationRepository;
+import com.keita.musicbay.repository.MessageRepository;
 import com.keita.musicbay.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -28,6 +31,9 @@ public class ConversationServiceTest {
 
     @Mock
     ConversationRepository conversationRepository;
+
+    @Mock
+    MessageRepository messageRepository;
 
     @Mock
     UserRepository userRepository;
@@ -111,12 +117,10 @@ public class ConversationServiceTest {
                 .creationDate(LocalDateTime.now())
                 .name("GLowGanggg")
                 .conversationType(ConversationType.GROUP).build();
-        SentMessage sentMessage = new SentMessage(new Message(1L,"sdaad","brr"));
-        Message message = new Message(sentMessage,conversation);
+        SentMessage sentMessage = new SentMessage(Message.builder().content("sadasd").build());
 
 
         when(conversationRepository.getById(conversation.getId())).thenReturn(conversation);
-        when(conversationRepository.save(conversation)).thenReturn(conversation);
 
         //ACT
         SentMessage newSentMessage = conversationService.sendMessageInConversation(conversation.getId(),sentMessage);
@@ -141,20 +145,21 @@ public class ConversationServiceTest {
     }
 
     @Test
-    void getConversation(){
+    void getMessagesFromConversation(){
         //ARRANGE
         Long id = 1L;
-        when(conversationRepository.getById(id)).thenReturn(Conversation.builder()
-                .id(1L)
-                .creationDate(LocalDateTime.now())
-                .name("GLowGanggg")
-                .conversationType(ConversationType.GROUP).build());
+        int noPage = 0;
+        List<Message> messages = Arrays.asList(
+                Message.builder().content("allo").sendBy("brrr").build(),
+                Message.builder().content("allo").sendBy("brrr").build()
+        );
+        when(messageRepository.getAllByConversationId(id, PageRequest.of(noPage,20, Sort.by("date").descending()))).thenReturn(messages);
 
         //ACT
-        ConversationDTO conversationDTO = conversationService.getConversation(id);
+        List<SentMessage> sentMessagesInConversation = conversationService.getMessagesFromConversation(id,noPage);
 
         //ASSERT
-        assertNotNull(conversationDTO);
+        assertEquals(2,sentMessagesInConversation.size());
     }
 
     @Test
@@ -164,7 +169,7 @@ public class ConversationServiceTest {
         List<Conversation> conversations = Arrays.asList(
                 Conversation.builder().id(1L).build()
         );
-        conversations.get(0).getMessages().add(new Message(1L,"allo","brr"));
+        conversations.get(0).getMessages().add(Message.builder().build());
 
         when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
         when(conversationRepository.getByUser(user)).thenReturn(conversations);

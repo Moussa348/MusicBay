@@ -6,7 +6,6 @@ import com.keita.musicbay.model.entity.Customer;
 import com.keita.musicbay.model.entity.User;
 import com.keita.musicbay.repository.UserRepository;
 import com.keita.musicbay.security.JwtProvider;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class AuthenticationServiceTest {
+public class AuthServiceTest {
 
     @Mock
     UserRepository userRepository;
@@ -28,7 +27,7 @@ public class AuthenticationServiceTest {
     JwtProvider jwtProvider;
 
     @InjectMocks
-    AuthenticationService authenticationService;
+    AuthService authService;
 
     @Test
     void login(){
@@ -42,8 +41,8 @@ public class AuthenticationServiceTest {
         when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
 
         //ACT
-        JwtToken jwtToken = authenticationService.login(user.getUsername(),user.getPassword());
-        JwtToken noToken = authenticationService.login(username,password);
+        JwtToken jwtToken = authService.login(user.getUsername(),user.getPassword());
+        JwtToken noToken = authService.login(username,password);
         //ASSERT
         assertNotNull(jwtToken);
         assertNull(noToken);

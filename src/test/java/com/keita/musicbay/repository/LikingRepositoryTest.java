@@ -47,26 +47,14 @@ public class LikingRepositoryTest {
         customerRepository.saveAndFlush(customer);
     }
 
-    @Test
-    void getByCustomerAndLikingDateBetween(){
-        //ARRANGE
-        Customer customer = customerRepository.findByUsername("brr").get();
-
-        //ACT
-        List<Liking> likings = likingRepository.getByCustomerAndLikingDateBetween(customer,LocalDateTime.now().minusDays(2),LocalDateTime.now());
-
-        //ASSERT
-        assertEquals(2,likings.size());
-
-    }
 
     @Test
-    void getAllByCustomer(){
+    void getAllByCustomerUsername(){
         //ARRANGE
-        Customer customer = customerRepository.findByUsername("brr").get();
+        String username = "brr";
 
         //ACT
-        List<Liking> likings = likingRepository.getAllByCustomer(customer, PageRequest.of(0,3, Sort.by("likingDate").ascending()));
+        List<Liking> likings = likingRepository.getAllByCustomerUsername(username, PageRequest.of(0,3, Sort.by("likingDate").ascending()));
         //ASSERT
         assertEquals(3,likings.size());
     }

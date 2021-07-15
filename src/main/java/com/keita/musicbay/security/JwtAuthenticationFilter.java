@@ -1,11 +1,15 @@
 package com.keita.musicbay.security;
+/*
+
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.extern.java.Log;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -22,16 +26,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private JwtProvider jwtProvider;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NotNull HttpServletRequest httpServletRequest,@NotNull HttpServletResponse httpServletResponse,@NotNull FilterChain filterChain) throws ServletException, IOException {
         try{
-            DecodedJWT token = jwtProvider.verify(httpServletRequest.getHeader("Authorization"));
+            DecodedJWT token = jwtProvider.verify(httpServletRequest.getHeader("Authorization"),httpServletRequest);
 
             if(token != null)
-                SecurityContextHolder.getContext().setAuthentication(new JwtAuthentication(token));
+                SecurityContextHolder.getContext().setAuthentication(new JwtAuthentication(token,httpServletRequest.getRemoteAddr()));
         }catch (JWTVerificationException e){
             log.warning(e.getMessage().toUpperCase());
         }
-
         filterChain.doFilter(httpServletRequest,httpServletResponse);
     }
 }
+ */
