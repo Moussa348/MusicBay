@@ -5,6 +5,7 @@ import com.keita.musicbay.model.entity.*;
 import com.keita.musicbay.model.enums.PriceType;
 import com.keita.musicbay.repository.CustomerRepository;
 import com.keita.musicbay.repository.MusicRepository;
+import com.keita.musicbay.repository.TransactionRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,6 +19,9 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class TransactionServiceTest {
+
+    @Mock
+    TransactionRepository transactionRepository;
 
     @Mock
     CustomerRepository customerRepository;

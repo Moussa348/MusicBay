@@ -41,14 +41,14 @@ public class FileServiceTest {
     }
 
     @Test
-    void zipFile() throws Exception{
+    void getFile() throws Exception{
         //ARRANGE
         File file = Mp3File.builder().fileName("Hope.txt").data("sadasd".getBytes()).build();
         when(fileRepository.findByFileName(file.getFileName())).thenReturn(Optional.of(file));
 
 
         //ACT
-        ZipOutputStream zipFile = fileService.zipFile(file.getFileName());
+        java.io.File zipFile = fileService.getFile(file.getFileName());
 
         //ASSERT
         assertNotNull(zipFile);

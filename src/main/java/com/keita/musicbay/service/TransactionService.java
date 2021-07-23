@@ -7,6 +7,7 @@ import com.keita.musicbay.model.dto.TransactionDTO;
 import com.keita.musicbay.model.enums.PriceType;
 import com.keita.musicbay.repository.CustomerRepository;
 import com.keita.musicbay.repository.MusicRepository;
+import com.keita.musicbay.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,9 @@ import java.util.UUID;
 
 @Service
 public class TransactionService {
+
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -81,10 +85,17 @@ public class TransactionService {
         customerRepository.save(customer);
     }
 
+    public void confirmTransaction(String username){
+        TransactionDTO transactionDTO = getCurrentTransaction(username);
+
+        //TODO : call stripe
+
+    }
+
     public TransactionDTO getCurrentTransaction(String username) {
         Customer customer = customerRepository.findByUsername(username).get();
-        int positionOfLastTransaction = customer.getTransactions().size()-1;
+        Transaction transaction = customer.getTransactions().get(customer.getTransactions().size()-1);
 
-        return customer.getTransactions().get(positionOfLastTransaction).isConfirmed() ? null:new TransactionDTO(customer.getTransactions().get(positionOfLastTransaction));
+        return transaction.isConfirmed() ? null:new TransactionDTO(transaction);
     }
 }

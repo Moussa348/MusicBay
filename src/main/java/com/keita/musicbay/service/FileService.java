@@ -36,6 +36,15 @@ public class FileService {
         IOUtils.copy(inputStream, httpServletResponse.getOutputStream());
     }
 
+    public java.io.File getFile(String fileName) throws Exception {
+        File file = fileRepository.findByFileName(fileName).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't find file : " + fileName));
+        java.io.File fileToSend = new java.io.File("./" + fileName);
+
+        FileUtils.writeByteArrayToFile(fileToSend, file.getData());
+
+        return fileToSend;
+    }
+    /*
     public ZipOutputStream zipFile(String fileName) throws Exception {
         File file = fileRepository.findByFileName(fileName).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't find file : " + fileName));
 
@@ -45,26 +54,28 @@ public class FileService {
 
 
         fileToZip.createNewFile();
-        FileUtils.writeByteArrayToFile(fileToZip, file.getData());
+            FileUtils.writeByteArrayToFile(fileToZip, file.getData());
 
-        FileInputStream fileInputStream = new FileInputStream("./" + fileToZip);
-        ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
+            FileInputStream fileInputStream = new FileInputStream("./" + fileToZip);
+            ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
 
-        zipOutputStream.putNextEntry(zipEntry);
+            zipOutputStream.putNextEntry(zipEntry);
 
-        byte[] bytes = new byte[1024];
-        int length;
+            byte[] bytes = new byte[1024];
+            int length;
 
-        while ((length = fileInputStream.read(bytes)) >= 0) {
-            zipOutputStream.write(bytes, 0, length);
-        }
+            while ((length = fileInputStream.read(bytes)) >= 0) {
+                zipOutputStream.write(bytes, 0, length);
+            }
 
-        zipOutputStream.close();
-        fileInputStream.close();
-        fileOutputStream.close();
+            zipOutputStream.close();
+            fileInputStream.close();
+            fileOutputStream.close();
 
 
-        return zipOutputStream;
+            return zipOutputStream;
 
     }
+
+     */
 }
