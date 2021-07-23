@@ -4,6 +4,7 @@ import com.keita.musicbay.model.dto.PostedComment;
 import com.keita.musicbay.model.entity.Comment;
 import com.keita.musicbay.model.entity.LikedBy;
 import com.keita.musicbay.model.entity.Music;
+import com.keita.musicbay.model.enums.NotificationEvent;
 import com.keita.musicbay.repository.CommentRepository;
 import com.keita.musicbay.repository.MusicRepository;
 import com.keita.musicbay.repository.UserRepository;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +29,9 @@ public class CommentService {
     @Autowired
     private MusicRepository musicRepository;
 
+    @Autowired
+    private NotificationService notificationService;
+
 
     public PostedComment postComment(PostedComment postedComment,String musicTitle){
         Music music = musicRepository.findByTitle(musicTitle).get();
@@ -38,6 +43,8 @@ public class CommentService {
 
         comment.setNbrLike(comment.getNbrLike()+1);
         comment.getLikedByList().add(new LikedBy(username,comment));
+
+        notificationService.saveNotification(username, NotificationEvent.LIKING_COMMENT, Arrays.asList(comment.getSendBy()));
 
         return new PostedComment(commentRepository.save(comment));
     }

@@ -33,6 +33,9 @@ public class CommentServiceTest {
     @Mock
     MusicRepository musicRepository;
 
+    @Mock
+    NotificationService notificationService;
+
     @InjectMocks
     CommentService commentService;
 

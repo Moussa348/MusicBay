@@ -12,7 +12,9 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -40,25 +42,25 @@ public class ConversationService {
         return conversationDTO;
     }
 
-    public ConversationDTO addUserInConversationGroup(Long id, String username){
+    public void addUserInConversationGroup(Long id, String username){
         Conversation conversation = conversationRepository.getById(id);
 
-        conversation.getUsers().add(userRepository.findByUsername(username).get());
-
-        return new ConversationDTO(conversationRepository.save(conversation));
+        conversation.getUsers().add(userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Customer with username: " + username)));
+        conversationRepository.save(conversation);
     }
 
-    public ConversationDTO removeUserFromConversationGroup(Long id,String username){
+    public void removeUserFromConversationGroup(Long id,String username){
         Conversation conversation = conversationRepository.getById(id);
 
         conversation.getUsers().removeIf(user -> user.getUsername().equals(username));
 
-        return new ConversationDTO(conversationRepository.save(conversation));
+        conversationRepository.save(conversation);
     }
 
     @Transactional
-    public SentMessage sendMessageInConversation(Long conversationId,SentMessage sentMessage){
-        Conversation conversation = conversationRepository.getById(conversationId);
+    public SentMessage sendMessageInConversation(SentMessage sentMessage){
+        Conversation conversation = conversationRepository.getById(sentMessage.getConversationId());
 
         conversation.getMessages().add(new Message(sentMessage,conversation));
 
@@ -79,10 +81,9 @@ public class ConversationService {
                 .stream().map(SentMessage::new).collect(Collectors.toList());
     }
 
-    public List<SentMessage> getLastSentMessages(String username){
+    public List<SentMessage> getLastSentMessages(String username,Integer noPage){
         List<Message> lastSentMessages = new ArrayList<>();
-        //TODO : in repo create getAllByUser(User user, Pageable pageable)
-        List<Conversation> conversations = conversationRepository.getByUser(userRepository.findByUsername(username).get()).stream().filter(Conversation::isActive).collect(Collectors.toList());
+        List<Conversation> conversations = conversationRepository.getByUser(userRepository.findByUsername(username).get(),PageRequest.of(noPage,20)).stream().filter(Conversation::isActive).collect(Collectors.toList());
 
         conversations.forEach(conversation -> lastSentMessages.add(conversation.getMessages().get(conversation.getMessages().size()-1)));
 

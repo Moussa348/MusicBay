@@ -1,6 +1,5 @@
 package com.keita.musicbay.security;
 
-/*
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -41,7 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //Configure http security
         http.cors().and().csrf().disable()
                 //url that can be accessed without authentication
-                .authorizeRequests().antMatchers("/auth/login","/music/getListMusic").permitAll()
+                .authorizeRequests().antMatchers("/auth/login/**","/music/getListMusic/**","/customer/getPicture/**","/file/play/**").permitAll()
 
                 .anyRequest().authenticated().and().httpBasic()
 
@@ -80,4 +79,3 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder(10);
     }
 }
- */

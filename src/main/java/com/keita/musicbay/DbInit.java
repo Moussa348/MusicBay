@@ -6,6 +6,7 @@ import com.keita.musicbay.model.dto.SentMessage;
 import com.keita.musicbay.model.entity.*;
 import com.keita.musicbay.model.enums.ConversationType;
 import com.keita.musicbay.model.enums.PriceType;
+import com.keita.musicbay.repository.ConversationRepository;
 import com.keita.musicbay.repository.CustomerRepository;
 import com.keita.musicbay.repository.MusicRepository;
 import com.keita.musicbay.service.*;
@@ -48,6 +49,9 @@ public class DbInit implements CommandLineRunner {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    private ConversationRepository conversationRepository;
+
 
     private void insertCustomers() throws Exception {
         FileInputStream fileInputStream = new FileInputStream("./docs/noUser.jpg");
@@ -65,20 +69,13 @@ public class DbInit implements CommandLineRunner {
 
         log.info(customers.get(0).getPassword().toUpperCase());
 
-
-        customers.forEach(customer -> {
-            try {
-                customerRepository.saveAndFlush(customer);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+        customerRepository.saveAll(customers);
     }
 
     private void insertMusic(){
         List<Music> musics = Arrays.asList(
                 MixTape.builder().timeLength("34:00").title("culture1").description("").tags("Dark Hip-Hop rap").nbrOfLike(0).nbrOfPLay(0).nbrOfShare(0).nbrOfPurchase(0).basicPrice(24.0f).exclusivePrice(100.0f).build(),
-                MixTape.builder().timeLength("55:00").title("").title("culture2").description("").tags("Hip-Hop Rap").nbrOfLike(1).nbrOfPLay(1).nbrOfShare(1).nbrOfPurchase(0).basicPrice(50.0f).exclusivePrice(200.0f).build(),
+                MixTape.builder().timeLength("55:00").title("culture2").description("").tags("Hip-Hop Rap").nbrOfLike(1).nbrOfPLay(1).nbrOfShare(1).nbrOfPurchase(0).basicPrice(50.0f).exclusivePrice(200.0f).build(),
                 Track.builder().timeLength("2:00").title("redRoom").tags("RAP").description("").nbrOfLike(0).nbrOfPLay(0).nbrOfShare(0).nbrOfPurchase(0).basicPrice(30.0f).exclusivePrice(50f).bpm(100f).build(),
                 Track.builder().timeLength("3:00").title("Ragnarok").tags("RAP").description("").nbrOfLike(0).nbrOfPLay(0).nbrOfShare(0).nbrOfPurchase(0).basicPrice(30.0f).exclusivePrice(70f).bpm(100f).build(),
                 Track.builder().timeLength("1:50").title("Winter").tags("RAP").description("").nbrOfLike(0).nbrOfPLay(0).nbrOfShare(0).nbrOfPurchase(0).basicPrice(30.0f).exclusivePrice(800f).bpm(100f).build(),
@@ -105,11 +102,11 @@ public class DbInit implements CommandLineRunner {
 
     private void sendMessagesInConversations(){
         List<SentMessage> sentMessages = Arrays.asList(
-                new SentMessage(Message.builder().content("allo").sendBy("brrr").build()),
-                new SentMessage(Message.builder().content("allo").sendBy("bayDrip").build())
+                new SentMessage(Message.builder().content("allo").sendBy("brrr").conversation(conversationRepository.getById(1L)).build()),
+                new SentMessage(Message.builder().content("allo").sendBy("bayDrip").conversation(conversationRepository.getById(2L)).build())
         );
 
-        sentMessages.forEach(sentMessage -> conversationService.sendMessageInConversation(sentMessage.getId(),sentMessage));
+        sentMessages.forEach(sentMessage -> conversationService.sendMessageInConversation(sentMessage));
     }
 
     private void insertComment(){

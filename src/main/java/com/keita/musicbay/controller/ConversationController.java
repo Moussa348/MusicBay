@@ -22,19 +22,20 @@ public class ConversationController {
         return conversationService.createConversation(conversationDTO);
     }
 
+
     @PatchMapping("/addUserInConversationGroup")
-    public ConversationDTO addUserInConversationGroup(@RequestParam("id") Long id, @RequestParam("username") String username){
-        return conversationService.addUserInConversationGroup(id,username);
+    public void addUserInConversationGroup(@RequestParam("id") Long id, @RequestParam("username") String username){
+         conversationService.addUserInConversationGroup(id,username);
     }
 
     @DeleteMapping("/removeUserFromConversationGroup")
-    public ConversationDTO removeUserFromConversationGroup(@RequestParam("id") Long id, @RequestParam("username") String username){
-        return conversationService.removeUserFromConversationGroup(id,username);
+    public void removeUserFromConversationGroup(@RequestParam("id") Long id, @RequestParam("username") String username){
+         conversationService.removeUserFromConversationGroup(id,username);
     }
 
-    @PatchMapping("/sendMessageInConversation/{conversationId}")
-    public SentMessage sendMessageInConversation(@PathVariable Long conversationId, @RequestBody SentMessage sentMessage){
-        return conversationService.sendMessageInConversation(conversationId,sentMessage);
+    @PatchMapping("/sendMessageInConversation/")
+    public SentMessage sendMessageInConversation(@RequestBody SentMessage sentMessage){
+        return conversationService.sendMessageInConversation(sentMessage);
     }
 
     @DeleteMapping("/deleteConversation/{id}")
@@ -42,16 +43,14 @@ public class ConversationController {
         conversationService.deleteConversation(id);
     }
 
-    /*
-    @GetMapping("/getConversation/{id}")
-    public ConversationDTO getConversation(@PathVariable Long id){
-        return conversationService.getConversation(id);
+    @GetMapping("/getMessagesFromConversation/")
+    public List<SentMessage> getMessagesFromConversation(@RequestParam("id")Long id,@RequestParam("noPage")Integer noPage){
+        return conversationService.getMessagesFromConversation(id,noPage);
     }
-     */
 
 
-    @GetMapping("/getLastSentMessages/{username}")
-    public List<SentMessage> getLastSentMessages(@PathVariable String username){
-        return conversationService.getLastSentMessages(username);
+    @GetMapping("/getLastSentMessages")
+    public List<SentMessage> getLastSentMessages(@RequestParam("username") String username,@RequestParam("noPage")Integer noPage){
+        return conversationService.getLastSentMessages(username,noPage);
     }
 }

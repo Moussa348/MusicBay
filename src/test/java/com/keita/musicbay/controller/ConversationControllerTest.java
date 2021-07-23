@@ -1,6 +1,7 @@
 package com.keita.musicbay.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.keita.musicbay.model.entity.Conversation;
 import com.keita.musicbay.model.entity.Message;
 import com.keita.musicbay.model.dto.ConversationDTO;
 import com.keita.musicbay.model.dto.SentMessage;
@@ -84,10 +85,9 @@ public class ConversationControllerTest {
     @Test
     void sendMessageInConversation() throws Exception{
         //ARRANGE
-        long conversationId = 2L;
-        SentMessage sentMessage = new SentMessage(Message.builder().content("allo").sendBy("brrr").build());
+        SentMessage sentMessage = new SentMessage(Message.builder().conversation(Conversation.builder().id(1L).build()).content("allo").sendBy("brrr").build());
         //ACT
-        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/conversation/sendMessageInConversation/" + conversationId)
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.patch("/conversation/sendMessageInConversation/")
                 .content(mapper.writeValueAsString(sentMessage))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -112,11 +112,14 @@ public class ConversationControllerTest {
     }
 
     @Test
-    void getConversation() throws Exception{
+    void getMessagesFromConversation() throws Exception{
         //ARRANGE
         long id = 2L;
+        int noPage = 0;
         //ACT
-        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.get("/conversation/getConversation/" + id)
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.get("/conversation/getMessagesFromConversation/")
+                .param("id",String.valueOf(id))
+                .param("noPage",String.valueOf(noPage))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
@@ -129,8 +132,11 @@ public class ConversationControllerTest {
     void getLastSentMessages() throws Exception{
         //ARRANGE
         String username = "bombay";
+        int noPage = 0;
         //ACT
-        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.get("/conversation/getLastSentMessages/" + username)
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.get("/conversation/getLastSentMessages/")
+                .param("username",username)
+                .param("noPage",String.valueOf(noPage))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();

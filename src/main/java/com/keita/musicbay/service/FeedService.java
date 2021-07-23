@@ -47,9 +47,9 @@ public class FeedService {
         List<Purchasing> purchasings = new ArrayList<>();
 
         Customer customer = customerRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Customer with username: " + username));
-        List<String> lostSubscribeToUsername = customer.getSubscribeTos().stream().map(SubscribeTo::getUsername).collect(Collectors.toList());
+        List<String> listSubscribeToUsername = customer.getSubscribeTos().stream().map(SubscribeTo::getUsername).collect(Collectors.toList());
 
-        lostSubscribeToUsername.forEach(subscribeToUsername -> {
+        listSubscribeToUsername.forEach(subscribeToUsername -> {
             likings.addAll(likingRepository.getAllByCustomerUsername(subscribeToUsername, PageRequest.of(noPage, 5, Sort.by("likingDate").descending())));
             sharings.addAll(sharingRepository.getAllByCustomerUsername(subscribeToUsername, PageRequest.of(noPage, 5, Sort.by("sharingDate").descending())));
             purchasings.addAll(purchasingRepository.getAllByCustomerUsername(subscribeToUsername, PageRequest.of(noPage, 5, Sort.by("purchasingDate").descending())));
@@ -61,9 +61,8 @@ public class FeedService {
 
     public List<ProfileToSubscribeTo> getListPossibleSubscribeTo(String username, Integer noPage) {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Customer with username: " + username));
-        List<User> listPossibleUserToSubscribeTo = userRepository.getAllByUsernameNot(username, PageRequest.of(noPage, 10, Sort.by("username")));
 
-        listPossibleUserToSubscribeTo = listPossibleUserToSubscribeTo
+        List<User> listPossibleUserToSubscribeTo = userRepository.getAllByUsernameNot(username, PageRequest.of(noPage, 10, Sort.by("username")))
                 .stream()
                 .filter(possibleUserToSubscribeTo -> user.getSubscribeTos().stream().noneMatch(subscribeTo -> possibleUserToSubscribeTo.getUsername().equals(subscribeTo.getUsername())))
                 .collect(Collectors.toList());

@@ -1,5 +1,7 @@
 package com.keita.musicbay.model.entity;
 
+import lombok.Builder;
+
 import javax.persistence.Entity;
 import java.io.Serializable;
 
@@ -8,6 +10,7 @@ public class WavFile extends File implements Serializable {
 
     public WavFile() { }
 
+    @Builder
     public WavFile(Long id, String fileName, byte[] data, Track track) {
         super(id, fileName, data, track);
     }

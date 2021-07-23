@@ -1,5 +1,4 @@
 package com.keita.musicbay.security;
-/*
 
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
@@ -26,7 +25,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private JwtProvider jwtProvider;
 
     @Override
-    protected void doFilterInternal(@NotNull HttpServletRequest httpServletRequest,@NotNull HttpServletResponse httpServletResponse,@NotNull FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         try{
             DecodedJWT token = jwtProvider.verify(httpServletRequest.getHeader("Authorization"),httpServletRequest);
 
@@ -38,4 +37,3 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(httpServletRequest,httpServletResponse);
     }
 }
- */

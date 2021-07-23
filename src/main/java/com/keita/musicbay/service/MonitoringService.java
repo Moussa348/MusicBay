@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @Service
 public class MonitoringService {
@@ -37,7 +38,7 @@ public class MonitoringService {
 
         customerRepository.save(customer);
 
-        notificationService.saveNotification(NotificationEvent.LIKING,customer);
+        notificationService.saveNotification(customer.getUsername(),NotificationEvent.LIKING,customer.getSubscribers().stream().map(Subscriber::getUsername).collect(Collectors.toList()));
     }
 
     public void unLikeMusic(String username, String title) {
@@ -61,7 +62,7 @@ public class MonitoringService {
 
         customerRepository.save(customer);
 
-        notificationService.saveNotification(NotificationEvent.SHARING,customer);
+        notificationService.saveNotification(customer.getUsername(),NotificationEvent.SHARING,customer.getSubscribers().stream().map(Subscriber::getUsername).collect(Collectors.toList()));
     }
 
     public void unShareMusic(String username, String title) {
@@ -85,7 +86,7 @@ public class MonitoringService {
 
         customerRepository.save(customer);
 
-        notificationService.saveNotification(NotificationEvent.PURCHASING,customer);
+        notificationService.saveNotification(customer.getUsername(),NotificationEvent.PURCHASING,customer.getSubscribers().stream().map(Subscriber::getUsername).collect(Collectors.toList()));
     }
 
     @Transactional
@@ -98,7 +99,7 @@ public class MonitoringService {
 
         customerRepository.saveAll(Arrays.asList(customer, customerToFollow));
 
-        notificationService.saveNotification(NotificationEvent.SUBSCRIPTION,customerToFollow);
+        notificationService.saveNotification(customer.getUsername(),NotificationEvent.SUBSCRIPTION,Arrays.asList(customerToFollow.getUsername()));
     }
 
     @Transactional

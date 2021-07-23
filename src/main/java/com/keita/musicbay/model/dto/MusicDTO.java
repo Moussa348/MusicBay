@@ -1,11 +1,16 @@
 package com.keita.musicbay.model.dto;
 
+import com.keita.musicbay.model.entity.File;
+import com.keita.musicbay.model.entity.Mp3File;
 import com.keita.musicbay.model.entity.Music;
 import com.keita.musicbay.model.entity.Track;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class MusicDTO implements Serializable {
@@ -13,6 +18,7 @@ public class MusicDTO implements Serializable {
     private LocalDateTime date;
     private Integer nbrOfLike,nbrOfShare,nbrOfPlay,nbrOfPurchase,nbrOfComment;
     private Float basicPrice,exclusivePrice;
+    private List<String> fileNames;
 
     public MusicDTO(){}
 
@@ -31,5 +37,8 @@ public class MusicDTO implements Serializable {
         this.nbrOfComment = music.getComments().size();
         this.creator = "bombay";
         this.type = music instanceof Track ? "TRACK":"MIXTAPE";
+        this.fileNames = music instanceof Track ?
+                ((Track) music).getFiles().stream().filter(file -> file instanceof Mp3File).map(File::getFileName).collect(Collectors.toList())
+                : Collections.emptyList();
     }
 }

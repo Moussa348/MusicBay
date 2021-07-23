@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Data
 public class MusicArticle implements Serializable {
-    private String title, timeLength;
+    private String title, timeLength,fileType;
     private PriceType priceType;
     private Float price;
 

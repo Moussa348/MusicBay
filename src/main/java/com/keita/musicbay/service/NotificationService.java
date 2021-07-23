@@ -25,8 +25,11 @@ public class NotificationService {
     @Autowired
     private UserRepository userRepository;
 
-    public void saveNotification(NotificationEvent notificationEvent, User user){
-        notificationRepository.save(new Notification(notificationEvent,user));
+    //TODO : link to the publication
+
+    public void saveNotification(String triggeredBy,NotificationEvent notificationEvent, List<String> usernames){
+        List<User> users = usernames.stream().map(username -> userRepository.findByUsername(username).get()).collect(Collectors.toList());
+        users.forEach(user -> notificationRepository.save(new Notification(notificationEvent,user,triggeredBy)));
     }
 
 

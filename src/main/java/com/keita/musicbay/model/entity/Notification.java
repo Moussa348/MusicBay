@@ -16,6 +16,7 @@ public class Notification implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
+    public String triggeredBy;
     private NotificationEvent notificationEvent;
     private LocalDateTime date;
     private boolean seen;
@@ -25,10 +26,11 @@ public class Notification implements Serializable {
 
     public Notification(){}
 
-    public Notification(NotificationEvent notificationEvent, User user) {
+    public Notification(NotificationEvent notificationEvent, User user,String triggeredBy) {
         this.notificationEvent = notificationEvent;
         this.date = LocalDateTime.now();
         this.seen = false;
         this.user = user;
+        this.triggeredBy = triggeredBy;
     }
 }

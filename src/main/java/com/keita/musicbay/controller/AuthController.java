@@ -19,8 +19,6 @@ public class AuthController {
 
     @GetMapping("/login")
     public JwtToken login(@RequestParam("username")String username,@RequestParam("password")String password){
-        log.info(String.valueOf(LocalDateTime.now().getDayOfMonth()));
-        log.info(LocalDateTime.now().getDayOfWeek().toString());
         return authService.login(username,password);
     }
 }

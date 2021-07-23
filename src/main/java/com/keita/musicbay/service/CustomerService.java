@@ -24,7 +24,7 @@ public class CustomerService {
     @Autowired
     private LikingRepository likingRepository;
 
-
+    //TODO: replace by UserRepository
     public boolean createCustomer(Registration registration) throws Exception {
         if (!customerRepository.existsByEmail(registration.getEmail()) && !customerRepository.existsByUsername(registration.getUsername())) {
             Customer customer = new Customer(registration, setDefaultProfilePicture());

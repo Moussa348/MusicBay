@@ -69,20 +69,18 @@ public class ConversationServiceTest {
                 .creationDate(LocalDateTime.now())
                 .name("GLowGanggg")
                 .conversationType(ConversationType.GROUP).build();
-        User user = Customer.builder().username("bigBrr").build();
         User userToAdd = Customer.builder().username("brr").build();
 
-        conversation.getUsers().add(user);
+        conversation.getUsers().add(Customer.builder().username("bigBrr").build());
 
-        when(userRepository.findByUsername(userToAdd.getUsername())).thenReturn(Optional.of(userToAdd));
+
         when(conversationRepository.getById(conversation.getId())).thenReturn(conversation);
-        when(conversationRepository.save(conversation)).thenReturn(conversation);
+        when(userRepository.findByUsername(userToAdd.getUsername())).thenReturn(Optional.of(userToAdd));
         //ACT
-        ConversationDTO conversationDTO = conversationService.addUserInConversationGroup(conversation.getId(),userToAdd.getUsername());
+        conversationService.addUserInConversationGroup(conversation.getId(),userToAdd.getUsername());
 
         //ASSERT
-        assertNotNull(conversationDTO);
-        assertEquals(2,conversationDTO.getUsernames().size());
+        assertEquals(2,conversation.getUsers().size());
     }
 
     @Test
@@ -93,20 +91,17 @@ public class ConversationServiceTest {
                 .creationDate(LocalDateTime.now())
                 .name("GLowGanggg")
                 .conversationType(ConversationType.GROUP).build();
-        User user = Customer.builder().username("bigBrr").build();
         User userToRemove = Customer.builder().username("brr").build();
 
-        conversation.getUsers().add(user);
+        conversation.getUsers().add(Customer.builder().username("bigBrr").build());
         conversation.getUsers().add(userToRemove);
 
         when(conversationRepository.getById(conversation.getId())).thenReturn(conversation);
-        when(conversationRepository.save(conversation)).thenReturn(conversation);
         //ACT
-        ConversationDTO conversationDTO = conversationService.removeUserFromConversationGroup(conversation.getId(),userToRemove.getUsername());
+        conversationService.removeUserFromConversationGroup(conversation.getId(),userToRemove.getUsername());
 
         //ASSERT
-        assertNotNull(conversationDTO);
-        assertEquals(1,conversationDTO.getUsernames().size());
+        assertEquals(1,conversation.getUsers().size());
     }
 
     @Test
@@ -117,13 +112,13 @@ public class ConversationServiceTest {
                 .creationDate(LocalDateTime.now())
                 .name("GLowGanggg")
                 .conversationType(ConversationType.GROUP).build();
-        SentMessage sentMessage = new SentMessage(Message.builder().content("sadasd").build());
+        SentMessage sentMessage = new SentMessage(Message.builder().content("sadasd").conversation(conversation).build());
 
 
         when(conversationRepository.getById(conversation.getId())).thenReturn(conversation);
 
         //ACT
-        SentMessage newSentMessage = conversationService.sendMessageInConversation(conversation.getId(),sentMessage);
+        SentMessage newSentMessage = conversationService.sendMessageInConversation(sentMessage);
 
         //ASSERT
         assertNotNull(newSentMessage);
@@ -150,8 +145,8 @@ public class ConversationServiceTest {
         Long id = 1L;
         int noPage = 0;
         List<Message> messages = Arrays.asList(
-                Message.builder().content("allo").sendBy("brrr").build(),
-                Message.builder().content("allo").sendBy("brrr").build()
+                Message.builder().content("allo").sendBy("brrr").conversation(Conversation.builder().id(1L).build()).build(),
+                Message.builder().content("allo").sendBy("brrr").conversation(Conversation.builder().id(1L).build()).build()
         );
         when(messageRepository.getAllByConversationId(id, PageRequest.of(noPage,20, Sort.by("date").descending()))).thenReturn(messages);
 
@@ -166,16 +161,17 @@ public class ConversationServiceTest {
     void getLastSentMessages(){
         //ARRANGE
         User user = Customer.builder().username("bigBrr").build();
+        int noPage = 0;
         List<Conversation> conversations = Arrays.asList(
                 Conversation.builder().id(1L).build()
         );
-        conversations.get(0).getMessages().add(Message.builder().build());
+        conversations.get(0).getMessages().add(Message.builder().conversation(conversations.get(0)).build());
 
         when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
-        when(conversationRepository.getByUser(user)).thenReturn(conversations);
+        when(conversationRepository.getByUser(user,PageRequest.of(noPage,20))).thenReturn(conversations);
 
         //ACT
-        List<SentMessage> lastSentMessages = conversationService.getLastSentMessages(user.getUsername());
+        List<SentMessage> lastSentMessages = conversationService.getLastSentMessages(user.getUsername(),noPage);
 
         //ASSERT
         assertEquals(1,lastSentMessages.size());

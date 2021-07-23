@@ -1,5 +1,4 @@
 package com.keita.musicbay.security;
-/*
 
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -57,4 +56,3 @@ public class JwtAuthentication implements Authentication {
         return token.getSubject();
     }
 }
- */

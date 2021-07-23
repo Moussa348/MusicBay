@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
@@ -45,7 +46,7 @@ public class ConversationRepositoryTest {
         User user = customerRepository.findByUsername("brr").get();
 
         //ACT
-        List<Conversation> conversations = conversationRepository.getByUser(user);
+        List<Conversation> conversations = conversationRepository.getByUser(user, PageRequest.of(0,5));
 
         //ASSERT
         assertEquals(1,conversations.size());

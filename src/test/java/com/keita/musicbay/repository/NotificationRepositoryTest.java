@@ -37,9 +37,9 @@ public class NotificationRepositoryTest {
         Customer customer = Customer.builder().username("brr").build();
         customerRepository.save(customer);
         List<Notification> notifications = Arrays.asList(
-                new Notification(NotificationEvent.LIKING,customerRepository.findByUsername(customer.getUsername()).get()),
-                new Notification(NotificationEvent.LIKING,customerRepository.findByUsername(customer.getUsername()).get()),
-                new Notification(NotificationEvent.LIKING,customerRepository.findByUsername(customer.getUsername()).get())
+                new Notification(NotificationEvent.LIKING,customerRepository.findByUsername(customer.getUsername()).get(),"bombay"),
+                new Notification(NotificationEvent.LIKING,customerRepository.findByUsername(customer.getUsername()).get(),"bombay"),
+                new Notification(NotificationEvent.LIKING,customerRepository.findByUsername(customer.getUsername()).get(),"bombay")
         );
 
         notifications.get(0).setSeen(true);

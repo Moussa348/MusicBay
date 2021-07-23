@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Data
 public class RecentNotification implements Serializable {
     private Long id;
-    private String username;
+    private String triggeredBy;
     private NotificationEvent notificationEvent;
     private LocalDateTime date;
 
@@ -19,7 +19,7 @@ public class RecentNotification implements Serializable {
     public RecentNotification(Notification notification){
         this.id = notification.getId();
         this.notificationEvent = notification.getNotificationEvent();
-        this.username = notification.getUser().getUsername();
         this.date = notification.getDate();
+        this.triggeredBy = notification.getTriggeredBy();
     }
 }

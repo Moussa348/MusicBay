@@ -15,11 +15,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -40,17 +40,22 @@ public class NotificationServiceTest {
     void saveNotification(){
         //ARRANGE
         NotificationEvent notificationEvent = NotificationEvent.PURCHASING;
-        User user = Customer.builder().username("bigBrr").build();
+        String triggeredBy = "bombay";
+
+        List<User> users = Arrays.asList(
+                Customer.builder().username("bayDrip").build()
+        );
+        users.stream().map(User::getUsername).forEach(username -> when(userRepository.findByUsername(username)).thenReturn(Optional.of(users.get(0))));
 
         //ACT
-        notificationService.saveNotification(notificationEvent,user);
+        notificationService.saveNotification(triggeredBy,notificationEvent,users.stream().map(User::getUsername).collect(Collectors.toList()));
     }
 
     @Test
     void notificationSeen(){
         //ARRANGE
         Long id = 1L;
-        Notification notification = new Notification(NotificationEvent.LIKING,Customer.builder().build());
+        Notification notification = new Notification(NotificationEvent.LIKING,Customer.builder().build(),"bombay");
         when(notificationRepository.getById(id)).thenReturn(notification);
 
         //ACT
@@ -64,9 +69,9 @@ public class NotificationServiceTest {
         int noPage = 0;
 
         List<Notification> notifications = Arrays.asList(
-                new Notification(NotificationEvent.LIKING,customer),
-                new Notification(NotificationEvent.LIKING,customer),
-                new Notification(NotificationEvent.LIKING,customer)
+                new Notification(NotificationEvent.LIKING,customer,"bombay"),
+                new Notification(NotificationEvent.LIKING,customer,"bombay"),
+                new Notification(NotificationEvent.LIKING,customer,"bombay")
         );
 
 

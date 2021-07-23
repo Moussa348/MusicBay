@@ -19,6 +19,6 @@ public class SentMessage implements Serializable {
         this.date = message.getDate();
         this.sendBy = message.getSendBy();
         this.content = message.getContent();
-        this.conversationId = message.getId();
+        this.conversationId = message.getConversation().getId();
     }
 }
