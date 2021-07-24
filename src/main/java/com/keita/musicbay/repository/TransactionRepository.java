@@ -11,4 +11,5 @@ import java.util.UUID;
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, UUID> {
     Optional<Transaction> findByCustomerUsernameAndDate(String username,LocalDateTime dateTime);
+    Optional<Transaction> findByCustomerUsernameAndConfirmedFalse(String username);
 }

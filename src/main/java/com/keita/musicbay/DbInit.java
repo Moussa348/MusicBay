@@ -63,7 +63,7 @@ public class DbInit implements CommandLineRunner {
                         .city("ATL").email("bigBrr@gmail.com").cellNumber("442-332-3421").username("bigBrr").password("bigBrr123")
                         .biography("brr..bigBrr...").roles("USER").build(),
                 Customer.builder().firstName("salehe").lastName("jojo").picture(fileInputStream.readAllBytes()).password("bombay123").picture("".getBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
-                        .city("MTL").email("bombay@gmail.com").cellNumber("514-987-3221").username("bombay").password("bombay123")
+                        .city("MTL").email("developpeurspring@gmail.com").cellNumber("514-987-3221").username("bombay").password("bombay123")
                         .biography("I love alcool and weed").roles("USER ADMIN").build()
         );
 

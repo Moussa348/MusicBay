@@ -1,20 +1,29 @@
 package com.keita.musicbay.service;
 
+import com.keita.musicbay.model.dto.MusicArticle;
 import com.keita.musicbay.model.entity.Article;
 import com.keita.musicbay.model.entity.Customer;
 import com.keita.musicbay.model.entity.Transaction;
 import com.keita.musicbay.model.dto.TransactionDTO;
+import com.keita.musicbay.model.enums.NotificationEvent;
 import com.keita.musicbay.model.enums.PriceType;
 import com.keita.musicbay.repository.CustomerRepository;
 import com.keita.musicbay.repository.MusicRepository;
 import com.keita.musicbay.repository.TransactionRepository;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
+@Log
 public class TransactionService {
 
     @Autowired
@@ -26,29 +35,39 @@ public class TransactionService {
     @Autowired
     private MusicRepository musicRepository;
 
-    public boolean checkIfTransactionPending(String username){
-        Customer customer = customerRepository.findByUsername(username).get();
+    @Autowired
+    private EmailService emailService;
 
-        return !customer.getTransactions().isEmpty() && !customer.getTransactions().get(customer.getTransactions().size() - 1).isConfirmed();
+    @Autowired
+    private MonitoringService monitoringService;
+
+    @Autowired
+    private ArticleService articleService;
+
+    public boolean checkIfTransactionPending(String username){
+
+        return transactionRepository.findByCustomerUsernameAndConfirmedFalse(username).isPresent();
     }
 
     public boolean checkIfArticleIsInTransaction(String username,String title){
-        Customer customer = customerRepository.findByUsername(username).get();
-        Transaction latestTransaction = customer.getTransactions().get(customer.getTransactions().size()-1);
+        Transaction currentTransaction = transactionRepository.findByCustomerUsernameAndConfirmedFalse(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No latest transaction for : " + username));
 
-        return latestTransaction.getArticles().stream().anyMatch(article -> article.getMusic().getTitle().equals(title));
+        return currentTransaction.getArticles().stream().anyMatch(article -> article.getMusic().getTitle().equals(title));
     }
 
 
     @Transactional
     public TransactionDTO createTransaction(String username, String title, PriceType priceType) {
         Customer customer = customerRepository.findByUsername(username).get();
-        Transaction transaction = Transaction.builder().customer(customer).build();
-        Article article = new Article(priceType,transaction,musicRepository.findByTitle(title).get());
+        Transaction transaction = Transaction.builder().total(0f).customer(customer).build();
+        Article article = new Article(priceType,transaction,musicRepository.findByTitle(title).get());//remove
 
-        transaction.getArticles().add(article);
-        transaction.setTotal(article.getPrice());
-        customer.getTransactions().add(transaction);
+        transaction.getArticles().add(article);//remove
+        transaction.setTotal(article.getPrice());//remove
+        customer.getTransactions().add(transaction);//remove
+
+        //customer.getTransactions().add(articleService.addArticleInTransaction(transaction,title,priceType));
 
         customerRepository.save(customer);
 
@@ -56,46 +75,70 @@ public class TransactionService {
     }
 
     public TransactionDTO addArticleToTransaction(String username, String title,PriceType priceType) {
-        Customer customer = customerRepository.findByUsername(username).get();
-        Transaction latestTransaction = customer.getTransactions().get(customer.getTransactions().size()-1);
-        Article article = new Article(priceType,latestTransaction,musicRepository.findByTitle(title).get());
+        Transaction  currentTransaction = transactionRepository.findByCustomerUsernameAndConfirmedFalse(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No latest transaction for : " + username));
 
-        latestTransaction.getArticles().add(article);
-        latestTransaction.setTotal(latestTransaction.getTotal() + article.getPrice());
+        Article article = new Article(priceType,currentTransaction,musicRepository.findByTitle(title).get());//remove
 
-        customerRepository.save(customer);
+        currentTransaction.getArticles().add(article);//remove
+        currentTransaction.setTotal(currentTransaction.getTotal() + article.getPrice());//remvove
 
-        return new TransactionDTO(latestTransaction);
+
+        //return new TransactionDTO(transactionRepository.save(articleService.addArticleInTransaction(currentTransaction,title,priceType)));
+
+
+        transactionRepository.save(currentTransaction);//remove
+
+        return new TransactionDTO(currentTransaction);//remove
     }
 
     public TransactionDTO removeArticleFromTransaction(String username, String title) {
-        Customer customer = customerRepository.findByUsername(username).get();
-        Transaction transaction = customer.getTransactions().get(customer.getTransactions().size() - 1);
+        Transaction currentTransaction = transactionRepository.findByCustomerUsernameAndConfirmedFalse(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No latest transaction for : " + username));
 
-        transaction.getArticles().removeIf(article -> article.getMusic().getTitle().equals(title));
+        currentTransaction.getArticles().removeIf(article -> article.getMusic().getTitle().equals(title));
 
-        return new TransactionDTO(customerRepository.save(customer).getTransactions().get(customer.getTransactions().size() - 1));
+        return new TransactionDTO(transactionRepository.save(currentTransaction));
     }
 
-    public void cancelTransaction(String username, UUID uuid) {
+    public void cancelTransaction(String username, UUID uuid) throws Exception {
         Customer customer = customerRepository.findByUsername(username).get();
 
         customer.getTransactions().removeIf(transaction -> transaction.getUuid().equals(uuid));
 
         customerRepository.save(customer);
+
+        emailService.sendCancellationEmail(customer,uuid);
     }
 
-    public void confirmTransaction(String username){
+    /*
+       / TODO : call stripe
+           -if no good --> emailService.sendCancellation()
+           -if good ---> send confirmationEmail() + update
+
+
+        */
+    @Transactional
+    public void confirmTransaction(String username,UUID uuid) throws Exception{
+        Customer customer = customerRepository.findByUsername(username).get();
         TransactionDTO transactionDTO = getCurrentTransaction(username);
+        List<String> musicArticleTitles = transactionDTO.getMusicArticles().stream().map(MusicArticle::getTitle).collect(Collectors.toList());
 
-        //TODO : call stripe
+        emailService.sendConfirmationEmail(customer,transactionDTO);
 
+        musicArticleTitles.forEach(musicArticleTitle -> monitoringService.purchaseMusic(new Customer(),musicArticleTitle, LocalDateTime.now()));
+
+        log.info("CONFIRMING TRANSACTION");
     }
 
     public TransactionDTO getCurrentTransaction(String username) {
         Customer customer = customerRepository.findByUsername(username).get();
-        Transaction transaction = customer.getTransactions().get(customer.getTransactions().size()-1);
+        Transaction transaction = getCurrentTransaction(customer);
 
         return transaction.isConfirmed() ? null:new TransactionDTO(transaction);
+    }
+
+    private Transaction getCurrentTransaction(Customer customer){
+        return customer.getTransactions().get(customer.getTransactions().size()-1);
     }
 }

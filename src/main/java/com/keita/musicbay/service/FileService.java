@@ -42,6 +42,8 @@ public class FileService {
 
         FileUtils.writeByteArrayToFile(fileToSend, file.getData());
 
+        log.info(file.toString());
+
         return fileToSend;
     }
     /*

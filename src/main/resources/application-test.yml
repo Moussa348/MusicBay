@@ -1,4 +1,13 @@
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: developpeurspring@gmail.com
+    password: d3vT0p21
+    properties.mail.smtp:
+      auth: true
+      starttls.enable: true
+      starttls.required: true
   servlet:
     multipart:
       enabled: true

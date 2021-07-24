@@ -42,7 +42,7 @@ public class MonitoringServiceTest {
 
 
     @Test
-    void likeMusic(){
+    void likeMusic() {
         //ARRANGE
         Customer customer = Customer.builder().username("bombay").likings(new ArrayList<>()).build();
         Music music = Track.builder().title("IT").nbrOfLike(4).build();
@@ -51,7 +51,7 @@ public class MonitoringServiceTest {
         when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
         doAnswer(invocationOnMock -> {
             Music musicUpdated = (Music) invocationOnMock.getArgument(0);
-            musicUpdated.setNbrOfLike(musicUpdated.getNbrOfLike()+1);
+            musicUpdated.setNbrOfLike(musicUpdated.getNbrOfLike() + 1);
             return null;
         }).when(musicService).increaseLike(music);
         //ACT
@@ -62,7 +62,7 @@ public class MonitoringServiceTest {
     }
 
     @Test
-    void unLikeMusic(){
+    void unLikeMusic() {
         //ARRANGE
         Customer customer = Customer.builder().username("bombay").likings(new ArrayList<>()).build();
         Music music = Track.builder().title("IT").nbrOfLike(4).build();
@@ -70,8 +70,8 @@ public class MonitoringServiceTest {
         when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
         when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
         doAnswer(invocationOnMock -> {
-            Music musicUpdated =  invocationOnMock.getArgument(0);
-            musicUpdated.setNbrOfLike(musicUpdated.getNbrOfLike()-1);
+            Music musicUpdated = invocationOnMock.getArgument(0);
+            musicUpdated.setNbrOfLike(musicUpdated.getNbrOfLike() - 1);
             return null;
         }).when(musicService).decreaseLike(music);
         //ACT
@@ -82,7 +82,7 @@ public class MonitoringServiceTest {
     }
 
     @Test
-    void shareMusic(){
+    void shareMusic() {
         //ARRANGE
         Customer customer = Customer.builder().username("bombay").sharings(new ArrayList<>()).build();
         Music music = Track.builder().title("IT").nbrOfShare(4).build();
@@ -91,18 +91,18 @@ public class MonitoringServiceTest {
         when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
         doAnswer(invocationOnMock -> {
             Music musicUpdated = invocationOnMock.getArgument(0);
-            musicUpdated.setNbrOfShare(musicUpdated.getNbrOfShare()+1);
+            musicUpdated.setNbrOfShare(musicUpdated.getNbrOfShare() + 1);
             return null;
         }).when(musicService).increaseShare(music);
         //ACT
-        monitoringService.shareMusic(customer.getUsername(), music.getTitle(),"Nice one");
+        monitoringService.shareMusic(customer.getUsername(), music.getTitle(), "Nice one");
 
         //ASSERT
         assertNotNull(customer.getSharings().stream().filter(sharing -> music.getTitle().equals(sharing.getMusic().getTitle())));
     }
 
     @Test
-    void unShareMusic(){
+    void unShareMusic() {
         //ARRANGE
         Customer customer = Customer.builder().username("bombay").sharings(new ArrayList<>()).build();
         Music music = Track.builder().title("IT").nbrOfShare(4).build();
@@ -111,7 +111,7 @@ public class MonitoringServiceTest {
         when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
         doAnswer(invocationOnMock -> {
             Music musicUpdated = invocationOnMock.getArgument(0);
-            musicUpdated.setNbrOfShare(musicUpdated.getNbrOfShare()-1);
+            musicUpdated.setNbrOfShare(musicUpdated.getNbrOfShare() - 1);
             return null;
         }).when(musicService).decreaseShare(music);
         //ACT
@@ -122,27 +122,28 @@ public class MonitoringServiceTest {
     }
 
     @Test
-    void purchaseMusic(){
+    void purchaseMusic() {
         //ARRANGE
         Customer customer = Customer.builder().username("bombay").purchasings(new ArrayList<>()).build();
         Music music = Track.builder().title("IT").nbrOfPurchase(4).build();
+        music.setProducer(Producer.builder().username("taa").build());
 
-        when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
         when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
         doAnswer(invocationOnMock -> {
             Music musicUpdated = invocationOnMock.getArgument(0);
-            musicUpdated.setNbrOfPurchase(musicUpdated.getNbrOfPurchase()+1);
+            musicUpdated.setNbrOfPurchase(musicUpdated.getNbrOfPurchase() + 1);
             return null;
         }).when(musicService).increasePurchase(music);
+
         //ACT
-        monitoringService.purchaseMusic(customer.getUsername(), music.getTitle(), LocalDateTime.now());
+        monitoringService.purchaseMusic(customer, music.getTitle(), LocalDateTime.now());
 
         //ASSERT
         assertNotNull(customer.getPurchasings().stream().filter(purchasing -> music.getTitle().equals(purchasing.getMusic().getTitle())));
     }
 
     @Test
-    void subscribe(){
+    void subscribe() {
         //ARRANGE
         Customer customer = Customer.builder().username("bigBrr").build();
         Customer customerToFollow = Customer.builder().username("c4").build();
@@ -150,33 +151,33 @@ public class MonitoringServiceTest {
         when(customerRepository.findByUsername(customerToFollow.getUsername())).thenReturn(Optional.of(customerToFollow));
 
         //ACT
-        monitoringService.subscribe(customer.getUsername(),customerToFollow.getUsername());
+        monitoringService.subscribe(customer.getUsername(), customerToFollow.getUsername());
 
         //ASSERT
-        assertEquals(1,customer.getSubscribeTos().size());
-        assertEquals(1,customerToFollow.getSubscribers().size());
+        assertEquals(1, customer.getSubscribeTos().size());
+        assertEquals(1, customerToFollow.getSubscribers().size());
     }
 
     @Test
-    void unSubscribe(){
+    void unSubscribe() {
         //ARRANGE
         Customer customer = Customer.builder().username("bigBrr").build();
         Customer customerToUnFollow = Customer.builder().username("c4").build();
 
-        customer.getSubscribeTos().add(new SubscribeTo(customerToUnFollow.getUsername(),customer));
+        customer.getSubscribeTos().add(new SubscribeTo(customerToUnFollow.getUsername(), customer));
 
         when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
         when(customerRepository.findByUsername(customerToUnFollow.getUsername())).thenReturn(Optional.of(customerToUnFollow));
 
         //ACT
-        monitoringService.unSubscribe(customer.getUsername(),customerToUnFollow.getUsername());
+        monitoringService.unSubscribe(customer.getUsername(), customerToUnFollow.getUsername());
 
         //ASSERT
-        assertEquals(0,customer.getSubscribeTos().size());
+        assertEquals(0, customer.getSubscribeTos().size());
     }
 
     @Test
-    void checkIfSubscribeTo(){
+    void checkIfSubscribeTo() {
         //ARRANGE
         Customer customer = Customer.builder().username("bigBrr").build();
         SubscribeTo customerSubscribeTo = SubscribeTo.builder().username("c4").build();
@@ -185,7 +186,7 @@ public class MonitoringServiceTest {
         when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
 
         //ACT
-        boolean customerIsSubscribedTo = monitoringService.checkIfSubscribeTo(customer.getUsername(),customerSubscribeTo.getUsername());
+        boolean customerIsSubscribedTo = monitoringService.checkIfSubscribeTo(customer.getUsername(), customerSubscribeTo.getUsername());
 
         //ASSERT
         assertTrue(customerIsSubscribedTo);

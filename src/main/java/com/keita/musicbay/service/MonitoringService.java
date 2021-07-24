@@ -76,8 +76,7 @@ public class MonitoringService {
         customerRepository.save(customer);
     }
 
-    public void purchaseMusic(String username, String title, LocalDateTime purchasingDate) {
-        Customer customer = customerRepository.findByUsername(username).get();
+    public void purchaseMusic(Customer customer, String title, LocalDateTime purchasingDate) {
         Music music = musicRepository.findByTitle(title).get();
 
         musicService.increasePurchase(music);
@@ -86,7 +85,7 @@ public class MonitoringService {
 
         customerRepository.save(customer);
 
-        notificationService.saveNotification(customer.getUsername(),NotificationEvent.PURCHASING,customer.getSubscribers().stream().map(Subscriber::getUsername).collect(Collectors.toList()));
+        notificationService.saveNotification(customer.getUsername(),NotificationEvent.PURCHASING,Arrays.asList(music.getProducer().getUsername()));
     }
 
     @Transactional

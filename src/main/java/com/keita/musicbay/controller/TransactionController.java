@@ -3,6 +3,7 @@ package com.keita.musicbay.controller;
 import com.keita.musicbay.model.dto.TransactionDTO;
 import com.keita.musicbay.model.enums.PriceType;
 import com.keita.musicbay.service.TransactionService;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/transaction")
 @CrossOrigin(origins = "http://localhost:5001")
+@Log
 public class TransactionController {
 
     @Autowired
@@ -42,8 +44,17 @@ public class TransactionController {
     }
 
     @DeleteMapping("/cancelTransaction")
-    public void cancelTransaction(@RequestParam("username") String username, @RequestParam("uuid")UUID uuid){
+    public void cancelTransaction(@RequestParam("username") String username, @RequestParam("uuid")UUID uuid) throws Exception{
         transactionService.cancelTransaction(username,uuid);
+    }
+
+    @GetMapping("/confirmTransaction/")
+    public void confirmTransaction(@RequestParam("username") String username,@RequestParam("uuid") UUID uuid){
+        try {
+            transactionService.confirmTransaction(username,uuid);
+        } catch (Exception e) {
+            log.warning(e.getMessage().toUpperCase());
+        }
     }
 
     @GetMapping("/getCurrentTransaction/{username}")
