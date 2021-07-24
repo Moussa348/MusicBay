@@ -48,10 +48,10 @@ public class TransactionController {
         transactionService.cancelTransaction(username,uuid);
     }
 
-    @GetMapping("/confirmTransaction/")
-    public void confirmTransaction(@RequestParam("username") String username,@RequestParam("uuid") UUID uuid){
+    @GetMapping("/confirmTransaction/{username}")
+    public void confirmTransaction(@PathVariable String username){
         try {
-            transactionService.confirmTransaction(username,uuid);
+            transactionService.confirmTransaction(username);
         } catch (Exception e) {
             log.warning(e.getMessage().toUpperCase());
         }

@@ -39,8 +39,4 @@ public class ArticleService {
 
         return currentTransaction;
     }
-
-    public List<MusicArticle> getListMusicArticle(Transaction transaction){
-        return transaction.getArticles().stream().map(MusicArticle::new).collect(Collectors.toList());
-    }
 }

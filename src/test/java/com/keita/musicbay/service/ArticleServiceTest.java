@@ -55,17 +55,4 @@ public class ArticleServiceTest {
         assertEquals(0,currentTransactionWithRemovedArticle.getArticles().size());
         assertEquals(0,currentTransactionWithRemovedArticle.getTotal());
     }
-
-    @Test
-    void getListMusicArticle(){
-        //ARRANGE
-        Transaction transaction = Transaction.builder().total(24.5f).customer(Customer.builder().username("bigBrr").build()).build();
-        transaction.getArticles().add(Article.builder().music(MixTape.builder().title("hoodSeason").basicPrice(24.5f).exclusivePrice(30.0f).build()).priceType(PriceType.BASIC).build());
-
-        //ACT
-        List<MusicArticle> musicArticles = articleService.getListMusicArticle(transaction);
-
-        //ASSERT
-        assertEquals(1,musicArticles.size());
-    }
 }

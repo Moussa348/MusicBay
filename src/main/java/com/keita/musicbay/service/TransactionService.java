@@ -93,9 +93,9 @@ public class TransactionService {
 
 
         */
-    public void confirmTransaction(String username,UUID uuid) throws Exception{
+    public void confirmTransaction(String username) throws Exception{
         Transaction transaction = getTransactionByCustomerUsername(username);
-        TransactionDTO transactionDTO = getCurrentTransaction(username);
+        TransactionDTO transactionDTO = new TransactionDTO(transaction);
         List<String> musicArticleTitles = transactionDTO.getMusicArticles().stream().map(MusicArticle::getTitle).collect(Collectors.toList());
 
         emailService.sendConfirmationEmail(transaction.getCustomer(),transactionDTO);
