@@ -94,11 +94,11 @@ public class TransactionService {
 
         */
     public void confirmTransaction(String username,UUID uuid) throws Exception{
-        Customer customer = customerRepository.findByUsername(username).get();
+        Transaction transaction = getTransactionByCustomerUsername(username);
         TransactionDTO transactionDTO = getCurrentTransaction(username);
         List<String> musicArticleTitles = transactionDTO.getMusicArticles().stream().map(MusicArticle::getTitle).collect(Collectors.toList());
 
-        emailService.sendConfirmationEmail(customer,transactionDTO);
+        emailService.sendConfirmationEmail(transaction.getCustomer(),transactionDTO);
 
         musicArticleTitles.forEach(musicArticleTitle -> monitoringService.purchaseMusic(new Customer(),musicArticleTitle, LocalDateTime.now()));
 
@@ -106,8 +106,7 @@ public class TransactionService {
     }
 
     public TransactionDTO getCurrentTransaction(String username) {
-        Customer customer = customerRepository.findByUsername(username).get();
-        Transaction transaction = getCurrentTransaction(customer);
+        Transaction transaction = getTransactionByCustomerUsername(username);
 
         return transaction.isConfirmed() ? null:new TransactionDTO(transaction);
     }

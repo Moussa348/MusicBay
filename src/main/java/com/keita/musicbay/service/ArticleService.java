@@ -1,5 +1,6 @@
 package com.keita.musicbay.service;
 
+import com.keita.musicbay.model.dto.MusicArticle;
 import com.keita.musicbay.model.dto.TransactionDTO;
 import com.keita.musicbay.model.entity.Article;
 import com.keita.musicbay.model.entity.Transaction;
@@ -9,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ArticleService {
@@ -34,5 +38,9 @@ public class ArticleService {
         currentTransaction.getArticles().remove(articleToRemove);
 
         return currentTransaction;
+    }
+
+    public List<MusicArticle> getListMusicArticle(Transaction transaction){
+        return transaction.getArticles().stream().map(MusicArticle::new).collect(Collectors.toList());
     }
 }

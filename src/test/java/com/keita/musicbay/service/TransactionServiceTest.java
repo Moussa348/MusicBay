@@ -182,11 +182,10 @@ public class TransactionServiceTest {
     @Test
     void getCurrentTransaction(){
         //ARRANGE
-        Customer customer1 =  Customer.builder().username("bigBrr").transactions(Arrays.asList(Transaction.builder().build())).build();
-        when(customerRepository.findByUsername(customer1.getUsername())).thenReturn(Optional.of(customer1));
-
+        String username = "brrr";
+        when(transactionRepository.findByCustomerUsernameAndConfirmedFalse(username)).thenReturn(Optional.of(Transaction.builder().total(24.5f).customer(Customer.builder().username(username).build()).build()));
         //ACT
-        TransactionDTO currentTransactionOfCustomer1 = transactionService.getCurrentTransaction(customer1.getUsername());
+        TransactionDTO currentTransactionOfCustomer1 = transactionService.getCurrentTransaction(username);
 
         //ASSERT
         assertNotNull(currentTransactionOfCustomer1);

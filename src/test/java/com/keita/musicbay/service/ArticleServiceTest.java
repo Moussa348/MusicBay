@@ -1,5 +1,6 @@
 package com.keita.musicbay.service;
 
+import com.keita.musicbay.model.dto.MusicArticle;
 import com.keita.musicbay.model.entity.*;
 import com.keita.musicbay.model.enums.PriceType;
 import com.keita.musicbay.repository.MusicRepository;
@@ -10,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -52,5 +54,18 @@ public class ArticleServiceTest {
         //ASSERT
         assertEquals(0,currentTransactionWithRemovedArticle.getArticles().size());
         assertEquals(0,currentTransactionWithRemovedArticle.getTotal());
+    }
+
+    @Test
+    void getListMusicArticle(){
+        //ARRANGE
+        Transaction transaction = Transaction.builder().total(24.5f).customer(Customer.builder().username("bigBrr").build()).build();
+        transaction.getArticles().add(Article.builder().music(MixTape.builder().title("hoodSeason").basicPrice(24.5f).exclusivePrice(30.0f).build()).priceType(PriceType.BASIC).build());
+
+        //ACT
+        List<MusicArticle> musicArticles = articleService.getListMusicArticle(transaction);
+
+        //ASSERT
+        assertEquals(1,musicArticles.size());
     }
 }
