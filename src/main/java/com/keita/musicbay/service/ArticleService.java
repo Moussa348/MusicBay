@@ -26,8 +26,12 @@ public class ArticleService {
     }
 
     public Transaction removeArticleFromTransaction(Transaction currentTransaction, String title) {
+        Article articleToRemove = currentTransaction.getArticles().stream().filter(article -> article.getMusic().getTitle().equals(title)).findFirst()
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't find article with music title : " + title));
 
-        currentTransaction.getArticles().removeIf(article -> article.getMusic().getTitle().equals(title));
+        currentTransaction.setTotal(currentTransaction.getTotal() - articleToRemove.getPrice());
+
+        currentTransaction.getArticles().remove(articleToRemove);
 
         return currentTransaction;
     }

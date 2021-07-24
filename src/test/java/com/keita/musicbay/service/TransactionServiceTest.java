@@ -108,6 +108,7 @@ public class TransactionServiceTest {
         transaction.getArticles().add(Article.builder().music(MixTape.builder().title("hoodSeason").basicPrice(25.0f).exclusivePrice(30.0f).build()).priceType(PriceType.BASIC).build());
 
         when(transactionRepository.findByCustomerUsernameAndConfirmedFalse(transaction.getCustomer().getUsername())).thenReturn(Optional.of(transaction));
+
         transaction.getArticles().add( Article.builder().music(MixTape.builder().title("hoodSeason2").basicPrice(25.0f).exclusivePrice(30.0f).build()).priceType(PriceType.BASIC).build());
 
         when(articleService.addArticleInTransaction(any(Transaction.class),any(String.class),any(PriceType.class))).thenReturn(transaction);
@@ -125,20 +126,25 @@ public class TransactionServiceTest {
     @Test
     void removeArticleFromTransaction(){
         //ARRANGE
-        Transaction transaction = Transaction.builder().customer(Customer.builder().username("bigBrr").build()).build();
-        Article article = Article.builder().priceType(PriceType.BASIC).music(Track.builder().title("culture").build()).build();
-        Customer customer = Customer.builder().username("bigBrr").transactions(Arrays.asList(transaction)).build();
-
+        Transaction transaction = Transaction.builder().total(25.0f).customer(Customer.builder().username("bigBrr").build()).build();
+        Article article = Article.builder().priceType(PriceType.BASIC).music(Track.builder().title("culture").basicPrice(25.0f).build()).build();
         transaction.getArticles().add(article);
 
         when(transactionRepository.findByCustomerUsernameAndConfirmedFalse(transaction.getCustomer().getUsername())).thenReturn(Optional.of(transaction));
+
+        transaction.getArticles().remove(0);
+        transaction.setTotal(0.0f);
+
+        when(articleService.removeArticleFromTransaction(any(Transaction.class),any(String.class))).thenReturn(transaction);
+
         when(transactionRepository.save(transaction)).thenReturn(transaction);
 
         //ACT
-        TransactionDTO removedMusicTransaction = transactionService.removeArticleFromTransaction(customer.getUsername(),article.getMusic().getTitle());
+        TransactionDTO removedMusicTransaction = transactionService.removeArticleFromTransaction(transaction.getCustomer().getUsername(),article.getMusic().getTitle());
 
         //ASSERT
         assertEquals(0,removedMusicTransaction.getMusicArticles().size());
+        assertEquals(0,removedMusicTransaction.getTotal());
     }
 
     @Test

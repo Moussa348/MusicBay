@@ -43,7 +43,7 @@ public class ArticleServiceTest {
     @Test
     void removeArticleFromTransaction(){
         //ARRANGE
-        Transaction currentTransaction = Transaction.builder().total(50.0f).customer(Customer.builder().username("bigBrr").build()).build();
+        Transaction currentTransaction = Transaction.builder().total(25.0f).customer(Customer.builder().username("bigBrr").build()).build();
         currentTransaction.getArticles().add(Article.builder().music(MixTape.builder().title("hoodSeason").basicPrice(25.0f).exclusivePrice(30.0f).build()).priceType(PriceType.BASIC).build());
 
         //ACT
@@ -51,5 +51,6 @@ public class ArticleServiceTest {
 
         //ASSERT
         assertEquals(0,currentTransactionWithRemovedArticle.getArticles().size());
+        assertEquals(0,currentTransactionWithRemovedArticle.getTotal());
     }
 }

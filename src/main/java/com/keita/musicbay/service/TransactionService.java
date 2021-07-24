@@ -33,9 +33,6 @@ public class TransactionService {
     private CustomerRepository customerRepository;
 
     @Autowired
-    private MusicRepository musicRepository;
-
-    @Autowired
     private EmailService emailService;
 
     @Autowired
@@ -75,12 +72,8 @@ public class TransactionService {
     }
 
     public TransactionDTO removeArticleFromTransaction(String username, String title) {
-        Transaction currentTransaction = transactionRepository.findByCustomerUsernameAndConfirmedFalse(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No latest transaction for : " + username));
 
-        currentTransaction.getArticles().removeIf(article -> article.getMusic().getTitle().equals(title));
-
-        return new TransactionDTO(transactionRepository.save(currentTransaction));
+        return new TransactionDTO(transactionRepository.save(articleService.removeArticleFromTransaction(getTransactionByCustomerUsername(username),title)));
     }
 
     public void cancelTransaction(String username, UUID uuid) throws Exception {
