@@ -37,6 +37,19 @@ public class ArticleServiceTest {
         Transaction currentTransactionWithAddedArticle = articleService.addArticleInTransaction(currentTransaction,music.getTitle(),PriceType.BASIC);
 
         //ASSERT
-        assertEquals(2,currentTransaction.getArticles().size());
+        assertEquals(2,currentTransactionWithAddedArticle.getArticles().size());
+    }
+
+    @Test
+    void removeArticleFromTransaction(){
+        //ARRANGE
+        Transaction currentTransaction = Transaction.builder().total(50.0f).customer(Customer.builder().username("bigBrr").build()).build();
+        currentTransaction.getArticles().add(Article.builder().music(MixTape.builder().title("hoodSeason").basicPrice(25.0f).exclusivePrice(30.0f).build()).priceType(PriceType.BASIC).build());
+
+        //ACT
+        Transaction currentTransactionWithRemovedArticle = articleService.removeArticleFromTransaction(currentTransaction,currentTransaction.getArticles().get(0).getMusic().getTitle());
+
+        //ASSERT
+        assertEquals(0,currentTransactionWithRemovedArticle.getArticles().size());
     }
 }

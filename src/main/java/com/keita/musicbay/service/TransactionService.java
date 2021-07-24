@@ -50,8 +50,7 @@ public class TransactionService {
     }
 
     public boolean checkIfArticleIsInTransaction(String username,String title){
-        Transaction currentTransaction = transactionRepository.findByCustomerUsernameAndConfirmedFalse(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No latest transaction for : " + username));
+        Transaction currentTransaction = getTransactionByCustomerUsername(username);
 
         return currentTransaction.getArticles().stream().anyMatch(article -> article.getMusic().getTitle().equals(title));
     }
@@ -60,36 +59,19 @@ public class TransactionService {
     @Transactional
     public TransactionDTO createTransaction(String username, String title, PriceType priceType) {
         Customer customer = customerRepository.findByUsername(username).get();
-        Transaction transaction = Transaction.builder().total(0f).customer(customer).build();
-        Article article = new Article(priceType,transaction,musicRepository.findByTitle(title).get());//remove
+        Transaction transaction = articleService.addArticleInTransaction(Transaction.builder().total(0f).customer(customer).build(),title,priceType);
 
-        transaction.getArticles().add(article);//remove
-        transaction.setTotal(article.getPrice());//remove
-        customer.getTransactions().add(transaction);//remove
-
-        //customer.getTransactions().add(articleService.addArticleInTransaction(transaction,title,priceType));
+        customer.getTransactions().add(transaction);
 
         customerRepository.save(customer);
 
         return new TransactionDTO(transaction);
     }
 
-    public TransactionDTO addArticleToTransaction(String username, String title,PriceType priceType) {
-        Transaction  currentTransaction = transactionRepository.findByCustomerUsernameAndConfirmedFalse(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No latest transaction for : " + username));
+    public TransactionDTO addArticleInTransaction(String username, String title,PriceType priceType) {
 
-        Article article = new Article(priceType,currentTransaction,musicRepository.findByTitle(title).get());//remove
+        return new TransactionDTO(transactionRepository.save(articleService.addArticleInTransaction(getTransactionByCustomerUsername(username),title,priceType)));
 
-        currentTransaction.getArticles().add(article);//remove
-        currentTransaction.setTotal(currentTransaction.getTotal() + article.getPrice());//remvove
-
-
-        //return new TransactionDTO(transactionRepository.save(articleService.addArticleInTransaction(currentTransaction,title,priceType)));
-
-
-        transactionRepository.save(currentTransaction);//remove
-
-        return new TransactionDTO(currentTransaction);//remove
     }
 
     public TransactionDTO removeArticleFromTransaction(String username, String title) {
@@ -118,7 +100,6 @@ public class TransactionService {
 
 
         */
-    @Transactional
     public void confirmTransaction(String username,UUID uuid) throws Exception{
         Customer customer = customerRepository.findByUsername(username).get();
         TransactionDTO transactionDTO = getCurrentTransaction(username);
@@ -136,6 +117,11 @@ public class TransactionService {
         Transaction transaction = getCurrentTransaction(customer);
 
         return transaction.isConfirmed() ? null:new TransactionDTO(transaction);
+    }
+
+    private Transaction getTransactionByCustomerUsername(String username){
+        return transactionRepository.findByCustomerUsernameAndConfirmedFalse(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No latest transaction for : " + username));
     }
 
     private Transaction getCurrentTransaction(Customer customer){

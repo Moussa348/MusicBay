@@ -11,10 +11,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.jdbc.SqlConfig;
 
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,6 +37,9 @@ public class TransactionServiceTest {
 
     @Mock
     MonitoringService monitoringService;
+
+    @Mock
+    ArticleService articleService;
 
     @InjectMocks
     TransactionService transactionService;
@@ -78,38 +84,41 @@ public class TransactionServiceTest {
         //ARRANGE
         Customer customer = Customer.builder().username("brr").transactions(new ArrayList<>()).build();
         Article article = Article.builder().music(MixTape.builder().title("hoodSeason").basicPrice(24.5f).exclusivePrice(30.0f).build()).priceType(PriceType.BASIC).build();
+        Transaction transactionCreated = Transaction.builder().total(article.getPrice()).customer(customer).build();
 
+        transactionCreated.getArticles().add(article);
 
         when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
-        when(musicRepository.findByTitle(article.getMusic().getTitle())).thenReturn(Optional.of(article.getMusic()));
+        when(articleService.addArticleInTransaction(any(Transaction.class),any(String.class),any(PriceType.class))).thenReturn(transactionCreated);
         when(customerRepository.save(customer)).thenReturn(customer);
         //ACT
-       TransactionDTO createdTransaction = transactionService.createTransaction(customer.getUsername(),article.getMusic().getTitle(),article.getPriceType());
+       TransactionDTO returnedTransaction = transactionService.createTransaction(customer.getUsername(),article.getMusic().getTitle(),article.getPriceType());
 
         //ASSERT
-        assertNotNull(createdTransaction);
-        assertEquals(1,createdTransaction.getMusicArticles().size());
-        assertEquals(24.5f,createdTransaction.getMusicArticles().get(0).getPrice());
+        assertNotNull(returnedTransaction);
+        assertEquals(1,returnedTransaction.getMusicArticles().size());
+        assertEquals(24.5f,returnedTransaction.getMusicArticles().get(0).getPrice());
     }
 
 
     @Test
-    void addArticleToTransaction(){
+    void addArticleInTransaction(){
         //ARRANGE
-        Transaction transaction = Transaction.builder().total(24.5f).customer(Customer.builder().username("bigBrr").build()).build();
-        transaction.getArticles().add(Article.builder().music(MixTape.builder().title("hoodSeason").basicPrice(24.5f).exclusivePrice(30.0f).build()).priceType(PriceType.BASIC).build());
-
-        Article article = Article.builder().music(MixTape.builder().title("hoodSeason2").basicPrice(24.5f).exclusivePrice(30.0f).build()).priceType(PriceType.BASIC).build();
+        Transaction transaction = Transaction.builder().total(50.0f).customer(Customer.builder().username("bigBrr").build()).build();
+        transaction.getArticles().add(Article.builder().music(MixTape.builder().title("hoodSeason").basicPrice(25.0f).exclusivePrice(30.0f).build()).priceType(PriceType.BASIC).build());
 
         when(transactionRepository.findByCustomerUsernameAndConfirmedFalse(transaction.getCustomer().getUsername())).thenReturn(Optional.of(transaction));
-        when(musicRepository.findByTitle(article.getMusic().getTitle())).thenReturn(Optional.of(article.getMusic()));
+        transaction.getArticles().add( Article.builder().music(MixTape.builder().title("hoodSeason2").basicPrice(25.0f).exclusivePrice(30.0f).build()).priceType(PriceType.BASIC).build());
+
+        when(articleService.addArticleInTransaction(any(Transaction.class),any(String.class),any(PriceType.class))).thenReturn(transaction);
+        when(transactionRepository.save(transaction)).thenReturn(transaction);
 
         //ACT
-        TransactionDTO addedMusicTransaction = transactionService.addArticleToTransaction(transaction.getCustomer().getUsername(),article.getMusic().getTitle(),PriceType.BASIC);
+        TransactionDTO addedMusicTransaction = transactionService.addArticleInTransaction(transaction.getCustomer().getUsername(),transaction.getArticles().get(1).getMusic().getTitle(),PriceType.BASIC);
 
         //ASSERT
         assertEquals(2,addedMusicTransaction.getMusicArticles().size());
-        assertEquals(49.0f,addedMusicTransaction.getTotal());
+        assertEquals(50.0f,addedMusicTransaction.getTotal());
     }
 
 

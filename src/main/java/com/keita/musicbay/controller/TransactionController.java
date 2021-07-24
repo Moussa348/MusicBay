@@ -33,9 +33,9 @@ public class TransactionController {
         return transactionService.createTransaction(username,title,PriceType.valueOf(priceType.toUpperCase()));
     }
 
-    @PatchMapping("/addArticleToTransaction")
-    public TransactionDTO addArticleToTransaction(@RequestParam("username") String username,@RequestParam("title") String title,@RequestParam("priceType") String priceType){
-        return transactionService.addArticleToTransaction(username,title,PriceType.valueOf(priceType.toUpperCase()));
+    @PatchMapping("/addArticleInTransaction")
+    public TransactionDTO addArticleInTransaction(@RequestParam("username") String username,@RequestParam("title") String title,@RequestParam("priceType") String priceType){
+        return transactionService.addArticleInTransaction(username,title,PriceType.valueOf(priceType.toUpperCase()));
     }
 
     @DeleteMapping("/removeArticleFromTransaction")

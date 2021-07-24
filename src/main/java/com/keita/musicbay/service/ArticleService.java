@@ -24,4 +24,11 @@ public class ArticleService {
 
         return currentTransaction;
     }
+
+    public Transaction removeArticleFromTransaction(Transaction currentTransaction, String title) {
+
+        currentTransaction.getArticles().removeIf(article -> article.getMusic().getTitle().equals(title));
+
+        return currentTransaction;
+    }
 }
