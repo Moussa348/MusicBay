@@ -83,7 +83,7 @@ public class MonitoringService {
 
         customer.getPurchasings().add(new Purchasing(customer, music, purchasingDate));
 
-        customerRepository.save(customer);
+        customerRepository.saveAndFlush(customer);
 
         notificationService.saveNotification(customer.getUsername(),NotificationEvent.PURCHASING,Arrays.asList(music.getProducer().getUsername()));
     }

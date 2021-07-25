@@ -82,6 +82,8 @@ public class DbInit implements CommandLineRunner {
                 Track.builder().timeLength("2:30").title("Mob").tags("RAP").description("").nbrOfLike(0).nbrOfPLay(0).nbrOfShare(0).nbrOfPurchase(0).basicPrice(30.0f).exclusivePrice(200f).bpm(100f).build()
         );
 
+        musics.forEach(music -> music.setProducer(Producer.builder().username("bigWolf").build()));
+
         musics.get(0).getComments().add(Comment.builder().id(1L).content("nice!!").sendBy("bayDrip").nbrLike(0).build());
 
         musicRepository.saveAll(musics);
@@ -128,7 +130,7 @@ public class DbInit implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         insertCustomers();
-        insertMusic();
+        //insertMusic();
         insertTransaction();
         insertConversation();
         sendMessagesInConversations();

@@ -93,16 +93,21 @@ public class TransactionService {
 
 
         */
+    @Transactional
     public void confirmTransaction(String username) throws Exception{
         Transaction transaction = getTransactionByCustomerUsername(username);
         TransactionDTO transactionDTO = new TransactionDTO(transaction);
         List<String> musicArticleTitles = transactionDTO.getMusicArticles().stream().map(MusicArticle::getTitle).collect(Collectors.toList());
 
-        emailService.sendConfirmationEmail(transaction.getCustomer(),transactionDTO);
-
-        musicArticleTitles.forEach(musicArticleTitle -> monitoringService.purchaseMusic(new Customer(),musicArticleTitle, LocalDateTime.now()));
+        musicArticleTitles.forEach(musicArticleTitle -> monitoringService.purchaseMusic(transaction.getCustomer(),musicArticleTitle, LocalDateTime.now()));
 
         log.info("CONFIRMING TRANSACTION");
+
+        transaction.setConfirmed(true);
+
+        transactionRepository.save(transaction);
+
+        emailService.sendConfirmationEmail(transaction.getCustomer(),transactionDTO);
     }
 
     public TransactionDTO getCurrentTransaction(String username) {
