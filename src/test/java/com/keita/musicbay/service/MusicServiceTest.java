@@ -93,6 +93,25 @@ public class MusicServiceTest {
     }
 
     @Test
+    void getNbrOfPage(){
+        //ARRANGE
+        List<Music> musics = Arrays.asList(
+                Track.builder().build(),
+                MixTape.builder().build(),
+                MixTape.builder().build(),
+                Track.builder().build()
+        );
+        when( musicRepository.getAllBy(PageRequest.of(0,30))).thenReturn(new PageImpl<>(musics));
+
+        //ACT
+        Integer nbrOfPage = musicService.getNbrOfPage();
+
+        //ASSERT
+        assertEquals(1,nbrOfPage);
+
+    }
+
+    @Test
     void increaseLike(){
         //ARRANGE
         Music music = Track.builder().title("IT").nbrOfLike(4).build();

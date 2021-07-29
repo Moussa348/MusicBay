@@ -56,26 +56,4 @@ public class EmailServiceTest {
         emailService.sendCancellationEmail(customer, UUID.randomUUID());
     }
 
-    @Test
-    void sendMusicArticles() throws Exception{
-        //ARRANGE
-        Customer customer = Customer.builder().email("araaaa@gmail.com").build();
-        List<MusicArticle> musicArticles = Arrays.asList(
-                new MusicArticle(Article.builder().music(Track.builder().title("adad").build()).priceType(PriceType.BASIC).build()),
-                new MusicArticle(Article.builder().music(Track.builder().title("trretfds").build()).priceType(PriceType.BASIC).build()),
-                new MusicArticle(Article.builder().music(Track.builder().title("vcxffr").build()).priceType(PriceType.BASIC).build())
-        );
-
-        when(javaMailSender.createMimeMessage()).thenReturn(new MimeMessage((Session) null));
-        musicArticles.forEach(musicArticle -> {
-            try {
-                when(fileService.getFile(musicArticle.getTitle() + ".mp3")).thenReturn(new File(""));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-
-        //ACT
-        emailService.sendMusicArticles(customer,musicArticles);
-    }
 }

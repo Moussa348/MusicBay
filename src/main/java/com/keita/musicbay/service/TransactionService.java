@@ -121,7 +121,4 @@ public class TransactionService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No latest transaction for : " + username));
     }
 
-    private Transaction getCurrentTransaction(Customer customer){
-        return customer.getTransactions().get(customer.getTransactions().size()-1);
-    }
 }

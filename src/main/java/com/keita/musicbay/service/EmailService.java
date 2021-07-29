@@ -56,33 +56,4 @@ public class EmailService {
         javaMailSender.send(mimeMessageHelper.getMimeMessage());
     }
 
-    public void sendMusicArticles(Customer customer,List<MusicArticle> musicArticles) throws Exception{
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
-
-        helper.setSubject("MUSIC ARTICLES");
-        helper.setTo(customer.getEmail());
-        helper.setText("HERE IS YOUR MUSIC ARTICLES", true);
-
-        /*
-            TODO:
-                *based on priceType
-                    -send mp3 file for basic
-                    -send mp4 + wav for exclusive
-         */
-
-        musicArticles.forEach(musicArticle -> {
-            try {
-                helper.addAttachment(musicArticle.getTitle(),fileService.getFile(musicArticle.getTitle() + ".mp3"));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-
-        log.info("SENDING ARTICLES");
-        javaMailSender.send(helper.getMimeMessage());
-
-    }
-
-   // private List<ZipOutputStream>
 }

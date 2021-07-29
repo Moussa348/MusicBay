@@ -37,7 +37,7 @@ public abstract class Music implements Serializable {
 
     public Music() {}
 
-    public Music(String title,String timeLength, String description, String tags, Integer nbrOfLike,
+    public Music(String title,String timeLength, String description, String tags, Integer nbrOfLike, Producer producer,
                  Integer nbrOfShare, Integer nbrOfPlay, Integer nbrOfPurchase,Float basicPrice,Float exclusivePrice) {
         this.uuid = UUID.randomUUID();
         this.title = title;
@@ -51,6 +51,7 @@ public abstract class Music implements Serializable {
         this.nbrOfPurchase = nbrOfPurchase;
         this.basicPrice = basicPrice;
         this.exclusivePrice = exclusivePrice;
+        this.producer = producer;
         this.comments = new ArrayList<>();
     }
 }

@@ -30,9 +30,10 @@ public class ArticleServiceTest {
     void addArticleInTransaction(){
         //ARRANGE
         Transaction currentTransaction = Transaction.builder().total(24.5f).customer(Customer.builder().username("bigBrr").build()).build();
-        currentTransaction.getArticles().add(Article.builder().music(MixTape.builder().title("hoodSeason").basicPrice(24.5f).exclusivePrice(30.0f).build()).priceType(PriceType.BASIC).build());
 
-        Music music = Track.builder().title("frrr").basicPrice(25.4f).build();
+        currentTransaction.getArticles().add(Article.builder().music(MixTape.builder().title("hoodSeason").basicPrice(24.5f).exclusivePrice(30.0f).producer(Producer.builder().username("sd").build()).build()).transaction(currentTransaction).priceType(PriceType.BASIC).build());
+
+        Music music = Track.builder().title("frrr").basicPrice(25.4f).producer(Producer.builder().username("sdad").build()).build();
         when(musicRepository.findByTitle(music.getTitle())).thenReturn(Optional.of(music));
 
         //ACT
@@ -46,8 +47,7 @@ public class ArticleServiceTest {
     void removeArticleFromTransaction(){
         //ARRANGE
         Transaction currentTransaction = Transaction.builder().total(25.0f).customer(Customer.builder().username("bigBrr").build()).build();
-        currentTransaction.getArticles().add(Article.builder().music(MixTape.builder().title("hoodSeason").basicPrice(25.0f).exclusivePrice(30.0f).build()).priceType(PriceType.BASIC).build());
-
+        currentTransaction.getArticles().add(Article.builder().music(MixTape.builder().title("hoodSeason").basicPrice(25.0f).exclusivePrice(30.0f).producer(Producer.builder().username("sdasd").build()).build()).transaction(currentTransaction).priceType(PriceType.BASIC).build());
         //ACT
         Transaction currentTransactionWithRemovedArticle = articleService.removeArticleFromTransaction(currentTransaction,currentTransaction.getArticles().get(0).getMusic().getTitle());
 

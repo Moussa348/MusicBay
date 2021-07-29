@@ -42,6 +42,10 @@ public class MusicService {
         return musicRepository.findAll(PageRequest.of(noPage, 30, Sort.by("date").descending())).stream().map(MusicDTO::new).collect(Collectors.toList());
     }
 
+    public Integer getNbrOfPage(){
+        return musicRepository.getAllBy(PageRequest.of(0,30)).getTotalPages();
+    }
+
     public void increaseLike(Music music) {
         music.setNbrOfLike(music.getNbrOfLike() + 1);
         musicRepository.saveAndFlush(music);

@@ -19,7 +19,7 @@ public class Transaction implements Serializable {
     private UUID uuid;
     private LocalDateTime date;
     private Float total;
-    private boolean paymentApproved,confirmed,articleAreSent;
+    private boolean paymentApproved,confirmed;
 
     @ManyToOne
     private Customer customer;
@@ -42,6 +42,5 @@ public class Transaction implements Serializable {
         this.customer = customer;
         this.paymentApproved = false;
         this.confirmed = false;
-        this.articleAreSent = false;
     }
 }

@@ -50,9 +50,9 @@ public class FeedService {
         List<String> listSubscribeToUsername = customer.getSubscribeTos().stream().map(SubscribeTo::getUsername).collect(Collectors.toList());
 
         listSubscribeToUsername.forEach(subscribeToUsername -> {
-            likings.addAll(likingRepository.getAllByCustomerUsername(subscribeToUsername, PageRequest.of(noPage, 5, Sort.by("likingDate").descending())));
-            sharings.addAll(sharingRepository.getAllByCustomerUsername(subscribeToUsername, PageRequest.of(noPage, 5, Sort.by("sharingDate").descending())));
-            purchasings.addAll(purchasingRepository.getAllByCustomerUsername(subscribeToUsername, PageRequest.of(noPage, 5, Sort.by("purchasingDate").descending())));
+            likings.addAll(likingRepository.getAllByCustomerUsername(subscribeToUsername, PageRequest.of(noPage, 3, Sort.by("likingDate").descending())));
+            sharings.addAll(sharingRepository.getAllByCustomerUsername(subscribeToUsername, PageRequest.of(noPage, 3, Sort.by("sharingDate").descending())));
+            purchasings.addAll(purchasingRepository.getAllByCustomerUsername(subscribeToUsername, PageRequest.of(noPage, 3, Sort.by("purchasingDate").descending())));
         });
 
         return new Feed(likings, sharings, purchasings);

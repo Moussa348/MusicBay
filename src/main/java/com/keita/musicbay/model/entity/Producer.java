@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.io.Serializable;
@@ -15,7 +16,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class Producer extends User implements Serializable {
 
-    @OneToMany(mappedBy = "producer")
+    @OneToMany(mappedBy = "producer",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Music> musics;
 
     public Producer() {

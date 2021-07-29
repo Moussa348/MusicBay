@@ -8,6 +8,7 @@ import lombok.ToString;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,15 +18,15 @@ import java.util.List;
 public class Track extends Music implements Serializable {
 
     @OneToMany(mappedBy = "track")
-    private List<File> files;
+    private List<File> files = new ArrayList<>();
     private Float bpm;
 
     public Track(){}
 
     @Builder
-    public Track(String title, String description, String tags, Integer nbrOfLike,String timeLength,
+    public Track(String title, String description, String tags, Integer nbrOfLike,String timeLength,Producer producer,
                  Integer nbrOfShare, Integer nbrOfPLay, Integer nbrOfPurchase,Float basicPrice,Float exclusivePrice, Float bpm) {
-        super(title, timeLength,description, tags, nbrOfLike, nbrOfShare, nbrOfPLay, nbrOfPurchase,basicPrice,exclusivePrice);
+        super(title, timeLength,description, tags, nbrOfLike,producer, nbrOfShare, nbrOfPLay, nbrOfPurchase,basicPrice,exclusivePrice);
         this.bpm = bpm;
     }
 }

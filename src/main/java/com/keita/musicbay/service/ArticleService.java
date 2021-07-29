@@ -3,6 +3,7 @@ package com.keita.musicbay.service;
 import com.keita.musicbay.model.dto.MusicArticle;
 import com.keita.musicbay.model.dto.TransactionDTO;
 import com.keita.musicbay.model.entity.Article;
+import com.keita.musicbay.model.entity.Music;
 import com.keita.musicbay.model.entity.Transaction;
 import com.keita.musicbay.model.enums.PriceType;
 import com.keita.musicbay.repository.MusicRepository;
@@ -21,7 +22,7 @@ public class ArticleService {
     private MusicRepository musicRepository;
 
     public Transaction addArticleInTransaction(Transaction currentTransaction,String title,PriceType priceType) {
-        Article article = new Article(priceType,currentTransaction,musicRepository.findByTitle(title).get());
+        Article article = new Article(priceType,currentTransaction,musicRepository.findByTitle(title).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't find music with title : " + title)));
 
         currentTransaction.getArticles().add(article);
         currentTransaction.setTotal(currentTransaction.getTotal() + article.getPrice());

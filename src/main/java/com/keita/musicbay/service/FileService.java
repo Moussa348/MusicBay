@@ -36,16 +36,6 @@ public class FileService {
         IOUtils.copy(inputStream, httpServletResponse.getOutputStream());
     }
 
-    public java.io.File getFile(String fileName) throws Exception {
-        File file = fileRepository.findByFileName(fileName).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't find file : " + fileName));
-        java.io.File fileToSend = new java.io.File("./" + fileName);
-
-        FileUtils.writeByteArrayToFile(fileToSend, file.getData());
-
-        log.info(file.toString());
-
-        return fileToSend;
-    }
     /*
     public ZipOutputStream zipFile(String fileName) throws Exception {
         File file = fileRepository.findByFileName(fileName).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't find file : " + fileName));

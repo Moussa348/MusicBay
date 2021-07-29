@@ -70,9 +70,9 @@ public class FeedServiceTest {
         customer.getSubscribeTos().add(SubscribeTo.builder().username(customerSubscribeTo.getUsername()).build());
 
         when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
-        when(likingRepository.getAllByCustomerUsername(customerSubscribeTo.getUsername(),PageRequest.of(noPage,5,Sort.by("likingDate").descending()))).thenReturn(likings);
-        when(sharingRepository.getAllByCustomerUsername(customerSubscribeTo.getUsername(),PageRequest.of(noPage,5,Sort.by("sharingDate").descending()))).thenReturn(sharings);
-        when(purchasingRepository.getAllByCustomerUsername(customerSubscribeTo.getUsername(),PageRequest.of(noPage,5,Sort.by("purchasingDate").descending()))).thenReturn(purchasings);
+        when(likingRepository.getAllByCustomerUsername(customerSubscribeTo.getUsername(),PageRequest.of(noPage,3,Sort.by("likingDate").descending()))).thenReturn(likings);
+        when(sharingRepository.getAllByCustomerUsername(customerSubscribeTo.getUsername(),PageRequest.of(noPage,3,Sort.by("sharingDate").descending()))).thenReturn(sharings);
+        when(purchasingRepository.getAllByCustomerUsername(customerSubscribeTo.getUsername(),PageRequest.of(noPage,3,Sort.by("purchasingDate").descending()))).thenReturn(purchasings);
 
         //ACT
         Feed yourFeed = feedService.getFeed(customer.getUsername(),0);

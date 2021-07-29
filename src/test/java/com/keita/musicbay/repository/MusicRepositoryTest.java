@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
@@ -26,7 +27,14 @@ public class MusicRepositoryTest {
     @BeforeEach
     void insert(){
         List<Music> musics = Arrays.asList(
-                Track.builder().title("hope").build()
+                Track.builder().title("hope").build(),
+                Track.builder().title("hope2").build(),
+                Track.builder().title("hope3").build(),
+                Track.builder().title("hope4").build(),
+                Track.builder().title("hope5").build(),
+                Track.builder().title("hope6").build(),
+                Track.builder().title("hope7").build(),
+                Track.builder().title("hope8").build()
         );
         musicRepository.saveAll(musics);
     }
@@ -59,5 +67,17 @@ public class MusicRepositoryTest {
         //ASSERT
         assertTrue(musicExist);
         assertFalse(musicDoNotExist);
+    }
+
+    @Test
+    void getAllBy(){
+        //ARRANGE
+        PageRequest pageRequest = PageRequest.of(0,3);
+
+        //ACT
+        Integer nbrOfPages = musicRepository.getAllBy(pageRequest).getTotalPages();
+
+        //ASSERT
+        assertEquals(3,nbrOfPages);
     }
 }

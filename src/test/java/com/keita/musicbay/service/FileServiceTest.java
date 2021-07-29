@@ -39,18 +39,4 @@ public class FileServiceTest {
         //ACT
         fileService.play(fileName,mockHttpServletResponse);
     }
-
-    @Test
-    void getFile() throws Exception{
-        //ARRANGE
-        File file = Mp3File.builder().fileName("Hope.txt").data("sadasd".getBytes()).build();
-        when(fileRepository.findByFileName(file.getFileName())).thenReturn(Optional.of(file));
-
-
-        //ACT
-        java.io.File zipFile = fileService.getFile(file.getFileName());
-
-        //ASSERT
-        assertNotNull(zipFile);
-    }
 }

@@ -14,8 +14,10 @@ public class Article implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
+    private String owner,purchasedBy;
     private PriceType priceType;
     private Float price;
+    private boolean articleHasBeenSent;
 
     @ManyToOne
     private Transaction transaction;
@@ -31,6 +33,9 @@ public class Article implements Serializable {
         this.transaction = transaction;
         this.music = music;
         this.price = priceType.equals(PriceType.BASIC) ? music.getBasicPrice():music.getExclusivePrice();
+        this.owner = music.getProducer().getUsername();
+        this.purchasedBy = this.transaction.getCustomer().getUsername();
+        this.articleHasBeenSent = false;
     }
 
 }
