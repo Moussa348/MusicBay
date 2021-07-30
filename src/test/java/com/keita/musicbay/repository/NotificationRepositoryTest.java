@@ -53,10 +53,23 @@ public class NotificationRepositoryTest {
     void getAllByUserUsernameAndSeenFalse(){
         //ARRANGE
         String username = "brr";
+
         //ACT
         List<Notification> notifications = notificationRepository.getAllByUserUsernameAndSeenFalse(username, PageRequest.of(0,3, Sort.by("date").ascending()));
 
         //ASSERT
         assertEquals(2,notifications.size());
+    }
+
+    @Test
+    void countAllByUserUsername(){
+        //ARRANGE
+        String username = "brr";
+
+        //ACT
+        Double nbrOfNotifications = notificationRepository.countAllByUserUsername(username);
+
+        //ASSERT
+        assertEquals(3,nbrOfNotifications);
     }
 }

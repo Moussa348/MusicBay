@@ -100,4 +100,16 @@ public class CommentServiceTest {
         //ASSERT
         assertEquals(2,postedComments.size());
     }
+
+    @Test
+    void getNbrOfPage(){
+        //ARRANGE
+        String title = "hope";
+        when(commentRepository.countAllByMusicTitle(title)).thenReturn(4.2);
+        //ACT
+        Integer nbrOfPage = commentService.getNbrOfPage(title);
+
+        //ASSERT
+        assertEquals(1,nbrOfPage);
+    }
 }

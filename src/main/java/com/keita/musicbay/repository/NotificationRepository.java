@@ -12,4 +12,5 @@ import java.util.List;
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification,Long> {
     List<Notification> getAllByUserUsernameAndSeenFalse(String username,Pageable pageable);
+    double countAllByUserUsername(String username);
 }

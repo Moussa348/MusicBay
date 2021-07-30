@@ -34,16 +34,16 @@ public class MusicService {
     @Transactional
     public Catalog getCatalog(String username,Integer noPage){
         return new Catalog(customerRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Customer with username: " + username)),
-                musicRepository.findAll(PageRequest.of(noPage, 30, Sort.by("date").descending())).getContent());
+                musicRepository.findAll(PageRequest.of(noPage, 12, Sort.by("date").descending())).getContent());
     }
 
     @Transactional
     public List<MusicDTO> getListMusic(Integer noPage){
-        return musicRepository.findAll(PageRequest.of(noPage, 30, Sort.by("date").descending())).stream().map(MusicDTO::new).collect(Collectors.toList());
+        return musicRepository.findAll(PageRequest.of(noPage, 12, Sort.by("date").descending())).stream().map(MusicDTO::new).collect(Collectors.toList());
     }
 
     public Integer getNbrOfPage(){
-        return musicRepository.getAllBy(PageRequest.of(0,30)).getTotalPages();
+        return (int) (Math.ceil(musicRepository.countAllBy()/10));
     }
 
     public void increaseLike(Music music) {

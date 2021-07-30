@@ -200,4 +200,30 @@ public class FeedServiceTest {
         //ASSERT
         assertEquals(1,subscriberTos.size());
     }
+
+    @Test
+    void getNbrOfPageSub(){
+        //ARRANGE
+        String username = "hope";
+        when(subscriberRepository.countAllByUserUsername(username)).thenReturn(15.2);
+
+        //ACT
+        Integer nbrOfPage = feedService.getNbrOfPageSub(username);
+
+        //ASSERT
+        assertEquals(2,nbrOfPage);
+    }
+
+    @Test
+    void getNbrOfPageSubTo(){
+        //ARRANGE
+        String username = "hope";
+        when(subscribeToRepository.countAllByUserUsername(username)).thenReturn(15.2);
+
+        //ACT
+        Integer nbrOfPage = feedService.getNbrOfPageSubTo(username);
+
+        //ASSERT
+        assertEquals(2,nbrOfPage);
+    }
 }

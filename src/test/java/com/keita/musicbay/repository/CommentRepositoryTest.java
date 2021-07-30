@@ -53,4 +53,13 @@ public class CommentRepositoryTest {
         //ASSERT
         assertEquals(3,comments.size());
     }
+
+    @Test
+    void countAllByMusicTitle(){
+        //ACT
+        Double nbrOfComments = commentRepository.countAllByMusicTitle("hope");
+
+        //ASSERT
+        assertEquals(3,nbrOfComments);
+    }
 }

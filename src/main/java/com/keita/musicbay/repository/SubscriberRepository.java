@@ -12,4 +12,5 @@ import java.util.List;
 @Repository
 public interface SubscriberRepository extends JpaRepository<Subscriber,Long> {
     List<Subscriber> getAllByUserUsername(String username,Pageable pageable);
+    double countAllByUserUsername(String username);
 }

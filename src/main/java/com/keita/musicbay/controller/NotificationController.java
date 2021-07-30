@@ -27,5 +27,10 @@ public class NotificationController {
         return notificationService.getRecentNotifications(username,noPage);
     }
 
+    @GetMapping("/getNbrOfPage/{username}")
+    public Integer getNbrOfPage(@PathVariable String username){
+        return notificationService.getNbrOfPage(username);
+    }
+
 
 }

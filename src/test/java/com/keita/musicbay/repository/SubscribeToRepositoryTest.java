@@ -49,4 +49,13 @@ public class SubscribeToRepositoryTest {
         //ASSERT
         assertEquals(2,subscribeTos.size());
     }
+
+    @Test
+    void countAllByUserUsername(){
+        //ACT
+        Double nbrOfSub = subscribeToRepository.countAllByUserUsername("brr");
+
+        //ASSERT
+        assertEquals(2,nbrOfSub);
+    }
 }

@@ -51,4 +51,14 @@ public class FeedController {
     public List<Profile> getListSubscribeTo(@RequestParam("username") String username, @RequestParam("noPage") Integer noPage){
         return feedService.getListSubscribeTo(username,noPage);
     }
+
+    @GetMapping("/getNbrOfPageSub/{username}")
+    public Integer getNbrOfPageSub(@PathVariable String username){
+        return feedService.getNbrOfPageSub(username);
+    }
+
+    @GetMapping("/getNbrOfPageSubTo/{username}")
+    public Integer getNbrOfPageSubTo(@PathVariable String username){
+        return feedService.getNbrOfPageSubTo(username);
+    }
 }

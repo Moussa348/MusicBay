@@ -72,25 +72,8 @@ public class DbInit implements CommandLineRunner {
         customerRepository.saveAll(customers);
     }
 
-    private void insertMusic(){
-        List<Music> musics = Arrays.asList(
-                MixTape.builder().timeLength("34:00").title("culture1").description("").tags("Dark Hip-Hop rap").nbrOfLike(0).nbrOfPLay(0).nbrOfShare(0).nbrOfPurchase(0).basicPrice(24.0f).exclusivePrice(100.0f).build(),
-                MixTape.builder().timeLength("55:00").title("culture2").description("").tags("Hip-Hop Rap").nbrOfLike(1).nbrOfPLay(1).nbrOfShare(1).nbrOfPurchase(0).basicPrice(50.0f).exclusivePrice(200.0f).build(),
-                Track.builder().timeLength("2:00").title("redRoom").tags("RAP").description("").nbrOfLike(0).nbrOfPLay(0).nbrOfShare(0).nbrOfPurchase(0).basicPrice(30.0f).exclusivePrice(50f).bpm(100f).build(),
-                Track.builder().timeLength("3:00").title("Ragnarok").tags("RAP").description("").nbrOfLike(0).nbrOfPLay(0).nbrOfShare(0).nbrOfPurchase(0).basicPrice(30.0f).exclusivePrice(70f).bpm(100f).build(),
-                Track.builder().timeLength("1:50").title("Winter").tags("RAP").description("").nbrOfLike(0).nbrOfPLay(0).nbrOfShare(0).nbrOfPurchase(0).basicPrice(30.0f).exclusivePrice(800f).bpm(100f).build(),
-                Track.builder().timeLength("2:30").title("Mob").tags("RAP").description("").nbrOfLike(0).nbrOfPLay(0).nbrOfShare(0).nbrOfPurchase(0).basicPrice(30.0f).exclusivePrice(200f).bpm(100f).build()
-        );
-
-        musics.forEach(music -> music.setProducer(Producer.builder().username("bigWolf").build()));
-
-        musics.get(0).getComments().add(Comment.builder().id(1L).content("nice!!").sendBy("bayDrip").nbrLike(0).build());
-
-        musicRepository.saveAll(musics);
-    }
-
     private void insertTransaction(){
-        transactionService.createTransaction("bayDrip","culture1", PriceType.BASIC);
+        transactionService.createTransaction("bombay","culture1", PriceType.BASIC);
     }
 
     private void insertConversation(){
@@ -117,6 +100,10 @@ public class DbInit implements CommandLineRunner {
             new PostedComment("this shit firee cant liee","bigBrr",0),
             new PostedComment("broo you should drop some more","bayDrip",0)
         );
+
+        postedComments.get(0).setId(1L);
+        postedComments.get(1).setId(2L);
+        postedComments.get(2).setId(3L);
 
         postedComments.forEach(postedComment -> commentService.postComment(postedComment,"culture1"));
     }

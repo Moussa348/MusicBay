@@ -9,7 +9,9 @@ import com.keita.musicbay.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -34,7 +36,7 @@ public class NotificationService {
 
 
     public void notificationSeen(Long id){
-        Notification notification = notificationRepository.getById(id);
+        Notification notification = notificationRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Cant find notification" + id));
 
         notification.setSeen(true);
 
@@ -45,5 +47,9 @@ public class NotificationService {
 
         return notificationRepository.getAllByUserUsernameAndSeenFalse(username, PageRequest.of(noPage,10, Sort.by("date").ascending()))
                 .stream().map(RecentNotification::new).collect(Collectors.toList());
+    }
+
+    public Integer getNbrOfPage(String username){
+        return (int) (Math.ceil(notificationRepository.countAllByUserUsername(username)/10));
     }
 }

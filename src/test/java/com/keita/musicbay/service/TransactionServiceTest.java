@@ -66,7 +66,7 @@ public class TransactionServiceTest {
     void checkIfArticleIsInTransaction(){
         //ARRANGE
         Transaction transaction = Transaction.builder().customer(Customer.builder().username("massou").build()).build();
-        Article article = Article.builder().music(MixTape.builder().title("hoodSeason").basicPrice(24.5f).exclusivePrice(30.0f).build()).priceType(PriceType.BASIC).build();
+        Article article = Article.builder().transaction(transaction).music(MixTape.builder().producer(Producer.builder().username("taa").build()).title("hoodSeason").basicPrice(24.5f).exclusivePrice(30.0f).build()).priceType(PriceType.BASIC).build();
 
         transaction.getArticles().add(article);
 
@@ -83,8 +83,8 @@ public class TransactionServiceTest {
     void createTransaction(){
         //ARRANGE
         Customer customer = Customer.builder().username("brr").transactions(new ArrayList<>()).build();
-        Article article = Article.builder().music(MixTape.builder().title("hoodSeason").basicPrice(24.5f).exclusivePrice(30.0f).build()).priceType(PriceType.BASIC).build();
-        Transaction transactionCreated = Transaction.builder().total(article.getPrice()).customer(customer).build();
+        Transaction transactionCreated = Transaction.builder().total(24.5f).customer(customer).build();
+        Article article = Article.builder().music(MixTape.builder().title("hoodSeason").basicPrice(24.5f).producer(Producer.builder().username("taa").build()).exclusivePrice(30.0f).build()).priceType(PriceType.BASIC).transaction(transactionCreated).build();
 
         transactionCreated.getArticles().add(article);
 
@@ -105,11 +105,11 @@ public class TransactionServiceTest {
     void addArticleInTransaction(){
         //ARRANGE
         Transaction transaction = Transaction.builder().total(50.0f).customer(Customer.builder().username("bigBrr").build()).build();
-        transaction.getArticles().add(Article.builder().music(MixTape.builder().title("hoodSeason").basicPrice(25.0f).exclusivePrice(30.0f).build()).priceType(PriceType.BASIC).build());
+        transaction.getArticles().add(Article.builder().music(MixTape.builder().title("hoodSeason").basicPrice(25.0f).exclusivePrice(30.0f).producer(Producer.builder().username("taa").build()).build()).transaction(transaction).priceType(PriceType.BASIC).build());
 
         when(transactionRepository.findByCustomerUsernameAndConfirmedFalse(transaction.getCustomer().getUsername())).thenReturn(Optional.of(transaction));
 
-        transaction.getArticles().add( Article.builder().music(MixTape.builder().title("hoodSeason2").basicPrice(25.0f).exclusivePrice(30.0f).build()).priceType(PriceType.BASIC).build());
+        transaction.getArticles().add( Article.builder().music(MixTape.builder().title("hoodSeason2").basicPrice(25.0f).exclusivePrice(30.0f).producer(Producer.builder().username("taa").build()).build()).transaction(transaction).priceType(PriceType.BASIC).build());
 
         when(articleService.addArticleInTransaction(any(Transaction.class),any(String.class),any(PriceType.class))).thenReturn(transaction);
         when(transactionRepository.save(transaction)).thenReturn(transaction);
@@ -127,7 +127,7 @@ public class TransactionServiceTest {
     void removeArticleFromTransaction(){
         //ARRANGE
         Transaction transaction = Transaction.builder().total(25.0f).customer(Customer.builder().username("bigBrr").build()).build();
-        Article article = Article.builder().priceType(PriceType.BASIC).music(Track.builder().title("culture").basicPrice(25.0f).build()).build();
+        Article article = Article.builder().transaction(transaction).priceType(PriceType.BASIC).music(Track.builder().producer(Producer.builder().username("taa").build()).title("culture").basicPrice(25.0f).build()).build();
         transaction.getArticles().add(article);
 
         when(transactionRepository.findByCustomerUsernameAndConfirmedFalse(transaction.getCustomer().getUsername())).thenReturn(Optional.of(transaction));

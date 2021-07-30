@@ -95,13 +95,7 @@ public class MusicServiceTest {
     @Test
     void getNbrOfPage(){
         //ARRANGE
-        List<Music> musics = Arrays.asList(
-                Track.builder().build(),
-                MixTape.builder().build(),
-                MixTape.builder().build(),
-                Track.builder().build()
-        );
-        when( musicRepository.getAllBy(PageRequest.of(0,30))).thenReturn(new PageImpl<>(musics));
+        when( musicRepository.countAllBy()).thenReturn(3.0);
 
         //ACT
         Integer nbrOfPage = musicService.getNbrOfPage();

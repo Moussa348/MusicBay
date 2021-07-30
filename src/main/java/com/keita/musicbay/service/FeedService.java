@@ -104,4 +104,12 @@ public class FeedService {
         return  users.stream().filter(User::isActive).map(Profile::new).collect(Collectors.toList());
     }
 
+    public Integer getNbrOfPageSub(String username){
+        return (int) (Math.ceil(subscriberRepository.countAllByUserUsername(username)/10));
+    }
+
+    public Integer getNbrOfPageSubTo(String username){
+        return (int) (Math.ceil(subscribeToRepository.countAllByUserUsername(username)/10));
+    }
+
 }

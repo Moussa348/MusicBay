@@ -11,7 +11,9 @@ import com.keita.musicbay.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,7 +41,7 @@ public class CommentService {
     }
 
     public PostedComment increaseLike(Long id,String username){
-        Comment comment = commentRepository.findById(id).get();
+        Comment comment = commentRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Comment " + id + " not found"));
 
         comment.setNbrLike(comment.getNbrLike()+1);
         comment.getLikedByList().add(new LikedBy(username,comment));
@@ -50,7 +52,7 @@ public class CommentService {
     }
 
     public PostedComment decreaseLike(Long id,String username){
-        Comment comment = commentRepository.findById(id).get();
+        Comment comment = commentRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Comment " + id + " not found"));
 
         comment.setNbrLike(comment.getNbrLike()-1);
         comment.getLikedByList().removeIf(likedBy -> likedBy.getUsername().equals(username));
@@ -61,6 +63,10 @@ public class CommentService {
     public List<PostedComment> getListCommentOfMusic(String title,Integer noPage){
         return commentRepository.getAllByMusicTitle(title, PageRequest.of(noPage,10, Sort.by("date").descending()))
         .stream().map(PostedComment::new).collect(Collectors.toList());
+    }
+
+    public Integer getNbrOfPage(String title){
+        return (int) (Math.ceil(commentRepository.countAllByMusicTitle(title)/10));
     }
 
 }

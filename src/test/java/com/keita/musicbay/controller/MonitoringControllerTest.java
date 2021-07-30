@@ -1,10 +1,16 @@
 package com.keita.musicbay.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.keita.musicbay.model.entity.Producer;
+import com.keita.musicbay.security.JwtProvider;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -18,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class MonitoringControllerTest {
 
     @Autowired
@@ -25,6 +32,17 @@ public class MonitoringControllerTest {
 
     @Autowired
     ObjectMapper mapper;
+
+
+    @Autowired
+    JwtProvider jwtProvider;
+
+    String token;
+
+    @BeforeAll
+    void generateToken() {
+        token = jwtProvider.generate(Producer.builder().username("bombay").roles("PRODUCER").build());
+    }
 
     @Test
     void likeMusic() throws Exception{
@@ -34,6 +52,7 @@ public class MonitoringControllerTest {
 
         //ACT
         MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.post("/monitoring/likeMusic/")
+                .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
                 .param("username",username)
                 .param("title",title)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -52,6 +71,7 @@ public class MonitoringControllerTest {
 
         //ACT
         MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.delete("/monitoring/unLikeMusic/")
+                .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
                 .param("username",username)
                 .param("title",title)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -71,6 +91,7 @@ public class MonitoringControllerTest {
 
         //ACT
         MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.post("/monitoring/shareMusic/")
+                .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
                 .param("username",username)
                 .param("title",title)
                 .param("sharingMsg",sharingMsg)
@@ -90,6 +111,7 @@ public class MonitoringControllerTest {
 
         //ACT
         MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.delete("/monitoring/unShareMusic/")
+                .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
                 .param("username",username)
                 .param("title",title)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -108,6 +130,7 @@ public class MonitoringControllerTest {
 
         //ACT
         MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.post("/monitoring/subscribe/")
+                .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
                 .param("username",username)
                 .param("usernameToFollow",usernameToFollow)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -126,6 +149,7 @@ public class MonitoringControllerTest {
 
         //ACT
         MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.delete("/monitoring/unSubscribe/")
+                .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
                 .param("username",username)
                 .param("usernameToUnFollow",usernameToUnFollow)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -144,6 +168,7 @@ public class MonitoringControllerTest {
 
         //ACT
         MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.get("/monitoring/checkIfSubscribeTo/")
+                .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
                 .param("username",username)
                 .param("usernameSubscribeTo",usernameSubscribeTo)
                 .contentType(MediaType.APPLICATION_JSON)

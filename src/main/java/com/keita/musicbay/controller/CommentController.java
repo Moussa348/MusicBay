@@ -35,4 +35,12 @@ public class CommentController {
         return commentService.getListCommentOfMusic(title,noPage);
     }
 
+    @GetMapping("/getNbrOfPage/{title}")
+    public Integer getNbrOfPage(@PathVariable String title){
+        return commentService.getNbrOfPage(title);
+    }
+
+
+
+
 }

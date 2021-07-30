@@ -31,4 +31,9 @@ public class MusicController {
     public List<MusicDTO> getListMusic(@PathVariable Integer noPage){
         return musicService.getListMusic(noPage);
     }
+
+    @GetMapping("/getNbrOfPage")
+    public Integer getBrfOfPage(){
+        return musicService.getNbrOfPage();
+    }
 }

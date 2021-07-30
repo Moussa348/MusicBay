@@ -83,6 +83,19 @@ public class NotificationServiceTest {
         assertEquals(3,recentNotifications.size());
     }
 
+    @Test
+    void getNbrOfPage(){
+        //ARRANGE
+        String username = "hope";
+        when(notificationRepository.countAllByUserUsername(username)).thenReturn(4.2);
+
+        //ACT
+        Integer nbrOfPage = notificationService.getNbrOfPage(username);
+
+        //ASSERT
+        assertEquals(1,nbrOfPage);
+    }
+
 
 
 }

@@ -80,4 +80,13 @@ public class MusicRepositoryTest {
         //ASSERT
         assertEquals(3,nbrOfPages);
     }
+
+    @Test
+    void countAllBy(){
+        //ACT
+        Double nbrOfMusic = musicRepository.countAllBy();
+
+        //ASSERT
+        assertEquals(8,nbrOfMusic);
+    }
 }

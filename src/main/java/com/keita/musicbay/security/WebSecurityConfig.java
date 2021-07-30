@@ -40,14 +40,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //Configure http security
         http.cors().and().csrf().disable()
                 //url that can be accessed without authentication
-                .authorizeRequests().antMatchers("/auth/login/**","/music/getListMusic/**","/customer/getPicture/**","/file/play/**").permitAll()
+                .authorizeRequests().antMatchers(
+                "/auth/login/**",
+                "/music/getListMusic/**",
+                "/music/getNbrOfPage/**",
+                "/music/getMusic/**",
+                "/customer/getPicture/**",
+                "/file/play/**",
+                "/customer/createCustomer/**"
+        ).permitAll()
 
                 .anyRequest().authenticated().and().httpBasic()
 
                 //Handle exceptions
                 .and().exceptionHandling()
-                .authenticationEntryPoint((request,response,authException) -> response
-                    .sendError(HttpServletResponse.SC_UNAUTHORIZED,"AUTHENTICATION TOKEN REQUIRED"))
+                .authenticationEntryPoint((request, response, authException) -> response
+                        .sendError(HttpServletResponse.SC_UNAUTHORIZED, "AUTHENTICATION TOKEN REQUIRED"))
 
                 //Make sure session is stateless
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -58,12 +66,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    CorsConfigurationSource corsConfigurationSource(){
+    CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:5001"));
 
-        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE"));
 
         configuration.addAllowedHeader("content-type");
         configuration.addAllowedHeader("Access-Control-Allow-Origin");
@@ -71,11 +79,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-        source.registerCorsConfiguration("/**",configuration);
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
     }
 }

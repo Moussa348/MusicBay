@@ -52,4 +52,13 @@ public class SubscriberRepositoryTest {
         //ASSERT
         assertEquals(2,subscribers.size());
     }
+
+    @Test
+    void countAllByUserUsername(){
+        //ACT
+        Double nbrOfSub = subscriberRepository.countAllByUserUsername("brr");
+
+        //ASSERT
+        assertEquals(2,nbrOfSub);
+    }
 }

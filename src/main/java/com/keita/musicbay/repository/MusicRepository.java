@@ -14,4 +14,5 @@ public interface MusicRepository extends JpaRepository<Music, UUID> {
     boolean existsByTitle(String title);
     Optional<Music> findByTitle(String title);
     Page<Music> getAllBy(Pageable pageable);
+    double countAllBy();
 }

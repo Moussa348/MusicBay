@@ -12,4 +12,5 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment,Long> {
     List<Comment> getAllByMusicTitle(String title,Pageable pageable);
+    double countAllByMusicTitle(String title);
 }
