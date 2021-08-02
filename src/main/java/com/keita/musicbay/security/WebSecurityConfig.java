@@ -45,9 +45,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/music/getListMusic/**",
                 "/music/getNbrOfPage/**",
                 "/music/getMusic/**",
-                "/customer/getPicture/**",
                 "/file/play/**",
-                "/customer/createCustomer/**"
+                "/customer/createCustomer/**",
+                "/user/getProfile/**",
+                "/user/getPicture/**",
+                "/user/getListProfileSearch/**"
         ).permitAll()
 
                 .anyRequest().authenticated().and().httpBasic()

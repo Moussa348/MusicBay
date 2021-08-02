@@ -46,7 +46,7 @@ public class FeedService {
         List<Sharing> sharings = new ArrayList<>();
         List<Purchasing> purchasings = new ArrayList<>();
 
-        Customer customer = customerRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Customer with username: " + username));
+        Customer customer = customerRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't find Customer with username: " + username));
         List<String> listSubscribeToUsername = customer.getSubscribeTos().stream().map(SubscribeTo::getUsername).collect(Collectors.toList());
 
         listSubscribeToUsername.forEach(subscribeToUsername -> {
@@ -60,7 +60,7 @@ public class FeedService {
 
 
     public List<ProfileToSubscribeTo> getListPossibleSubscribeTo(String username, Integer noPage) {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Customer with username: " + username));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't find Customer with username: " + username));
 
         List<User> listPossibleUserToSubscribeTo = userRepository.getAllByUsernameNot(username, PageRequest.of(noPage, 10, Sort.by("username")))
                 .stream()

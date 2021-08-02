@@ -32,14 +32,4 @@ public class CustomerController {
             return null;
         }
     }
-
-    @GetMapping("/getProfile/{username}")
-    public Profile getProfile(@PathVariable String username){
-        return customerService.getProfile(username);
-    }
-
-    @GetMapping("/getPicture/{username}")
-    public void getPicture(@PathVariable String username, HttpServletResponse httpServletResponse) throws Exception{
-        customerService.getPicture(username,httpServletResponse);
-    }
 }

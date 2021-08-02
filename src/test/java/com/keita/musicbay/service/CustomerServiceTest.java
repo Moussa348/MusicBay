@@ -69,33 +69,4 @@ public class CustomerServiceTest {
         assertEquals(registration2.getUsername(),updatedProfileWithModifiedUser.getUsername());
     }
 
-    @Test
-    void getProfile(){
-        //ARRANGE
-        String username1 = "bigBrr";
-        when(customerRepository.findByUsername(username1)).thenReturn(Optional.of(Customer.builder().likings(Collections.emptyList()).sharings(Collections.emptyList()).purchasings(Collections.emptyList()).build()));
-
-        //ACT
-        Profile profileExist = customerService.getProfile(username1);
-
-        //ASSERT
-        assertNotNull(profileExist);
-    }
-
-    @Test
-    void getPicture() throws IOException {
-        //ARRANGE
-        Customer customer = Customer.builder().username("bigBrr").build();
-        customer.setPicture("sadasd".getBytes());
-
-        MockHttpServletResponse mockHttpServletResponse = new MockHttpServletResponse();
-
-        mockHttpServletResponse.setContentType("image/jpeg");
-
-        when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
-
-        //ACT
-        customerService.getPicture(customer.getUsername(),mockHttpServletResponse);
-
-    }
 }

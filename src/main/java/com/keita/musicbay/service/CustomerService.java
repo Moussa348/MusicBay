@@ -7,7 +7,9 @@ import com.keita.musicbay.repository.LikingRepository;
 import lombok.extern.java.Log;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -22,25 +24,20 @@ public class CustomerService {
     private CustomerRepository customerRepository;
 
     @Autowired
-    private LikingRepository likingRepository;
+    private UserService userService;
 
-    //TODO: replace by UserRepository
+
     public boolean createCustomer(Registration registration) throws Exception {
         if (!customerRepository.existsByEmail(registration.getEmail()) && !customerRepository.existsByUsername(registration.getUsername())) {
-            Customer customer = new Customer(registration, setDefaultProfilePicture());
+            Customer customer = new Customer(registration, userService.setDefaultProfilePicture());
             customerRepository.save(customer);
             return true;
         }
         return false;
     }
 
-    private byte[] setDefaultProfilePicture() throws Exception {
-        FileInputStream fileInputStream = new FileInputStream("./docs/noUser.jpg");
-        return fileInputStream.readAllBytes();
-    }
-
     public Profile updateCustomer(Registration registration) throws Exception {
-        Customer customer = customerRepository.findById(registration.getUuid()).get();
+        Customer customer = customerRepository.findById(registration.getUuid()).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't find customer with uuid : " + registration.getUuid()));
 
 
         return customer.getUsername().equals(registration.getUsername()) ||
@@ -50,17 +47,5 @@ public class CustomerService {
 
     //TODO : add individual method to save picture
 
-    public Profile getProfile(String username) {
-        Customer customer = customerRepository.findByUsername(username).get();
-        return new Profile(customer);
-    }
-
-    public void getPicture(String username, HttpServletResponse httpServletResponse) throws IOException {
-        httpServletResponse.setContentType("image/jpeg");
-
-        InputStream inputStream = new ByteArrayInputStream(customerRepository.findByUsername(username).get().getPicture());
-
-        IOUtils.copy(inputStream, httpServletResponse.getOutputStream());
-    }
 
 }
