@@ -56,40 +56,40 @@ public class DbInit implements CommandLineRunner {
     private void insertCustomers() throws Exception {
         FileInputStream fileInputStream = new FileInputStream("./docs/noUser.jpg");
         List<Customer> customers = Arrays.asList(
-                Customer.builder().firstName("bay").lastName("drip").password("bayDrip123").picture("".getBytes()).dateOfBirth(LocalDate.of(1999, 12, 22))
-                        .city("ATL").picture(fileInputStream.readAllBytes()).email("bayDrip@gmail.com").cellNumber("442-332-3421").username("bayDrip").password("bayDrip123")
+                Customer.builder().firstName("bay").lastName("drip").password("bayDrip123").dateOfBirth(LocalDate.of(1999, 12, 22))
+                        .city("ATL").picture(new FileInputStream("./docs/noUser.jpg").readAllBytes()).email("bayDrip@gmail.com").cellNumber("442-332-3421").username("bayDrip").password("bayDrip123")
                         .biography("best rapper alive").roles("USER").build(),
-                Customer.builder().firstName("brr").lastName("Big").picture(fileInputStream.readAllBytes()).password("bigBrr123").picture("".getBytes()).dateOfBirth(LocalDate.of(1967, 12, 22))
+                Customer.builder().firstName("brr").lastName("Big").picture(new FileInputStream("./docs/noUser.jpg").readAllBytes()).dateOfBirth(LocalDate.of(1967, 12, 22))
                         .city("ATL").email("bigBrr@gmail.com").cellNumber("442-332-3421").username("bigBrr").password("bigBrr123")
                         .biography("brr..bigBrr...").roles("USER").build(),
-                Customer.builder().firstName("salehe").lastName("jojo").picture(fileInputStream.readAllBytes()).password("bombay123").picture("".getBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
+                Customer.builder().firstName("salehe").lastName("jojo").picture(new FileInputStream("./docs/noUser.jpg").readAllBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
                         .city("MTL").email("developpeurspring@gmail.com").cellNumber("514-987-3221").username("bombay").password("bombay123")
                         .biography("I love alcool and weed").roles("USER ADMIN").build(),
-                Customer.builder().firstName("salehe").lastName("jojo").picture(fileInputStream.readAllBytes()).password("bombay123").picture("".getBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
+                Customer.builder().firstName("salehe").lastName("jojo").picture(new FileInputStream("./docs/noUser.jpg").readAllBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
                         .city("MTL").email("developpeurspring@gmail.com").cellNumber("514-987-3221").username("cash").password("cash123")
                         .biography("I love alcool and weed").roles("USER").build(),
-                Customer.builder().firstName("salehe").lastName("jojo").picture(fileInputStream.readAllBytes()).password("bombay123").picture("".getBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
+                Customer.builder().firstName("salehe").lastName("jojo").picture(new FileInputStream("./docs/noUser.jpg").readAllBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
                         .city("MTL").email("developpeurspring@gmail.com").cellNumber("514-987-3221").username("fabo").password("fabo123")
                         .biography("I love alcool and weed").roles("USER").build(),
-                Customer.builder().firstName("salehe").lastName("jojo").picture(fileInputStream.readAllBytes()).password("bombay123").picture("".getBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
+                Customer.builder().firstName("salehe").lastName("jojo").picture(new FileInputStream("./docs/noUser.jpg").readAllBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
                         .city("MTL").email("developpeurspring@gmail.com").cellNumber("514-987-3221").username("ricchi").password("ricchi123")
                         .biography("I love alcool and weed").roles("USER").build(),
-                Customer.builder().firstName("salehe").lastName("jojo").picture(fileInputStream.readAllBytes()).password("bombay123").picture("".getBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
+                Customer.builder().firstName("salehe").lastName("jojo").picture(new FileInputStream("./docs/noUser.jpg").readAllBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
                         .city("MTL").email("developpeurspring@gmail.com").cellNumber("514-987-3221").username("splash").password("splash123")
                         .biography("I love alcool and weed").roles("USER").build(),
-                Customer.builder().firstName("salehe").lastName("jojo").picture(fileInputStream.readAllBytes()).password("bombay123").picture("".getBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
+                Customer.builder().firstName("salehe").lastName("jojo").picture(new FileInputStream("./docs/noUser.jpg").readAllBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
                         .city("MTL").email("developpeurspring@gmail.com").cellNumber("514-987-3221").username("water").password("water123")
                         .biography("I love alcool and weed").roles("USER").build(),
-                Customer.builder().firstName("salehe").lastName("jojo").picture(fileInputStream.readAllBytes()).password("bombay123").picture("".getBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
+                Customer.builder().firstName("salehe").lastName("jojo").picture(new FileInputStream("./docs/noUser.jpg").readAllBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
                         .city("MTL").email("developpeurspring@gmail.com").cellNumber("514-987-3221").username("iceBurr").password("iceBurr123")
                         .biography("I love alcool and weed").roles("USER").build(),
-                Customer.builder().firstName("salehe").lastName("jojo").picture(fileInputStream.readAllBytes()).password("bombay123").picture("".getBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
+                Customer.builder().firstName("salehe").lastName("jojo").picture(new FileInputStream("./docs/noUser.jpg").readAllBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
                         .city("MTL").email("developpeurspring@gmail.com").cellNumber("514-987-3221").username("sasuske").password("sasuske123")
                         .biography("I love alcool and weed").roles("USER").build(),
-                Customer.builder().firstName("salehe").lastName("jojo").picture(fileInputStream.readAllBytes()).password("bombay123").picture("".getBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
+                Customer.builder().firstName("salehe").lastName("jojo").picture(new FileInputStream("./docs/noUser.jpg").readAllBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
                         .city("MTL").email("developpeurspring@gmail.com").cellNumber("514-987-3221").username("gintoki").password("gintoki123")
                         .biography("I love alcool and weed").roles("USER").build(),
-                Customer.builder().firstName("salehe").lastName("jojo").picture(fileInputStream.readAllBytes()).password("bombay123").picture("".getBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
+                Customer.builder().firstName("salehe").lastName("jojo").picture(new FileInputStream("./docs/noUser.jpg").readAllBytes()).dateOfBirth(LocalDate.of(1998, 12, 22))
                         .city("MTL").email("developpeurspring@gmail.com").cellNumber("514-987-3221").username("massou").password("massou123")
                         .biography("I love alcool and weed").roles("USER").build()
         );

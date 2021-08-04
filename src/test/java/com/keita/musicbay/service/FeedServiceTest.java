@@ -226,4 +226,17 @@ public class FeedServiceTest {
         //ASSERT
         assertEquals(2,nbrOfPage);
     }
+
+    @Test
+    void getNbrOfPagePossibleSubTo(){
+        //ARRANGE
+        String username = "hope";
+        when(userRepository.countAllByUsernameNot(username)).thenReturn(15.2);
+
+        //ACT
+        Integer nbrOfPage = feedService.getNbrOfPagePossibleSubTo(username);
+
+        //ASSERT
+        assertEquals(4,nbrOfPage);
+    }
 }

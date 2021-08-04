@@ -3,6 +3,7 @@ package com.keita.musicbay.service;
 import com.keita.musicbay.model.entity.*;
 import com.keita.musicbay.repository.CustomerRepository;
 import com.keita.musicbay.repository.MusicRepository;
+import com.keita.musicbay.repository.UserRepository;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +16,7 @@ import org.mockito.stubbing.Answer;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,6 +29,9 @@ public class MonitoringServiceTest {
 
     @Mock
     CustomerRepository customerRepository;
+
+    @Mock
+    UserRepository userRepository;
 
     @Mock
     MusicRepository musicRepository;
@@ -145,17 +150,23 @@ public class MonitoringServiceTest {
     @Test
     void subscribe() {
         //ARRANGE
-        Customer customer = Customer.builder().username("bigBrr").build();
-        Customer customerToFollow = Customer.builder().username("c4").build();
-        when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
-        when(customerRepository.findByUsername(customerToFollow.getUsername())).thenReturn(Optional.of(customerToFollow));
+        Customer customer1 = Customer.builder().username("bigBrr").build();
+        Customer customerToFollow1 = Customer.builder().username("c4").build();
+        when(userRepository.findByUsername(customer1.getUsername())).thenReturn(Optional.of(customer1));
+        when(userRepository.findByUsername(customerToFollow1.getUsername())).thenReturn(Optional.of(customerToFollow1));
+
+        Customer customer2 = Customer.builder().username("araa").build();
+        customer2.getSubscribeTos().add(SubscribeTo.builder().username("taa").build());
+        when(userRepository.findByUsername(customer2.getUsername())).thenReturn(Optional.of(customer2));
 
         //ACT
-        monitoringService.subscribe(customer.getUsername(), customerToFollow.getUsername());
+        monitoringService.subscribe(customer1.getUsername(), customerToFollow1.getUsername());
+        monitoringService.subscribe(customer2.getUsername(), "taa");
 
         //ASSERT
-        assertEquals(1, customer.getSubscribeTos().size());
-        assertEquals(1, customerToFollow.getSubscribers().size());
+        assertEquals(1, customer1.getSubscribeTos().size());
+        assertEquals(1, customerToFollow1.getSubscribers().size());
+        assertEquals(1, customer2.getSubscribeTos().size());
     }
 
     @Test
@@ -166,8 +177,8 @@ public class MonitoringServiceTest {
 
         customer.getSubscribeTos().add(new SubscribeTo(customerToUnFollow.getUsername(), customer));
 
-        when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
-        when(customerRepository.findByUsername(customerToUnFollow.getUsername())).thenReturn(Optional.of(customerToUnFollow));
+        when(userRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
+        when(userRepository.findByUsername(customerToUnFollow.getUsername())).thenReturn(Optional.of(customerToUnFollow));
 
         //ACT
         monitoringService.unSubscribe(customer.getUsername(), customerToUnFollow.getUsername());
@@ -183,7 +194,7 @@ public class MonitoringServiceTest {
         SubscribeTo customerSubscribeTo = SubscribeTo.builder().username("c4").build();
         customer.getSubscribeTos().add(customerSubscribeTo);
 
-        when(customerRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
+        when(userRepository.findByUsername(customer.getUsername())).thenReturn(Optional.of(customer));
 
         //ACT
         boolean customerIsSubscribedTo = monitoringService.checkIfSubscribeTo(customer.getUsername(), customerSubscribeTo.getUsername());

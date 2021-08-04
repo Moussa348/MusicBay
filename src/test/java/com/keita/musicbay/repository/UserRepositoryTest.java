@@ -72,4 +72,16 @@ public class UserRepositoryTest {
         //ASSERT
         assertEquals(4,users.size());
     }
+
+    @Test
+    void countAllByUsernameNot(){
+        //ARRANGE
+        String username = "brr";
+
+        //ACT
+        Double nbrOfUser = userRepository.countAllByUsernameNot(username);
+
+        //ASSERT
+        assertEquals(4,nbrOfUser);
+    }
 }

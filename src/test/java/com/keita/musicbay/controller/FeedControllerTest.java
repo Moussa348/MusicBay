@@ -219,4 +219,20 @@ public class FeedControllerTest {
         //ASSERT
         assertEquals("1",mvcResult1.getResponse().getContentAsString());
     }
+
+    @Test
+    void getNbrOfPagePossibleSubTo() throws Exception{
+        //ARRANGE
+        String username = "bombay";
+
+        //ACT
+        MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.get("/feed/getNbrOfPagePossibleSubTo/" + username )
+                .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+
+        //ASSERT
+        assertNotNull(mvcResult1.getResponse().getContentAsString());
+    }
 }

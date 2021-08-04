@@ -61,4 +61,9 @@ public class FeedController {
     public Integer getNbrOfPageSubTo(@PathVariable String username){
         return feedService.getNbrOfPageSubTo(username);
     }
+
+    @GetMapping("/getNbrOfPagePossibleSubTo/{username}")
+    public Integer getNbrOfPagePossibleSubTo(@PathVariable String username){
+        return feedService.getNbrOfPagePossibleSubTo(username);
+    }
 }

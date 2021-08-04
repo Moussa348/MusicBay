@@ -62,7 +62,7 @@ public class FeedService {
     public List<ProfileToSubscribeTo> getListPossibleSubscribeTo(String username, Integer noPage) {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't find Customer with username: " + username));
 
-        List<User> listPossibleUserToSubscribeTo = userRepository.getAllByUsernameNot(username, PageRequest.of(noPage, 10, Sort.by("username")))
+        List<User> listPossibleUserToSubscribeTo = userRepository.getAllByUsernameNot(username, PageRequest.of(noPage, 5, Sort.by("username")))
                 .stream()
                 .filter(possibleUserToSubscribeTo -> user.getSubscribeTos().stream().noneMatch(subscribeTo -> possibleUserToSubscribeTo.getUsername().equals(subscribeTo.getUsername())))
                 .collect(Collectors.toList());
@@ -100,16 +100,20 @@ public class FeedService {
         return  mapListUserToListProfile(users);
     }
 
-    private List<Profile> mapListUserToListProfile(List<User> users){
-        return  users.stream().filter(User::isActive).map(Profile::new).collect(Collectors.toList());
-    }
-
     public Integer getNbrOfPageSub(String username){
         return (int) (Math.ceil(subscriberRepository.countAllByUserUsername(username)/10));
     }
 
     public Integer getNbrOfPageSubTo(String username){
         return (int) (Math.ceil(subscribeToRepository.countAllByUserUsername(username)/10));
+    }
+
+    public Integer getNbrOfPagePossibleSubTo(String username){
+        return (int) (Math.ceil(userRepository.countAllByUsernameNot(username)/5));
+    }
+
+    private List<Profile> mapListUserToListProfile(List<User> users){
+        return  users.stream().filter(User::isActive).map(Profile::new).collect(Collectors.toList());
     }
 
 }
