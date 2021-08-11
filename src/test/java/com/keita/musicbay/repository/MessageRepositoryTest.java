@@ -33,8 +33,11 @@ public class MessageRepositoryTest {
 
         List<Conversation> conversations = Arrays.asList(
                 Conversation.builder().build(),
+                Conversation.builder().build(),
                 Conversation.builder().build()
         );
+
+        conversations.get(2).setActive(false);
         conversationRepository.saveAll(conversations);
 
         List<Message> messages = Arrays.asList(
@@ -55,5 +58,17 @@ public class MessageRepositoryTest {
 
         //ASSERT
         assertEquals(2,messages.size());
+    }
+
+    @Test
+    void getAllByConversationIdAndConversationActiveTrue(){
+        //ARRANGE
+        long id = 3L;
+
+        //ACT
+        List<Message> messages = messageRepository.getAllByConversationIdAndConversationActiveTrue(id, PageRequest.of(0,4, Sort.by("date").descending()));
+
+        //ASSERT
+        assertEquals(0,messages.size());
     }
 }

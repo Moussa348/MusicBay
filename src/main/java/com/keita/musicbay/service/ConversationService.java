@@ -85,7 +85,7 @@ public class ConversationService {
         List<Message> lastSentMessages = new ArrayList<>();
         List<Conversation> conversations = conversationRepository.getByUser(userRepository.findByUsername(username).get(),PageRequest.of(noPage,20)).stream().filter(Conversation::isActive).collect(Collectors.toList());
 
-        conversations.forEach(conversation -> lastSentMessages.add(conversation.getMessages().get(conversation.getMessages().size()-1)));
+        conversations.stream().filter(conversation -> conversation.isActive() && !conversation.getMessages().isEmpty()).forEach(conversation -> lastSentMessages.add(conversation.getMessages().get(conversation.getMessages().size()-1)));
 
         return lastSentMessages.stream().map(SentMessage::new).collect(Collectors.toList());
     }
