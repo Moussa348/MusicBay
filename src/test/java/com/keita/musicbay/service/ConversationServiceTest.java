@@ -148,7 +148,7 @@ public class ConversationServiceTest {
                 Message.builder().content("allo").sendBy("brrr").conversation(Conversation.builder().id(1L).build()).build(),
                 Message.builder().content("allo").sendBy("brrr").conversation(Conversation.builder().id(1L).build()).build()
         );
-        when(messageRepository.getAllByConversationId(id, PageRequest.of(noPage,20, Sort.by("date").descending()))).thenReturn(messages);
+        when(messageRepository.getAllByConversationIdAndConversationActiveTrue(id, PageRequest.of(noPage,20, Sort.by("date").descending()))).thenReturn(messages);
 
         //ACT
         List<SentMessage> sentMessagesInConversation = conversationService.getMessagesFromConversation(id,noPage);
@@ -168,7 +168,7 @@ public class ConversationServiceTest {
         conversations.get(0).getMessages().add(Message.builder().conversation(conversations.get(0)).build());
 
         when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
-        when(conversationRepository.getByUser(user,PageRequest.of(noPage,20))).thenReturn(conversations);
+        when(conversationRepository.getByUserAndConversationTrue(user,PageRequest.of(noPage,20))).thenReturn(conversations);
 
         //ACT
         List<SentMessage> lastSentMessages = conversationService.getLastSentMessages(user.getUsername(),noPage);

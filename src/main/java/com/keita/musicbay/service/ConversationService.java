@@ -77,15 +77,15 @@ public class ConversationService {
     }
 
     public List<SentMessage> getMessagesFromConversation(Long id,Integer noPage){
-        return messageRepository.getAllByConversationId(id, PageRequest.of(noPage,20, Sort.by("date").descending()))
+        return messageRepository.getAllByConversationIdAndConversationActiveTrue(id, PageRequest.of(noPage,20, Sort.by("date").descending()))
                 .stream().map(SentMessage::new).collect(Collectors.toList());
     }
 
     public List<SentMessage> getLastSentMessages(String username,Integer noPage){
         List<Message> lastSentMessages = new ArrayList<>();
-        List<Conversation> conversations = conversationRepository.getByUser(userRepository.findByUsername(username).get(),PageRequest.of(noPage,20)).stream().filter(Conversation::isActive).collect(Collectors.toList());
+        List<Conversation> conversations = conversationRepository.getByUserAndConversationTrue(userRepository.findByUsername(username).get(),PageRequest.of(noPage,20)).stream().filter(Conversation::isActive).collect(Collectors.toList());
 
-        conversations.stream().filter(conversation -> conversation.isActive() && !conversation.getMessages().isEmpty()).forEach(conversation -> lastSentMessages.add(conversation.getMessages().get(conversation.getMessages().size()-1)));
+        conversations.stream().filter(conversation -> !conversation.getMessages().isEmpty()).forEach(conversation -> lastSentMessages.add(conversation.getMessages().get(conversation.getMessages().size()-1)));
 
         return lastSentMessages.stream().map(SentMessage::new).collect(Collectors.toList());
     }

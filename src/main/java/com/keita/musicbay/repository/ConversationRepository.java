@@ -15,4 +15,7 @@ public interface ConversationRepository extends JpaRepository<Conversation,Long>
     @Query("SELECT c FROM Conversation c GROUP BY :user,c.id")
     List<Conversation> getByUser(@Param("user")User user, Pageable pageable);
 
+    @Query("SELECT c FROM Conversation c GROUP BY :user,c.id HAVING c.active = true")
+    List<Conversation> getByUserAndConversationTrue(@Param("user")User user, Pageable pageable);
+
 }

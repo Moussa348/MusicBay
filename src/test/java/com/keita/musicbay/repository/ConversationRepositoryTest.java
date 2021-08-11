@@ -33,9 +33,12 @@ public class ConversationRepositoryTest {
         customerRepository.save(Customer.builder().username("brr").build());
 
         List<Conversation> conversations = Arrays.asList(
-                Conversation.builder().id(1L).build()
+                Conversation.builder().id(1L).build(),
+                Conversation.builder().id(2L).build()
         );
-        conversations.get(0).getUsers().add(customerRepository.findByUsername("brr").get());
+
+        conversations.get(1).setActive(false);
+        conversations.forEach(conversation -> conversation.getUsers().add(customerRepository.findByUsername("brr").get()));
 
         conversationRepository.saveAll(conversations);
     }
@@ -51,4 +54,17 @@ public class ConversationRepositoryTest {
         //ASSERT
         assertEquals(1,conversations.size());
     }
+
+    @Test
+    void getByUserAndConversationTrue(){
+        //ARRANGE
+        User user = customerRepository.findByUsername("brr").get();
+
+        //ACT
+        List<Conversation> conversations = conversationRepository.getByUserAndConversationTrue(user, PageRequest.of(0,5));
+
+        //ASSERT
+        assertEquals(1,conversations.size());
+    }
+
 }
