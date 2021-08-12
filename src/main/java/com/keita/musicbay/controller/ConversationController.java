@@ -44,7 +44,7 @@ public class ConversationController {
     }
 
     @GetMapping("/getMessagesFromConversation/")
-    public List<SentMessage> getMessagesFromConversation(@RequestParam("id")Long id,@RequestParam("noPage")Integer noPage){
+    public ConversationDTO getMessagesFromConversation(@RequestParam("id")Long id,@RequestParam("noPage")Integer noPage){
         return conversationService.getMessagesFromConversation(id,noPage);
     }
 

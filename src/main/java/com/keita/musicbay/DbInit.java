@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -26,6 +27,7 @@ import java.util.List;
 @Component
 @Order(1)
 @Log
+@Transactional
 public class DbInit implements CommandLineRunner {
 
     @Autowired
@@ -99,14 +101,10 @@ public class DbInit implements CommandLineRunner {
         customerRepository.saveAll(customers);
     }
 
-    private void insertTransaction(){
-        transactionService.createTransaction("bombay","culture1", PriceType.BASIC);
-    }
-
     private void insertConversation(){
         List<ConversationDTO> conversationDTOS = Arrays.asList(
-                ConversationDTO.builder().createdBy("brr").name("glowGang").conversationType(ConversationType.GROUP).usernames(Arrays.asList("bigBrr","bombay")).build(),
-                ConversationDTO.builder().createdBy("brr").name("glowGang").conversationType(ConversationType.GROUP).usernames(Arrays.asList("bayDrip","bombay")).build()
+                ConversationDTO.builder().createdBy("bigBrr").name("glowGang").conversationType(ConversationType.GROUP).usernames(Arrays.asList("bigBrr","bombay","bayDrip")).build(),
+                ConversationDTO.builder().createdBy("bigBrr").name("bigBrr").conversationType(ConversationType.UNIQUE).usernames(Arrays.asList("bigBrr","bombay")).build()
         );
 
         conversationDTOS.forEach(conversationDTO -> conversationService.createConversation(conversationDTO));
@@ -114,7 +112,7 @@ public class DbInit implements CommandLineRunner {
 
     private void sendMessagesInConversations(){
         List<SentMessage> sentMessages = Arrays.asList(
-                new SentMessage(Message.builder().content("allo").sendBy("brrr").conversation(conversationRepository.getById(1L)).build()),
+                new SentMessage(Message.builder().content("allo").sendBy("bigBrr").conversation(conversationRepository.getById(1L)).build()),
                 new SentMessage(Message.builder().content("allo").sendBy("bayDrip").conversation(conversationRepository.getById(2L)).build())
         );
 
@@ -144,8 +142,6 @@ public class DbInit implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         insertCustomers();
-        //insertMusic();
-        insertTransaction();
         insertConversation();
         sendMessagesInConversations();
         insertComment();

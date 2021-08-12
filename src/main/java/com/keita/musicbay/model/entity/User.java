@@ -29,8 +29,8 @@ public abstract class User implements Serializable {
     @ManyToMany
     private List<User> users;
 
-    @ManyToMany
-    private List<Conversation> conversations;
+    @ManyToMany(mappedBy = "users")
+    private List<Conversation> conversations = new ArrayList<>();
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Subscriber> subscribers = new ArrayList<>();

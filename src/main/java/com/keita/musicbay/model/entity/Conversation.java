@@ -23,7 +23,7 @@ public class Conversation implements Serializable {
     private ConversationType conversationType;
     private boolean active;
 
-    @ManyToMany(mappedBy = "conversations")
+    @ManyToMany()
     private List<User> users = new ArrayList<>();
 
     @OneToMany(mappedBy = "conversation",cascade = CascadeType.ALL)

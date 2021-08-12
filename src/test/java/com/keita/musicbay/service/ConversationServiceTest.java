@@ -142,16 +142,17 @@ public class ConversationServiceTest {
     @Test
     void getMessagesFromConversation(){
         //ARRANGE
-        Long id = 1L;
         int noPage = 0;
-        List<Message> messages = Arrays.asList(
-                Message.builder().content("allo").sendBy("brrr").conversation(Conversation.builder().id(1L).build()).build(),
-                Message.builder().content("allo").sendBy("brrr").conversation(Conversation.builder().id(1L).build()).build()
-        );
-        when(messageRepository.getAllByConversationIdAndConversationActiveTrue(id, PageRequest.of(noPage,20, Sort.by("date").descending()))).thenReturn(messages);
+        Conversation conversation  = Conversation.builder().id(1L).name("glowgang").createdBy("arraa").creationDate(LocalDateTime.now()).conversationType(ConversationType.GROUP).build();
+
+        conversation.getMessages().add( Message.builder().content("allo").sendBy("brrr").conversation(conversation).build());
+        conversation.getMessages().add( Message.builder().content("adsasda").sendBy("brrr").conversation(conversation).build());
+
+        when(conversationRepository.getById(conversation.getId())).thenReturn(conversation);
+        when(messageRepository.getAllByConversationIdAndConversationActiveTrue(conversation.getId(), PageRequest.of(noPage,20, Sort.by("date").descending()))).thenReturn(conversation.getMessages());
 
         //ACT
-        List<SentMessage> sentMessagesInConversation = conversationService.getMessagesFromConversation(id,noPage);
+        List<SentMessage> sentMessagesInConversation = conversationService.getMessagesFromConversation(conversation.getId(),noPage).getSentMessages();
 
         //ASSERT
         assertEquals(2,sentMessagesInConversation.size());

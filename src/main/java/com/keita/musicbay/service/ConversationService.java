@@ -76,9 +76,10 @@ public class ConversationService {
         conversationRepository.save(conversation);
     }
 
-    public List<SentMessage> getMessagesFromConversation(Long id,Integer noPage){
-        return messageRepository.getAllByConversationIdAndConversationActiveTrue(id, PageRequest.of(noPage,20, Sort.by("date").descending()))
-                .stream().map(SentMessage::new).collect(Collectors.toList());
+    public ConversationDTO getMessagesFromConversation(Long id,Integer noPage){
+        Conversation conversation = conversationRepository.getById(id);
+        return new ConversationDTO(conversation,messageRepository.getAllByConversationIdAndConversationActiveTrue(id, PageRequest.of(noPage,20, Sort.by("date").descending()))
+                .stream().map(SentMessage::new).collect(Collectors.toList()));
     }
 
     public List<SentMessage> getLastSentMessages(String username,Integer noPage){
